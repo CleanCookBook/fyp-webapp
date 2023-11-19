@@ -4,7 +4,7 @@ const Navbar = () => {
     return (
         <nav className=" flex bg-blue-950 h-[80px] items-center">
             <div className='text-white flex w-1/2 justify-start font-black text-2xl px-10'>
-                <p>CleanCookBook Logo</p>
+                <p>Logo Image Here</p>
             </div>
             <div className="container mx-auto">
                 
