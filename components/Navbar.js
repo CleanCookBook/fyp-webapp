@@ -1,8 +1,24 @@
+import Link from 'next/link';
+
 const Navbar = () => {
     return (
-        <div className="">
-            <p>Hello</p>
-        </div>
+        <nav className=" flex bg-blue-950 h-[80px] items-center">
+            <div className='text-white flex w-1/2 justify-start font-black text-2xl px-10'>
+                <p>CleanCookBook Logo</p>
+            </div>
+            <div className="container mx-auto">
+                
+                <ul>
+                    <li className='text-white font-bold flex justify-end'> 
+                        <a className=' px-4'>Recipes</a>
+                        <a className=' px-4'>About Us</a>
+                        <a className=' px-4'>Meal Plans</a>
+                        <a className=' pr-10 pl-4'>Account</a>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
     );
 }
 
