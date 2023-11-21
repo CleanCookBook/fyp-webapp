@@ -27,7 +27,7 @@ const Login = () => {
                     
                     <div className="pt-3">
                         <button class="w-[170px] h-7 bg-blue-950 hover:bg-[#154083] text-white font-bold text-sm rounded-[10px] shadow">
-                            Login
+                            Login Now
                         </button>
                     </div>
                     <div className="text-sm mt-[1rem]">
