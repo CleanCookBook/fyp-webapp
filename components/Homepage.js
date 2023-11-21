@@ -6,6 +6,7 @@ const Homepage = () => {
             
             <Navbar />
             <p> hello</p>
+            <p> world</p>
             
         </div>
     );
