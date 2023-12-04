@@ -9,7 +9,7 @@ const Homepage = () => {
         <h1 className="flex text-7xl font-black py-5 item-center">
           Whats Cooking Today?
         </h1>
-        <div class="w-[748px] h-[38px] bg-white rounded-[20px]">
+        <div className="w-[748px] h-[38px] bg-white rounded-[20px]">
           <div>
             <div className="flex items-center text-sm p-2 pl-9 text-stone-300">
               <p>Search our library of recipes</p>
