@@ -4,13 +4,14 @@ import Login from "@/components/Login";
 import Homepage from "@/components/Homepage";
 import Image from "next/image";
 import Head from "next/head";
+
 export default function Home() {
   return (
     <main className="">
       {/* <Welcome /> */}
-      {/* <Login  /> */}
+      <Login />
       {/* <Signup /> */}
-      <Homepage />
+      {/* <Homepage /> */}
     </main>
   );
 }
