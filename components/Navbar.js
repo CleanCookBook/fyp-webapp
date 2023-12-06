@@ -12,7 +12,7 @@ const Navbar = () => {
     <nav className="flex bg-blue-950 h-[80px] items-center">
       <div className="text-white flex w-1/2 justify-start font-black text-2xl px-10">
         {/* Circular Logo Image */}
-        <div className="rounded-full overflow-hidden border border-white w-16 h-16 flex-shrink-0">
+        <div className="overflow-hidden w-16 h-16 flex-shrink-0">
           <Image
             src="/logo.jpg" // Update the path based on your actual file structure
             alt="Logo"
