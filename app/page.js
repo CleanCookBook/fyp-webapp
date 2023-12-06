@@ -6,9 +6,8 @@ import Signup from "@/components/Signup";
 //import { useEffect, useState } from 'react';
 
 const Home = () => {
-
   //Yall can delete i leave here cos this is some of my backened i will need for my future reference yeah
-/* const [users, setUsers] = useState([]);
+  /* const [users, setUsers] = useState([]);
 
   useEffect(() => {
     // Fetch data from the API on the client side
@@ -24,11 +23,8 @@ const Home = () => {
 
   return (
     <main className="">
-
       <Signup />
       <Homepage />
-   
-    
     </main>
   );
 };

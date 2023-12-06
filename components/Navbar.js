@@ -1,5 +1,5 @@
-import Image from 'next/image';
-import { useState } from 'react';
+import Image from "next/image";
+import { useState } from "react";
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -24,22 +24,31 @@ const Navbar = () => {
       <div className="container mx-auto">
         <ul>
           <li className="text-white font-bold flex justify-end">
-            <a className="px-4">Recipes</a>
-            <a className="px-4">About Us</a>
-            <a className="px-4">Notification</a>
-            <a className="px-4">NewsFeed</a>
-            <a className="px-4">Meal Plans</a>
+            <button className="px-4 hover:opacity-[0.5]">Recipes</button>
+            <button className="px-4 hover:opacity-[0.5]">About Us</button>
+            <button className="px-4 hover:opacity-[0.5]">Notification</button>
+            <button className="px-4 hover:opacity-[0.5]">NewsFeed</button>
+            <button className="px-4 hover:opacity-[0.5]">Meal Plans</button>
             <div className="relative inline-block text-left">
-              <button onClick={toggleDropdown} className="px-4 focus:outline-none">
+              <button
+                onClick={toggleDropdown}
+                className="px-4 hover:text-gray-400 focus:outline-none"
+              >
                 Account
               </button>
               {isDropdownOpen && (
                 <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                   <div className="py-1">
-                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
                       Profile
                     </a>
-                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
                       About Me
                     </a>
                   </div>
