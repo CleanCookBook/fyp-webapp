@@ -1,6 +1,9 @@
 // app/page.js
 "use client";
 import Homepage from "@/components/Homepage";
+import Terms from "@/components/terms";
+import Image from "next/image";
+import Head from "next/head";
 import Signup from "@/components/Signup";
 //This too yall can delete
 //import { useEffect, useState } from 'react';
@@ -23,6 +26,11 @@ const Home = () => {
 
   return (
     <main className="">
+      {/* <Welcome /> */}
+      {/* <Login /> */}
+      {/* <Signup /> */}
+      {/* <Homepage /> */}
+      { <Terms /> }
       <Signup />
       <Homepage />
     </main>
