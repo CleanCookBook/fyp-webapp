@@ -2,6 +2,7 @@
 "use client";
 import Homepage from "@/components/Homepage";
 import Terms from "@/components/terms";
+import Quizz from "@/components/Quizz";
 import Image from "next/image";
 import Head from "next/head";
 import Signup from "@/components/Signup";
@@ -30,9 +31,8 @@ const Home = () => {
       {/* <Login /> */}
       {/* <Signup /> */}
       {/* <Homepage /> */}
-      { <Terms /> }
-      <Signup />
-      <Homepage />
+      {/* <Terms /> */}
+      { <Quizz /> }
     </main>
   );
 };

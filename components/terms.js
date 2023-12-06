@@ -51,7 +51,7 @@ return (
       </div>
 
       <div>
-        <button class="w-[259px] h-8 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow absolute bottom-[105px] left-[850px]">
+        <button class="w-[259px] h-8 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow absolute bottom-[105px] left-[820px]">
           Create Account
         </button>
       </div>
