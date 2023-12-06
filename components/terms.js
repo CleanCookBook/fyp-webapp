@@ -1,49 +1,94 @@
+import { useState } from "react";
+
 const terms = () => {
+  const [isChecked, setIsChecked]=useState(false);
+  
+  const handleCheckChange=(event) => {
+    setIsChecked(event.target.checked);
+    if (!event.target.checked) {
+      document.getElementById('required-error').classList.remove('hidden');
+    } else {
+      document.getElementById('required-error').classList.add('hidden');
+    }
+  };
+
 return (
   <div className="flex flex-col h-screen justify-center items-center bg-[#F9D548] text-[#0A2A67]">
-      <div className="lg:w-4/5 lg:pr-8 p-8 flex flex-col items-center">
-   
-        <div className="text-2xl font-black font-semibold w-[1800px] h-[760px]">
-          <span className="font-semibold no-underline hover:opacity-[0.5]">
-            Back
+    
+    <div className="flex flex-col bg-[#F9D548] text-[#0A2A67] justify-center items-center">
+        <span className="text-2xl font-black font-semibold no-underline hover:opacity-[0.5] absolute top-10 left-10">
+          <a href="#">Back</a>
+        </span>
+    </div>
+
+      <div className="bg-white w-[1600px] h-[585px] font-black text-2xl shadow-md flex-row -mt-9">
+        <p className="text-xl font-bold flex py-5 px-5 top-0 left-75">Terms and Conditions </p>
+        <div className="bg-[#E5E4E2] w-[1510px] h-[495px] font-black text-2xl shadow-md border-4 border-gray-300 overflow-auto justify-center items-center ml-10">
+          <ol class="text-black text-base font-semibold pb-5 ajustify-center items-center">
+            <li><b>1. Acceptance of Terms</b></li>
+            <li>By accessing or using the CleanCookBook Healthy Recipe App ("the App"), you agree to comply with and be bound by the following terms and conditions. If you do not agree to these terms, please do not use the App.</li>
+            <li><b>2. User Eligibility</b></li>
+            <li>You must be at least 18 years old to use the App. By using the App, you warrant that you are at least 18 years old and have the legal capacity to enter into this agreement.</li>
+            <li><b>3. User Accounts</b></li>
+            <li>a. You may be required to create a user account to access certain features of the App. You are responsible for maintaining the confidentiality of your account information and are fully responsible for all activities that occur under your account.</li>
+            <li>b. You agree to provide accurate and complete information when creating your account and to update your information promptly if there are any changes.</li>
+            <li><b>4. User Content</b></li>
+            <li>a. The App may allow users to submit, upload, or share content, including but not limited to recipes, images, and comments ("User Content"). You retain ownership of your User Content.</li>
+            <li>b. By submitting User Content, you grant CleanCookBook a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, adapt, publish, translate, distribute, and display the User Content in connection with the App.</li>
+            <li>c. You agree not to submit User Content that is unlawful, defamatory, obscene, offensive, or otherwise objectionable.</li>
+            <li><b>5. Prohibited Conduct</b></li>
+            <li>You agree not to:</li>
+            <li>a. Use the App for any unlawful purpose or in violation of any applicable laws.</li>
+            <li>b. Attempt to access, tamper with, or use non-public areas of the App, its systems, or its technical delivery systems.</li>
+            <li>c. Impersonate any person or entity or falsely state or otherwise misrepresent your affiliation with a person or entity.</li>
+            <li><b>6. Intellectual Property</b></li>
+            <li>a. All content, features, and functionality of the App are owned by CleanCookBook and are protected by intellectual property laws.</li>
+            <li>b. You may not reproduce, distribute, modify, create derivative works of, publicly display, publicly perform, republish, download, or transmit any of the material on the App without the prior written consent of CleanCookBook.</li>
+            <li><b>7. Disclaimer of Warranties</b></li>
+            <li>a. The App is provided "as is" and "as available" without any warranties of any kind, either express or implied.</li>
+            <li>b. CleanCookBook does not warrant that the App will be uninterrupted or error-free, that defects will be corrected, or that the App is free of viruses or other harmful components.</li>
+            <li><b>8. Limitation of Liability</b></li>
+            <li>In no event shall CleanCookBook be liable for any direct, indirect, incidental, special, or consequential damages arising out of or in any way connected with the use of the App.</li>
+            <li><b>9. Changes to Terms</b></li>
+            <li>CleanCookBook reserves the right to change or modify these terms at any time without notice. Your continued use of the App after such changes will indicate your acceptance of the updated terms.</li>
+            <li><b>10. Contact Us</b></li>
+            <li>If you have any questions about these Terms and Conditions, please contact us at cleancookbook@gmail.com.</li>
+          </ol>
+
+        </div>
+
+        <div class="flex justify-center items-center mt-8 ">
+          <input 
+            type="checkbox" 
+            id="required-checkbox" 
+            checked={isChecked}
+            onChange={handleCheckChange}
+            className="form-checkbox h-3 w-3 text-blue-600">
+          </input>
+          <label htmlFor="required-checkbox">
+            <p class="text-gray-900 text-sm font-medium"> I accept the Terms & Conditions</p>
+          </label>
+          <span
+            id="required-error"
+            className={`text-sm text-red-500 ml-2 ${
+            isChecked ? 'hidden' : ''
+            }`}>
+            This field is required.
           </span>
         </div>
 
-      <div className="bg-white w-[1600px] h-[560px] absolute top-[95px] left-15 font-black text-2xl px-7 shadow-md">
-        <span className="text-xl font-bold absolute top-[15px]">Terms and Conditions </span>
-          <ol class="text-black text-base font-semibold pb-5 absolute top-[55px]">
-            <li><b>Eligibility:</b> To use this website, you must be at least 18 years old and have the capacity to enter into a binding agreement. If you are under 18, you may only use this website with the involvement of a parent or legal guardian who agrees to be bound by these Terms and Conditions.</li>
-            <li>**Access and Use:** We grant you a non-exclusive, non-transferable, revocable license to access and use the website for your personal, non-commercial use only. You agree not to use the website for any other purpose, including any commercial purpose, without our express written consent.</li>
-            <li>**User Content:** You are solely responsible for any content you submit, post, or upload to the website. You represent and warrant that you own all rights to your User Content or have obtained all necessary permissions and licenses to use and authorize us to use it. You further agree that your User Content will not:</li>
-              <li>Be defamatory, libelous, invasive of privacy, obscene, hateful, or racially, ethnically, or otherwise objectionable.</li>
-              <li>Infringe any patent, trademark, copyright, or other intellectual property right of any other person.</li>
-              <li>Contain any viruses, malware, or other harmful code.</li>
-              <li>Be false, misleading, or inaccurate.</li>
-            <li>**Intellectual Property:** The content and materials on the website, including, but not limited to, text, graphics, logos, images, and software, are protected by copyright, trademark, and other intellectual property laws. You agree not to reproduce, distribute, modify, create derivative works, publicly display, or commercially exploit any of the content or materials on the website without our express written consent.</li>
-            <li>**Disclaimer:** The information on the website is provided for informational purposes only and is not intended to be a substitute for professional medical advice. You should always consult with a qualified healthcare professional before making any changes to your diet or exercise routine.</li>
-            <li>**Termination:** We may terminate your access to the website at any time, for any reason, without notice.</li>
-            <li>**Entire Agreement:** These Terms and Conditions constitute the entire agreement between you and us regarding your use of the website.</li>
-            <li>**Amendments:** We may amend these Terms and Conditions at any time by posting the amended terms on the website. Your continued use of the website after the posting of the amended terms constitutes your acceptance of the amendments.</li>
-            <li>**Contact Us:** If you have any questions about these Terms and Conditions, please contact us at cleancookbook@gmail.com.</li>
-          </ol>
+        <div class="flex justify-center items-center mt-3">
+          <button type="button" class="w-[259px] h-[35px] bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] drop-shadow-xl">
+            <a href="#">Create Account</a>
+          </button>
+        </div>
+
       </div>
 
-      <div class="flex items-center space-x-3 absolute bottom-[145px] left-15">
-      <input type="checkbox" class="form-checkbox h-3 w-3 text-blue-600"></input>
-        <span class="text-gray-900 font-medium">I accept the Terms & Conditions</span>
-      </div>
 
-      <div>
-        <button class="w-[259px] h-8 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow absolute bottom-[105px] left-[850px]">
-          Create Account
-        </button>
-      </div>
-</div>
-</div>
-
+  </div>
 
 );
 };
   
 export default terms;
-  
