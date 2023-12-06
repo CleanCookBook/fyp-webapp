@@ -2,16 +2,14 @@ const terms = () => {
 return (
   <div className="flex flex-col h-screen justify-center items-center bg-[#F9D548] text-[#0A2A67]">
       <div className="lg:w-4/5 lg:pr-8 p-8 flex flex-col items-center">
-   
-        <div className="text-2xl font-black font-semibold w-[1800px] h-[760px]">
-          <span className="font-semibold cursor-pointer no-underline hover:opacity-[0.5]">
-            Back
-          </span>
-        </div>
 
-      <div className="bg-white w-[1600px] h-[565px] absolute top-[95px] left-15 font-black text-2xl px-7 shadow-md">
-        <span className="text-xl font-bold absolute top-[15px]">Terms and Conditions </span>
-        <div className="bg-[#E5E4E2] border-4 border-gray-300 w-[1510px] overflow-auto h-[495px] absolute top-[55px] left-[45px] font-black text-2xl px-7 shadow-md">
+     <div className="flex flex-col bg-[#F9D548] text-[#0A2A67] justify-center items-center">
+        <span className="text-2xl font-black font-semibold no-underline hover:opacity-[0.5] absolute top-10 left-10">Back</span>
+     </div>
+
+      <div className="bg-white w-[1600px] h-[565px] font-black text-2xl shadow-md absolute top-[90px] right-50 items-center">
+        <p className="text-xl font-bold flex py-5 px-5 top-0 left-75">Terms and Conditions </p>
+        <div className="bg-[#E5E4E2] w-[1510px] h-[495px] font-black text-2xl shadow-md border-4 border-gray-300 overflow-auto absolute top-[50px] left-[50px] items-center">
           <ol class="text-black text-base font-semibold pb-5 absolute top-[5px]">
             <li><b>1. Acceptance of Terms</b></li>
             <li>By accessing or using the CleanCookBook Healthy Recipe App ("the App"), you agree to comply with and be bound by the following terms and conditions. If you do not agree to these terms, please do not use the App.</li>
@@ -50,8 +48,8 @@ return (
         <span class="text-gray-900 font-medium">I accept the Terms & Conditions</span>
       </div>
 
-      <div>
-        <button class="w-[259px] h-8 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow absolute bottom-[105px] left-[820px]">
+      <div className= "flex lg:flex-row mx-12 items-center justify-center">
+        <button class="w-[259px] h-8 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow absolute bottom-20 left-190">
           Create Account
         </button>
       </div>

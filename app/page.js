@@ -31,7 +31,7 @@ const Home = () => {
       {/* <Login /> */}
       {/* <Signup /> */}
       {/* <Homepage /> */}
-      {/* <Terms /> */}
+      { <Terms /> }
       { <Quizz /> }
     </main>
   );
