@@ -1,6 +1,8 @@
 // app/page.js
 "use client";
 import Homepage from "@/components/Homepage";
+import Welcome from "@/components/Welcome";
+import Login from "@/components/Login";
 import Terms from "@/components/terms";
 import Quizz from "@/components/Quizz";
 import Image from "next/image";
@@ -30,9 +32,9 @@ const Home = () => {
       {/* <Welcome /> */}
       {/* <Login /> */}
       {/* <Signup /> */}
-      {/* <Homepage /> */}
       { <Terms /> }
-      { <Quizz /> }
+      { <Homepage /> }
+      {/* <Quizz /> */}
     </main>
   );
 };
