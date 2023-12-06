@@ -12,7 +12,7 @@ return (
       <div className="bg-white w-[1600px] h-[560px] absolute top-[95px] left-15 font-black text-2xl px-7 shadow-md">
         <span className="text-xl font-bold absolute top-[15px]">Terms and Conditions </span>
           <ol class="text-black text-base font-semibold pb-5 absolute top-[55px]">
-            <li>**Eligibility:** To use this website, you must be at least 18 years old and have the capacity to enter into a binding agreement. If you are under 18, you may only use this website with the involvement of a parent or legal guardian who agrees to be bound by these Terms and Conditions.</li>
+            <li><b>Eligibility:</b> To use this website, you must be at least 18 years old and have the capacity to enter into a binding agreement. If you are under 18, you may only use this website with the involvement of a parent or legal guardian who agrees to be bound by these Terms and Conditions.</li>
             <li>**Access and Use:** We grant you a non-exclusive, non-transferable, revocable license to access and use the website for your personal, non-commercial use only. You agree not to use the website for any other purpose, including any commercial purpose, without our express written consent.</li>
             <li>**User Content:** You are solely responsible for any content you submit, post, or upload to the website. You represent and warrant that you own all rights to your User Content or have obtained all necessary permissions and licenses to use and authorize us to use it. You further agree that your User Content will not:</li>
               <li>Be defamatory, libelous, invasive of privacy, obscene, hateful, or racially, ethnically, or otherwise objectionable.</li>
