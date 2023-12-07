@@ -20,7 +20,7 @@ const Accountpage = () => {
       <Navbar />
       <div className="flex flex-col h-screen bg-[#F9D548] text-[#0A2A67] justify-center items-center">
       <div className="w-full max-w-md">
-        <h2 className="text-xl underline font-bold left-10">Hello</h2>
+        <h2 className="text-xl underline font-bold left-10">Hello!</h2>
         
         <form action="/update-account" method="post">
           <div className="flex flex-row mb-4">
