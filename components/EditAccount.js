@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import Modal from "./Modal"; // Adjust the path based on your file structure
 import Navbar from "./Navbar";
 
-const Accountpage = () => {
+const EditAccount = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -21,7 +21,7 @@ const Accountpage = () => {
       <div className="flex flex-col h-screen bg-[#F9D548] text-[#0A2A67] justify-center items-center">
       <div className="w-full max-w-md">
         <h2 className="text-xl underline font-bold left-10">General Settings</h2>
-
+        
         <form action="/update-account" method="post">
           <div className="flex flex-row mb-4">
             <label className="w-1/3">Name:</label>
@@ -72,4 +72,4 @@ const Accountpage = () => {
   );
 };
 
-export default Accountpage;
+export default EditAccount;
