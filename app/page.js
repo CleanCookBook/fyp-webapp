@@ -6,6 +6,7 @@ import Image from "next/image";
 import Head from "next/head";
 import Signup from "@/components/Signup";
 import Accountpage from "@/components/Accountpage";
+import Quizz from "@/components/Quizz";
 //This too yall can delete
 //import { useEffect, useState } from 'react';
 
@@ -35,6 +36,7 @@ const Home = () => {
       {/* <Signup /> */}
       {/* <Homepage /> */}
       { <Accountpage/> }
+      {/* <Quizz> */}
     </main>
   );
 };
