@@ -5,6 +5,7 @@ import Terms from "@/components/terms";
 import Image from "next/image";
 import Head from "next/head";
 import Signup from "@/components/Signup";
+import Accountpage from "@/components/Accountpage";
 //This too yall can delete
 //import { useEffect, useState } from 'react';
 
@@ -30,9 +31,10 @@ const Home = () => {
       {/* <Login /> */}
       {/* <Signup /> */}
       {/* <Homepage /> */}
-      { <Terms /> }
-      <Signup />
-      <Homepage />
+      {/* <Terms /> */}
+      {/* <Signup /> */}
+      {/* <Homepage /> */}
+      { <Accountpage/> }
     </main>
   );
 };
