@@ -1,6 +1,6 @@
 // app/page.js
 "use client";
-import RecipeDetails from "@/components/RecipePage";
+import Welcome from "@/components/Welcome";
 
 //This too yall can delete
 //import { useEffect, useState } from 'react';
@@ -23,15 +23,7 @@ const Home = () => {
 
   return (
     <main className="">
-      {/* <Welcome /> */}
-      {/* <Login /> */}
-      {/* <Signup /> */}
-      {/* <Homepage /> */}
-      <RecipeDetails/>
-    
-      {/* <Terms /> */}
-      {/* <EditAccount/> */}
-      {/* <Quizz> */}
+      <Welcome/>
 
     </main>
   );

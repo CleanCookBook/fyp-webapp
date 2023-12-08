@@ -53,7 +53,7 @@ return (
         </div>
         <div className="flex flex-row mt-28 gap-4">
             <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
-                <a href="#">Edit</a>
+                <a href="/editAccount">Edit</a>
             </button>
 
             <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">

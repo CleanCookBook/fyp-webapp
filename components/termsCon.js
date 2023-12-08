@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const terms = () => {
+const termsCon = () => {
 
   const [isChecked, setIsChecked]=useState(false);
   
@@ -93,4 +93,4 @@ return (
 
 };
 
-export default terms;
+export default termsCon;

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 const Signup = () => {
   return (
     <div className="flex flex-col h-screen justify-center items-center bg-[#F9D548] text-[#0A2A67]">
@@ -63,16 +64,20 @@ const Signup = () => {
             </div>
             <br />
             <div>
+            <Link href="/quizPage">
               <button class="w-[259px] h-7 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow">
                 Next
               </button>
+              </Link>
             </div>
             <div className="text-sm mt-[1rem]">
               <p>
                 Already have an account?{" "}
+                <Link href="/loginPage">
                 <span className="font-semibold underline hover:opacity-[0.5]">
-                  Login here
+                    Login here
                 </span>
+                </Link>
               </p>
             </div>
           </div>
