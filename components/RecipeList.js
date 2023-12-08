@@ -15,7 +15,7 @@ const RecipeList = () => {
     <section className="flex flex-col h-screen bg-[#F9D548]">
       <Navbar />
       <div className="flex flex-col justify-start items-center">
-        <h1 className="justify-start pt-8 text-7xl text-[#0A2A67] font-black">
+        <h1 className="items-start pt-8 text-7xl text-[#0A2A67] font-black">
           {input}
         </h1>
         <div className="mt-8 bg-white w-[70%] max-w-[1114px]">

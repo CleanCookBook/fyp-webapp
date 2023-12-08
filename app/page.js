@@ -1,11 +1,13 @@
 // app/page.js
 "use client";
+import Welcome from "@/components/Welcome";
+import Login from "@/components/Login";
 import Homepage from "@/components/Homepage";
 import Terms from "@/components/terms";
 import Image from "next/image";
 import Head from "next/head";
 import Signup from "@/components/Signup";
-import RecipeList from "@/components/recipeList";
+import RecipeList from "@/components/RecipeList";
 //This too yall can delete
 //import { useEffect, useState } from 'react';
 
