@@ -5,70 +5,131 @@ import Modal from "./Modal"; // Adjust the path based on your file structure
 import Navbar from "./Navbar";
 
 const EditAccount = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+    const [formData, setFormData] = useState({
+        name : "",
+        dob : "",
+        gender : "",
+        email : "",
+    })
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
 
-  return (
-    <div className="flex flex-col h-screen bg-[#F9D548]">
-      <Navbar />
-      <div className="flex flex-col h-screen bg-[#F9D548] text-[#0A2A67] justify-center items-center">
-      <div className="w-full max-w-md">
-        <h2 className="text-xl underline font-bold left-10">General Settings</h2>
-        
-        <form action="/update-account" method="post">
-          <div className="flex flex-row mb-4">
-            <label className="w-1/3">Name:</label>
-            <input type="text" name="name" className="w-2/3 border p-2" />
-          </div>
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
-          <div className="flex flex-row mb-4">
-            <label className="w-1/3">Date of Birth:</label>
-            <input type="date" name="dob" className="w-2/3 border p-2" />
-          </div>
+    const handleInput = (e) => {
+        const fieldName = e.target.name
+        const fieldValue = e.target.value
+        setFormData((prevState) => ({
+        ...prevState,
+        [fieldName]: fieldValue
+      }));
+    }
 
-          <div className="flex flex-row mb-4">
-            <label className="w-1/3">Gender:</label>
-            <select name="gender" className="w-2/3 border p-2">
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
+    const submitForm = (e) => {
+        e.preventDefault()
+        const data = new FormData()
+        Object.entries(formData).forEach(([key, value]) => {
+            data.append(key, value);
+        })
+        fetch(formURL, {
+            method: "POST",
+            body: data,
+            headers: {
+              'accept': 'application/json',
+            },
+        }).then((response) => response.json())
+          .then((data) => {
+            setFormData({
+                name : "",
+                dob : "",
+                gender : "",
+                email : ""
+            })
+        })
+    }
 
-          <div className="flex flex-row mb-4">
-            <label className="w-1/3">E-mail:</label>
-            <input type="email" name="email" className="w-2/3 border p-2" />
-          </div>
-
-          <div className="flex flex-row mb-4">
-            <label className="w-1/3">Height:</label>
-            <input type="number" name="height" className="w-2/3 border p-2" />
-          </div>
-
-          <div className="flex flex-row mb-4">
-            <label className="w-1/3">Weight:</label>
-            <input type="number" name="weight" className="w-2/3 border p-2" />
-          </div>
-        
-          <div className="pt-3">
-            <button type="submit" className="w-[170px] h-7 bg-blue-950 hover:bg-[#154083] text-white font-bold text-sl rounded-[10px] shadow">
-            Confirm Update
-            </button>
-          </div>
-
-        </form>
-      </div>
+return (
+<div className="flex flex-col h-screen bg-[#F9D548]">
+    <Navbar />
+    <div className=" lg:w-4/5 lg:pr-8 p-8 flex flex-col h-screen bg-[#F9D548] text-[#0A2A67] justify-start items-start">
+    <div className="w-full max-w-md flex flex-row mt-7">
+        <Image
+            src="/logo.jpg"
+            alt="Profile Picture"
+            width={150}
+            height={150}
+            className="rounded-full shadow-lg"
+        />
+        <div className="flex flex-col mt-9 ml-8 gap-1">
+          <h1 className="flex flex-row text-2xl font-bold text-black">Clean Cook Book</h1>
+          <p className="text-xl text-black">@Cleancookbook</p>
+        </div>
     </div>
-      <Footer />
-      {isModalOpen && <Modal onClose={closeModal} />}
+
+    <form action="/update-account" method="POST" onSubmit={submitForm}>
+        <div>
+            <h2 className="text-xl underline font-bold left-10 mt-9">General Settings</h2>
+            <div className="flex flex-row mt-9 gap-4">
+                <label className="flex flex-row text-xl text-black font-semibold mt-1">Name :</label>
+                <input 
+                  className="text-xl text-black w-[748px] h-10 rounded-[10px] border p-2" 
+                  type="text" 
+                  name="name" 
+                  onChange={handleInput} 
+                  value={formData.name} 
+                  placeholder="Enter new name" />
+            </div>
+            <div className="flex flex-row mt-9 gap-4">
+                <label className="flex flex-row text-xl text-black font-semibold mt-1">Date of Birth :</label>
+                <input 
+                  className="text-xl text-black w-[308px] h-10 rounded-[10px] border p-2" 
+                  type="date" 
+                  name="dob" 
+                  onChange={handleInput} 
+                  value={formData.dob} />
+            </div>
+            <div className="flex flex-row mt-9 gap-4">
+                <label className="flex flex-row text-xl text-black font-semibold mt-1">Gender :</label>
+                <select
+                  className="text-xl text-black w-[735px] h-10 rounded-[10px] border p-2" 
+                  type="text" 
+                  name="gender" 
+                  onChange={handleInput} 
+                  value={formData.gender}>
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div className="flex flex-row mt-9 gap-4">
+                <label className="flex flex-row text-xl text-black font-semibold mt-1">E-mail :</label>
+                <input 
+                  className="text-xl text-black w-[745px] h-10 rounded-[10px] border p-2" 
+                  type="text" 
+                  name="email" 
+                  onChange={handleInput} 
+                  value={formData.email} 
+                  placeholder="Enter new e-mail" />
+            </div>
+            <div className="flex flex-row mt-20 gap-4">
+                <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
+                    <a href="#">Confirm Update</a>
+                </button>
+            </div>
+        </div>
+    </form>
+        
     </div>
+    <Footer />
+        {isModalOpen && <Modal onClose={closeModal} />}
+</div>
   );
 };
 

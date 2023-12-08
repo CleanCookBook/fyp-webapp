@@ -36,8 +36,8 @@ const Home = () => {
       {/* <Terms /> */}
       {/* <Signup /> */}
       {/* <Homepage /> */}
-      {/* <EditAccount/> */}
-      { <Accountpage /> }
+      { <EditAccount/> }
+      {/* <Accountpage /> */}
       {/* <Quizz> */}
     </main>
   );
