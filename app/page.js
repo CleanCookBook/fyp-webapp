@@ -8,6 +8,10 @@ import Image from "next/image";
 import Head from "next/head";
 import Signup from "@/components/Signup";
 import RecipeList from "@/components/RecipeList";
+import EditAccount from "@/components/EditAccount";
+import Accountpage from "@/components/Accountpage";
+import Quizz from "@/components/Quizz";
+
 //This too yall can delete
 //import { useEffect, useState } from 'react';
 
@@ -35,8 +39,10 @@ const Home = () => {
       {/* <Homepage /> */}
       <RecipeList />
       {/* <Terms /> */}
-      {/* <Signup /> */}
-      {/* <Homepage /> */}
+      {/* <EditAccount/> */}
+      { <Accountpage /> }
+      {/* <Quizz> */}
+
     </main>
   );
 };
