@@ -3,6 +3,7 @@ import { useState } from "react";
 import Footer from "./Footer";
 import Modal from "./Modal"; // Adjust the path based on your file structure
 import Navbar from "./Navbar";
+import Link from 'next/link';
 
 const Accountpage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,10 +53,12 @@ return (
             <p className="text-xl text-black">Cleancookbook@gmail.com</p>
         </div>
         <div className="flex flex-row mt-28 gap-4">
-            <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
-                <a href="/editAccount">Edit</a>
-            </button>
-
+            <Link href="/editAccount">
+                <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
+                    Edit
+                </button>
+            </Link>
+            
             <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
                 <a href="#">Reset Password</a>
             </button>
