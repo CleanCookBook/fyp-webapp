@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 const terms = () => {
+
   const [isChecked, setIsChecked]=useState(false);
   
   const handleCheckChange=(event) => {
@@ -89,6 +90,7 @@ return (
   </div>
 
 );
+
 };
-  
+
 export default terms;

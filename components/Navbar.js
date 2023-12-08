@@ -9,7 +9,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex bg-blue-950 h-[80px] items-center">
+    <nav className="flex w-full bg-blue-950 h-[80px] items-center">
       <div className="text-white flex w-1/2 justify-start font-black text-2xl px-10">
         {/* Circular Logo Image */}
         <div className="overflow-hidden w-16 h-16 flex-shrink-0">
