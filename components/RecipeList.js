@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import Navbar from "./Navbar";
 
 const RecipeList = () => {
   const input = "Fish";

@@ -28,6 +28,7 @@ const Home = () => {
       {/* <Signup /> */}
       {/* <Homepage /> */}
       <RecipeDetails/>
+    
       {/* <Terms /> */}
       {/* <EditAccount/> */}
       {/* <Quizz> */}
