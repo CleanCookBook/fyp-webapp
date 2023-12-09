@@ -81,7 +81,7 @@ return (
         </div>
         
         <div class="flex justify-center items-center mt-3">
-          <Link href="/quizPage">
+          <Link href="/home">
             <button class="w-[259px] h-[35px] bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] drop-shadow-xl">
               Create Account
             </button>
