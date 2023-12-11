@@ -38,13 +38,12 @@ return (
     </div>
 
     <div>
-            
         {/* Division 1 - 1/3 width */}
         <div className="w-1/3 float-right justify-items-end text-center">
           <img
             src="Fish&chips.jpg" // Replace with the actual path to your image
             alt="Homemade Fish & Chips Image"
-            className="w-full max-w-screen-xl mr-96 rounded-[0px] shadow-2xl shadow-black"
+            className="w-full max-w-screen-xl mr-96 rounded-2xl shadow-2xl shadow-black"
           />
         </div>
         <h2 className="text-xl underline font-bold left-10 mt-9">General Settings</h2>

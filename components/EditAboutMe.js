@@ -9,10 +9,9 @@ const EditAboutMe = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [formData, setFormData] = useState({
-        name : "",
-        dob : "",
-        gender : "",
-        email : "",
+        dpreference : "",
+        allergies : "",
+        goals : "",
     })
 
     const openModal = () => {
@@ -47,10 +46,9 @@ const EditAboutMe = () => {
         }).then((response) => response.json())
           .then((data) => {
             setFormData({
-                name : "",
-                dob : "",
-                gender : "",
-                email : ""
+              dpreference : "",
+              allergies : "",
+              goals : ""
             })
         })
     }
@@ -77,50 +75,53 @@ return (
         <div>
             <h2 className="text-xl underline font-bold left-10 mt-9">Dietary Settings</h2>
             <div className="flex flex-row mt-9 gap-4">
-                <label className="flex flex-row text-xl text-black font-semibold mt-1">Dietary Preferences :</label>
-                <input 
-                  className="text-xl text-black w-[748px] h-10 rounded-[10px] border p-2" 
-                  type="text" 
-                  name="name" 
-                  onChange={handleInput} 
-                  value={formData.name} 
-                  placeholder="Enter new name" />
-            </div>
-            <div className="flex flex-row mt-9 gap-4">
-                <label className="flex flex-row text-xl text-black font-semibold mt-1">Date of Birth :</label>
-                <input 
-                  className="text-xl text-black w-[308px] h-10 rounded-[10px] border p-2" 
-                  type="date" 
-                  name="dob" 
-                  onChange={handleInput} 
-                  value={formData.dob} />
-            </div>
-            <div className="flex flex-row mt-9 gap-4">
-                <label className="flex flex-row text-xl text-black font-semibold mt-1">Gender :</label>
+                <label className="flex flex-row text-xl text-black font-semibold mt-2">Dietary Preferences :</label>
                 <select
-                  className="text-xl text-black w-[735px] h-10 rounded-[10px] border p-2" 
+                  className="text-xl text-black w-[660px] h-12 rounded-[10px] border p-2" 
                   type="text" 
-                  name="gender" 
+                  name="dpreference" 
                   onChange={handleInput} 
-                  value={formData.gender}>
-                    <option value="">Select Gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
+                  value={formData.dpreference}>
+                    <option value="">Select New Preference</option>
+                    <option value="dairy-free">Dairy-free</option>
+                    <option value="vegan">Vegan</option>
+                    <option value="gluten-free">Gluten-free</option>
+                    <option value="halal">Halal</option>
                 </select>
             </div>
             <div className="flex flex-row mt-9 gap-4">
-                <label className="flex flex-row text-xl text-black font-semibold mt-1">E-mail :</label>
-                <input 
-                  className="text-xl text-black w-[745px] h-10 rounded-[10px] border p-2" 
+                <label className="flex flex-row text-xl text-black font-semibold mt-2">Allergies :</label>
+                <select
+                  className="text-xl text-black w-[775px] h-12 rounded-[10px] border p-2" 
                   type="text" 
-                  name="email" 
+                  name="allergies" 
                   onChange={handleInput} 
-                  value={formData.email} 
-                  placeholder="Enter new e-mail" />
+                  value={formData.allergies}>
+                    <option value="">Select New Allergies</option>
+                    <option value="nuts">Nuts</option>
+                    <option value="dairy-free">Dairy-free</option>
+                    <option value="seafood">Seafood</option>
+                    <option value="eggs">Eggs</option>
+                    <option value="soy">Soy</option>
+                </select>
             </div>
+            <div className="flex flex-row mt-9 gap-4">
+                <label className="flex flex-row text-xl text-black font-semibold mt-2">Health Goals :</label>
+                <select
+                  className="text-xl text-black w-[735px] h-12 rounded-[10px] border p-2" 
+                  type="text" 
+                  name="goals" 
+                  onChange={handleInput} 
+                  value={formData.goals}>
+                    <option value="">Select New Goals</option>
+                    <option value="weight-loss">Weight Loss</option>
+                    <option value="diet-nutrition"> Improve my diet and nutrition</option>
+                    <option value="overall-health">Improve my overall health</option>
+                </select>
+            </div>
+            
             <div className="flex flex-row mt-20 gap-4">
-            <Link href="/profile">
+            <Link href="/AboutMe">
               <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
               Confirm Update
               </button>
