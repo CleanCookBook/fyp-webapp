@@ -176,7 +176,7 @@ const Quizz = () => {
                     </div>
                 </div>
             </div>
-            <div className="fixed bottom-6 left-20">
+            <div className="fixed bottom-6 right-20">
             <Link href="/termsCon">
             <button className="w-[350px] h-7 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow">
               Next
