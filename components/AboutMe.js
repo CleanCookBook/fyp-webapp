@@ -45,14 +45,14 @@ return (
             <p className="text-xl text-black">Nuts</p>
         </div>
         <div className="flex flex-row mt-9 gap-4">
-            <p className="flex flex-row text-xl text-black font-semibold">Health Goal :</p>
+            <p className="flex flex-row text-xl text-black font-semibold">Health Goals :</p>
             <p className="text-xl text-black">Weight Loss</p>
         </div>
         <div className="flex flex-row mt-9 gap-4">
 
         </div>
         <div className="flex flex-row mt-28 gap-4">
-            <Link href="/editAccount">
+            <Link href="/editAboutMe">
                 <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
                     Edit
                 </button>
