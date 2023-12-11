@@ -1,6 +1,7 @@
 // app/page.js
 "use client";
 import Welcome from "@/components/Welcome";
+import NewsFeed from "@/components/NewsFeed";
 
 //This too yall can delete
 //import { useEffect, useState } from 'react';
@@ -23,8 +24,7 @@ const Home = () => {
 
   return (
     <main className="">
-      <Welcome/>
-
+      <NewsFeed />
     </main>
   );
 };

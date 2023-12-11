@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useState } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import Navbar from "./Navbar";
 
 const RecipeList = () => {
   const input = "Fish";
@@ -50,7 +49,7 @@ const RecipeList = () => {
               className="flex items-center h-[60px] border-b-2 border-gray-300"
             >
               <Link href="detailRecipe">
-              <p className="ml-2 text-black text-xl font-medium">{recipe}</p>
+                <p className="ml-2 text-black text-xl font-medium">{recipe}</p>
               </Link>
             </div>
           ))}
