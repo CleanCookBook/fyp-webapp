@@ -99,7 +99,7 @@ return (
                   value={formData.allergies}>
                     <option value="">Select New Allergies</option>
                     <option value="nuts">Nuts</option>
-                    <option value="dairy-free">Dairy-free</option>
+                    <option value="dairy">Dairy</option>
                     <option value="seafood">Seafood</option>
                     <option value="eggs">Eggs</option>
                     <option value="soy">Soy</option>
