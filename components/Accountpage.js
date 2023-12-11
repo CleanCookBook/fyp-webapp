@@ -18,7 +18,10 @@ const closeModal = () => {
 
 return (
 <div className="flex flex-col h-screen bg-[#F9D548]">
+    {/* Navbar */}
     <Navbar />
+
+    {/* Main Content */}
     <div className=" lg:w-4/5 lg:pr-8 p-8 flex flex-col h-screen bg-[#F9D548] text-[#0A2A67] justify-start items-start">
     <div className="w-full max-w-md flex flex-row mt-7">
         <Image
@@ -35,6 +38,15 @@ return (
     </div>
 
     <div>
+            
+        {/* Division 1 - 1/3 width */}
+        <div className="w-1/3 float-right justify-items-end text-center">
+          <img
+            src="Fish&chips.jpg" // Replace with the actual path to your image
+            alt="Homemade Fish & Chips Image"
+            className="w-full max-w-screen-xl mr-96 rounded-2xl shadow-2xl shadow-black"
+          />
+        </div>
         <h2 className="text-xl underline font-bold left-10 mt-9">General Settings</h2>
         <div className="flex flex-row mt-9 gap-4">
             <p className="flex flex-row text-xl text-black font-semibold">Name :</p>
