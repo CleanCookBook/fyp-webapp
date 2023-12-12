@@ -5,7 +5,7 @@ import Modal from "./Modal"; // Adjust the path based on your file structure
 import Navbar from "./Navbar";
 import Link from 'next/link';
 
-const Accountpage = () => {
+const AboutMe = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
 const openModal = () => {
@@ -18,10 +18,7 @@ const closeModal = () => {
 
 return (
 <div className="flex flex-col h-screen bg-[#F9D548]">
-    {/* Navbar */}
     <Navbar />
-
-    {/* Main Content */}
     <div className=" lg:w-4/5 lg:pr-8 p-8 flex flex-col h-screen bg-[#F9D548] text-[#0A2A67] justify-start items-start">
     <div className="w-full max-w-md flex flex-row mt-7">
         <Image
@@ -46,25 +43,29 @@ return (
             className="w-full max-w-screen-xl mr-96 rounded-2xl shadow-2xl shadow-black"
           />
         </div>
-        <h2 className="text-xl underline font-bold left-10 mt-9">General Settings</h2>
+        <h2 className="text-xl underline font-bold left-10 mt-9">Dietary Settings</h2>
         <div className="flex flex-row mt-9 gap-4">
-            <p className="flex flex-row text-xl text-black font-semibold">Name :</p>
-            <p className="text-xl text-black">Clean Cook Book</p>
+            <p className="flex flex-row text-xl text-black font-semibold">Dietary Preferences :</p>
+            <p className="text-xl text-black">Gluten-free</p>
         </div>
         <div className="flex flex-row mt-9 gap-4">
-            <p className="flex flex-row text-xl text-black font-semibold">Date of Birth :</p>
-            <p className="text-xl text-black">12/7/2023</p>
+            <p className="flex flex-row text-xl text-black font-semibold">Allergies :</p>
+            <p className="text-xl text-black">Nuts</p>
         </div>
         <div className="flex flex-row mt-9 gap-4">
-            <p className="flex flex-row text-xl text-black font-semibold">Gender :</p>
-            <p className="text-xl text-black">Male</p>
+            <p className="flex flex-row text-xl text-black font-semibold">Health Goals :</p>
+            <p className="text-xl text-black">Weight Loss</p>
         </div>
         <div className="flex flex-row mt-9 gap-4">
-            <p className="flex flex-row text-xl text-black font-semibold">E-mail :</p>
-            <p className="text-xl text-black">Cleancookbook@gmail.com</p>
+            <p className="flex flex-row text-xl text-black font-semibold">Height :</p>
+            <p className="text-xl text-black">186 cm</p>
+        </div>
+        <div className="flex flex-row mt-9 gap-4">
+            <p className="flex flex-row text-xl text-black font-semibold">Weight :</p>
+            <p className="text-xl text-black">80 kg</p>
         </div>
         <div className="flex flex-row mt-28 gap-4">
-            <Link href="/editAccount">
+            <Link href="/EditAboutMe">
                 <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
                     Edit
                 </button>
@@ -84,4 +85,4 @@ return (
   );
 };
 
-export default Accountpage;
+export default AboutMe;
