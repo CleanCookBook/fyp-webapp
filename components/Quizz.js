@@ -15,7 +15,7 @@ const Quizz = () => {
 
                         <label class="flex items-center space-x-2">
                             <input type="checkbox" class="form-checkbox" />
-                            <span class="text-sm">Diet-free</span>
+                            <span class="text-sm">Dairy-free</span>
                         </label>
 
 
@@ -42,8 +42,8 @@ const Quizz = () => {
                 <div class="bg-white p-6 rounded shadow-md">
                     <h2 class="text-lg font-semibold mb-4">2. What is your current weight?</h2>
                     <div class="space-y-2">
-                    <label class="absolute bottom-[640px] left-[900px] items-center space-x-2">
-                        <span class="text-sm">Weight: </span>
+                    <label class="mx-auto px-4 items-center space-x-2">
+                        <span class="text-sm"></span>
                         <input type="text" class="border border-gray-300 p-1 pb-1 pr-8 rounded-md" />
                         <span class="text-sm">kg</span>
                     </label>
@@ -53,8 +53,8 @@ const Quizz = () => {
                 <div class="bg-white p-6 rounded shadow-md">
                     <h2 class="text-lg font-semibold mb-4">3. What is your current height?</h2>
                     <div class="space-y-2">
-                        <label class="absolute bottom-[640px] left-[1725px] items-center space-x-2">
-                            <span class="text-sm">Height: </span>
+                        <label class="mx-auto px-4 items-center space-x-2">
+                            <span class="text-sm"></span>
                             <input type="text" class="border border-gray-300 p-1 pb-1 pr-8 rounded-md" />
                             <span class="text-sm">cm</span>
                         </label>
@@ -178,7 +178,7 @@ const Quizz = () => {
             </div>
             <div className="fixed bottom-6 right-20">
             <Link href="/termsCon">
-            <button className="w-[350px] h-7 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow">
+            <button className="w-[350px] h-10 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow">
               Next
             </button>
             </Link>
