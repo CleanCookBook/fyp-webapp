@@ -48,7 +48,9 @@ const EditAboutMe = () => {
             setFormData({
               dpreference : "",
               allergies : "",
-              goals : ""
+              goals : "",
+              height : "",
+              weight : ""
             })
         })
     }
@@ -77,7 +79,7 @@ return (
             <div className="flex flex-row mt-9 gap-4">
                 <label className="flex flex-row text-xl text-black font-semibold mt-2">Dietary Preferences :</label>
                 <select
-                  className="text-xl text-black w-[660px] h-12 rounded-[10px] border p-2" 
+                  className="text-xl text-black w-[400px] h-12 rounded-[10px] border p-2" 
                   type="text" 
                   name="dpreference" 
                   onChange={handleInput} 
@@ -92,7 +94,7 @@ return (
             <div className="flex flex-row mt-9 gap-4">
                 <label className="flex flex-row text-xl text-black font-semibold mt-2">Allergies :</label>
                 <select
-                  className="text-xl text-black w-[775px] h-12 rounded-[10px] border p-2" 
+                  className="text-xl text-black w-[400px] h-12 rounded-[10px] border p-2" 
                   type="text" 
                   name="allergies" 
                   onChange={handleInput} 
@@ -108,7 +110,7 @@ return (
             <div className="flex flex-row mt-9 gap-4">
                 <label className="flex flex-row text-xl text-black font-semibold mt-2">Health Goals :</label>
                 <select
-                  className="text-xl text-black w-[735px] h-12 rounded-[10px] border p-2" 
+                  className="text-xl text-black w-[400px] h-12 rounded-[10px] border p-2" 
                   type="text" 
                   name="goals" 
                   onChange={handleInput} 
@@ -118,6 +120,28 @@ return (
                     <option value="diet-nutrition"> Improve my diet and nutrition</option>
                     <option value="overall-health">Improve my overall health</option>
                 </select>
+            </div>
+            <div className="flex flex-row mt-9 gap-4">
+                <label className="text-xl text-black font-semibold mt-2">Height :</label>
+                <input 
+                  className="text-xl text-black w-[100px] h-12 rounded-[10px] border p-2" 
+                  type="text" 
+                  name="height" 
+                  onChange={handleInput} 
+                  value={formData.height} 
+                  placeholder="Enter new height" />
+                  <label className="text-xl text-black font-semibold mt-2">cm</label>
+            </div>
+            <div className="flex flex-row mt-9 gap-4">
+                <label className="text-xl text-black font-semibold mt-2">Weight :</label>
+                <input 
+                  className="text-xl text-black w-[100px] h-12 rounded-[10px] border p-2" 
+                  type="text" 
+                  name="weight" 
+                  onChange={handleInput} 
+                  value={formData.weight} 
+                  placeholder="Enter new weight" />
+                  <label className="text-xl text-black font-semibold mt-2">kg</label> 
             </div>
             
             <div className="flex flex-row mt-20 gap-4">

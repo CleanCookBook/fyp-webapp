@@ -57,7 +57,12 @@ return (
             <p className="text-xl text-black">Weight Loss</p>
         </div>
         <div className="flex flex-row mt-9 gap-4">
-
+            <p className="flex flex-row text-xl text-black font-semibold">Height :</p>
+            <p className="text-xl text-black">186 cm</p>
+        </div>
+        <div className="flex flex-row mt-9 gap-4">
+            <p className="flex flex-row text-xl text-black font-semibold">Weight :</p>
+            <p className="text-xl text-black">80 kg</p>
         </div>
         <div className="flex flex-row mt-28 gap-4">
             <Link href="/editAboutMe">
