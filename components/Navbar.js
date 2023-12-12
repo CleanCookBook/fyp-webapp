@@ -54,10 +54,16 @@ const Navbar = () => {
                       Profile
                     </a>
                     <a
-                      href="#"
+                      href="/AboutMe"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       About Me
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Log Out
                     </a>
                   </div>
                 </div>

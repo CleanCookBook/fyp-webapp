@@ -77,9 +77,9 @@ return (
         <div>
             <h2 className="text-xl underline font-bold left-10 mt-9">General Settings</h2>
             <div className="flex flex-row mt-9 gap-4">
-                <label className="flex flex-row text-xl text-black font-semibold mt-1">Name :</label>
+                <label className="flex flex-row text-xl text-black font-semibold mt-2">Name :</label>
                 <input 
-                  className="text-xl text-black w-[748px] h-10 rounded-[10px] border p-2" 
+                  className="text-xl text-black w-[748px] h-12 rounded-[10px] border p-2" 
                   type="text" 
                   name="name" 
                   onChange={handleInput} 
@@ -87,18 +87,18 @@ return (
                   placeholder="Enter new name" />
             </div>
             <div className="flex flex-row mt-9 gap-4">
-                <label className="flex flex-row text-xl text-black font-semibold mt-1">Date of Birth :</label>
+                <label className="flex flex-row text-xl text-black font-semibold mt-2">Date of Birth :</label>
                 <input 
-                  className="text-xl text-black w-[308px] h-10 rounded-[10px] border p-2" 
+                  className="text-xl text-black w-[308px] h-12 rounded-[10px] border p-2" 
                   type="date" 
                   name="dob" 
                   onChange={handleInput} 
                   value={formData.dob} />
             </div>
             <div className="flex flex-row mt-9 gap-4">
-                <label className="flex flex-row text-xl text-black font-semibold mt-1">Gender :</label>
+                <label className="flex flex-row text-xl text-black font-semibold mt-2">Gender :</label>
                 <select
-                  className="text-xl text-black w-[735px] h-10 rounded-[10px] border p-2" 
+                  className="text-xl text-black w-[735px] h-12 rounded-[10px] border p-2" 
                   type="text" 
                   name="gender" 
                   onChange={handleInput} 
@@ -110,9 +110,9 @@ return (
                 </select>
             </div>
             <div className="flex flex-row mt-9 gap-4">
-                <label className="flex flex-row text-xl text-black font-semibold mt-1">E-mail :</label>
+                <label className="flex flex-row text-xl text-black font-semibold mt-2">E-mail :</label>
                 <input 
-                  className="text-xl text-black w-[745px] h-10 rounded-[10px] border p-2" 
+                  className="text-xl text-black w-[745px] h-12 rounded-[10px] border p-2" 
                   type="text" 
                   name="email" 
                   onChange={handleInput} 
@@ -122,7 +122,7 @@ return (
             <div className="flex flex-row mt-20 gap-4">
             <Link href="/profile">
               <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
-              Confirm Update
+                Confirm Update
               </button>
             </Link>
             </div>
