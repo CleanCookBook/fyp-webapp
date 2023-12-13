@@ -53,7 +53,7 @@ return (
     </div>
 
     <div className="bg-white w-[1600px] h-[585px] mx-auto font-black text-2xl shadow-md flex-row -mt-9">
-      <p className="text-xl font-bold flex py-5 px-5 top-0 left-75">Terms and Conditions </p>
+      <p className="text-xl font-bold flex py-5 px-5 top-0 left-75">Terms and Conditions :</p>
         <div className="bg-[#E5E4E2] w-[1510px] h-[495px] font-black text-2xl shadow-md border-4 border-gray-300 overflow-auto justify-center items-center ml-10">
           <ol className="text-black text-base font-semibold pb-5 ajustify-center items-center">
             <li><b>Acceptance of Terms</b></li>
