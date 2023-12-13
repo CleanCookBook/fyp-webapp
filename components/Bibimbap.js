@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "./Footer";
 
-const RecipeDetails = () => {
+const Bibimbap = () => {
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       {/* Navbar */}
@@ -9,17 +9,15 @@ const RecipeDetails = () => {
 
       {/* Main Content */}
       <div className="p-4 pl-20 bg-[#F9D548]">
-        <h1 className="text-6xl font-extrabold text-blue-950">
-          Homemade Fish & Chips
-        </h1>
+        <h1 className="text-6xl font-extrabold text-blue-950">Bibimbap</h1>
       </div>
 
       <div className="flex p-4 pl-20 bg-[#F9D548]">
         {/* Division 1 - 1/3 width */}
         <div className="w-1/3">
           <img
-            src="Fish&chips.jpg" // Replace with the actual path to your image
-            alt="Homemade Fish & Chips Image"
+            src="" // Replace with the actual path to your image
+            alt="Bibimbap Image"
             className="w-full max-w-screen-xl mx-auto rounded-2xl shadow-2xl shadow-black"
           />
         </div>
@@ -45,19 +43,22 @@ const RecipeDetails = () => {
             Why this Recipe?
           </h2>
           <p className="text-[#1D5198] leading-tight">
-            This recipe for 2 is a healthy version of the otherwise stodgy and
-            oil
+            Bibimbap (비빔밥), a vibrant Korean dish, intricately weaves
+            together an
             <br />
-            soaked fish and chips. The fish is lightly coated in breadcrumbs and
+            array of fresh vegetables, tender meats or tofu, and a spicy
+            gochujang
             <br />
-            baked, and the chips are tossed in a small amount of oil and
+            sauce atop steamed rice. Beyond its visually striking presentation
+            lies a
             <br />
-            cooked in the oven until golden. The peas are garden peas, crushed
+            nutritional powerhouse, boasting an abundance of vitamins, minerals,{" "}
             <br />
-            and mixed with a bit of butter and mint. Nutritious, but still hits
-            the
-            <br />
-            spot when that chippy craving strikes.
+            and antioxidants from its colourful ingredients. This one-bowl
+            wonder <br />
+            offers not just a meal but an exploration of flavours, textures, and
+            the rich <br />
+            tapestry of Korean culinary heritage.
           </p>
         </div>
       </div>
@@ -72,21 +73,24 @@ const RecipeDetails = () => {
             {/* First Column - 1/2 width */}
             <div className="w-1/2 p-4 pl-20">
               <p className="text-[#1D5198]">
-                4 white Fish Fillet <br />
-                100 g Breadcrumbs <br />
-                4 Large Potatoes <br />
-                400g Frozen Garden Peas <br />
+                ½ cup Cooked Rice <br />
+                1 cup Assorted Vegetables (spinach, carrots, bean sprouts,
+                mushrooms, zucchini) <br />
+                ¼ cup Marinated Beef or Tofu (for a vegetarian option) <br />
+                1 Egg <br />
+                1 tablespoon Gochujang (Korean red pepper paste) <br />
+                1 tablespoon Soy Sauce <br />
               </p>
             </div>
 
             {/* Second Column - 1/2 width */}
             <div className="w-1/2 p-4">
               <p className="text-[#1D5198]">
-                2 Eggs <br />
-                Pinch of Salt and Pepper
-                <br />
-                2 teaspoons of Oil <br />
-                20g Butter <br />
+                1 teaspoon Sesame Oil <br />
+                1 teaspoon Sesame Seeds <br />
+                1 Clove Garlic, Minced <br />
+                ½ teaspoon Sugar <br />
+                1 teaspoon Rice Vinegar <br />
               </p>
             </div>
           </div>
@@ -98,74 +102,63 @@ const RecipeDetails = () => {
             </div>
             <div name="content" className="p-4 pl-20">
               <h3 className="text-xl text-[#1D5198] font-bold">
-                For the chips(French Fries):
+                Prepare the Vegetables:
               </h3>
               <br />
               <p className="text-[#1D5198]">
-                1.Preheat your oven to 220°C (425°F). <br />
-                2.Wash and peel the potatoes. Cut them into even-sized strips
-                (thicker cuts for a fluffier interior).
+                1. Julienne or thinly slice the carrots and zucchini. <br />
+                2. Blanch spinach in boiling water for a minute, then drain and
+                squeeze out excess water.
                 <br />
-                3.Soak the cut potatoes in a bowl of cold water for about 30
-                minutes to remove excess starch.
+                3. Blanch bean sprouts in boiling water for 2-3 minutes, then
+                drain.
                 <br />
-                4.After soaking, drain the water and thoroughly dry the potato
-                strips with paper towels.
-                <br />
-                5.Toss the dried potato strips in a bowl with 1 tablespoon of
-                oil, salt, and pepper until evenly coated.
-                <br />
-                6.Spread the potatoes on a baking tray lined with parchment
-                paper.
-                <br />
-                7.Bake for 30-35 minutes or until golden brown and crispy,
-                flipping them halfway through for even cooking.
+                4. Sauté or stir-fry the mushrooms until cooked, seasoned
+                lightly with soy sauce and garlic.
                 <br />
                 <br />
                 <h3 className="text-xl text-[#1D5198] font-bold">
-                  For the Fish:
+                  Prepare the Protien:
                 </h3>
                 <br />
-                1. Pat the fish fillets dry with paper towels.
-                <br />
-                2. In separate shallow dishes, prepare two coatings: one with
-                plain flour seasoned with salt, pepper, and dried mint, and the
-                other with beaten eggs.
-                <br />
-                3. Dip each fillet first into the seasoned flour, then into the
-                beaten egg, and finally coat it thoroughly with breadcrumbs.
-                <br />
-                4. Heat the remaining oil in a frying pan over medium-high heat.
-                <br />
-                5. Once the oil is hot, carefully add the breaded fish fillets
-                to the pan.
-                <br />
-                6. Fry each fillet for about 3-4 minutes on each side until
-                golden brown and the fish is cooked through. Place them on a
-                paper towel-lined plate to drain excess oil.
+                1. If using beef, stir-fry it in a pan until cooked through. If
+                using tofu, sauté until lightly browned.
                 <br />
                 <br />
                 <h3 className="text-xl text-[#1D5198] font-bold">
-                  For the Peas:
+                  Prepare the Gochujang Sauce:
                 </h3>
                 <br />
-                1. Boil the frozen garden peas according to the package
-                instructions.
-                <br />
-                2. Drain the peas and return them to the pan.
-                <br />
-                3. Add the butter and a pinch of salt and pepper to the peas.
-                Mash lightly or blend for a smoother consistency if preferred.
+                1. In a small bowl, mix Gochujang with sesame oil, sesame seeds,
+                sugar, rice vinegar (if using), and a teaspoon of water to
+                achieve a paste-like consistency.
                 <br />
                 <br />
-                <h3 className="text-xl text-[#1D5198] font-bold">Plating:</h3>
+                <h3 className="text-xl text-[#1D5198] font-bold">
+                  Fry the Egg:
+                </h3>
                 <br />
-                Serve the crispy fish fillets alongside the golden brown chips.
+                1. Heat a small pan with vegetable oil over medium heat. Crack
+                the egg into the pan and cook until the whites are set but the
+                yolk remains runny.
                 <br />
-                Plate a portion of mashed peas on each serving plate.
                 <br />
-                Garnish with a wedge of lemon or your preferred condiments like
-                tartar sauce or malt vinegar.
+                <h3 className="text-xl text-[#1D5198] font-bold">
+                  Plating & Serving:
+                </h3>
+                <br />
+                1. Place the cooked rice in a serving bowl.
+                <br />
+                2. Arrange the cooked vegetables and protein on top of the rice
+                in separate sections.
+                <br />
+                3. Add the fried egg on one side.
+                <br />
+                4. Drizzle the Gochujang sauce over the vegetables and
+                meat/tofu.
+                <br />
+                Mix all the ingredients together thoroughly just before eating
+                to combine flavors and textures.
                 <br />
                 <br />
               </p>
@@ -183,36 +176,38 @@ const RecipeDetails = () => {
           </div>
           <div name="content" className="p-4 pl-20">
             <h3 className="text-xl text-[#1D5198] font-bold">
-              Selecting the Fish:
+              Veggie Variety:
             </h3>
             <p className="text-[#1D5198]">
-              Opt for fresh, firm white fish like cod, haddock, or halibut. The
-              freshness of the fish is key to a great dish.
+              Aim for a diverse selection of vegetables for a colorful and
+              nutritious bowl. Use what you have on hand—carrots, spinach,
+              mushrooms, and bean sprouts are classic choices, but feel free to
+              add others like bell peppers or cucumbers.
             </p>
             <h3 className="text-xl text-[#1D5198] font-bold">
               {" "}
-              Double Fry Technique:{" "}
+              Gochujang Blend:{" "}
             </h3>
             <p className="text-[#1D5198]">
-              Fry the fish twice for that perfect crunch. After an initial fry
-              to cook the fish, let it rest, then fry it again briefly just
-              before serving for that ultimate crispy texture.
+              Customize your Gochujang sauce by adjusting its consistency and
+              spiciness. Add a splash of rice vinegar for tanginess or a touch
+              of sugar for balance. Don't be afraid to tailor it to your taste.
             </p>
             <h3 className="text-xl text-[#1D5198] font-bold">
-              Temperature Matters:{" "}
+              Perfect Egg Fry:{" "}
             </h3>
             <p className="text-[#1D5198]">
-              Maintain a consistent oil temperature (around 350-375°F or
-              175-190°C) when frying. This ensures the fish cooks evenly and the
-              batter turns golden brown without burning.
+              For a traditional bibimbap, fry the egg sunny-side-up with a runny
+              yolk. Cook it gently, covering the pan for a minute to ensure the
+              whites are set but the yolk remains runny.
             </p>
             <h3 className="text-xl text-[#1D5198] font-bold">
-              Oil Selection:{" "}
+              Customize to Taste:{" "}
             </h3>
             <p className="text-[#1D5198]">
-              Use oils with high smoke points like peanut, sunflower, or canola
-              oil for frying. They can withstand higher temperatures without
-              imparting unwanted flavours.
+              Feel free to experiment with ingredients and proportions.
+              Personalize the bowl to suit your preferences for spice level,
+              types of veggies, or protein choices.
             </p>
           </div>
           <div className="border-t border-gray-500 my-4 pl-20"></div>
@@ -224,19 +219,20 @@ const RecipeDetails = () => {
           <div name="content" className="p-4 pl-20">
             <ul className="list-disc text-[#1D5198] ml-4">
               <li>
-                <b>Calories</b>: Around 2624 calories
+                <b>Calories</b>: Around 500 - 600 calories (Varies based on
+                specific ingredients and amount used)
               </li>
               <li>
-                <b>Protein</b>: Approximately 99 grams
+                <b>Protein</b>: Approximately 25 grams
               </li>
               <li>
-                <b>Fat</b>: Roughly 25 grams
+                <b>Fat</b>: Roughly 20 grams
               </li>
               <li>
-                <b>Carbohydrates</b>: About 397 grams
+                <b>Carbohydrates</b>: About 80 grams
               </li>
               <li>
-                <b>Fiber</b>: Around 51 grams
+                <b>Fiber</b>: Around 8 grams
               </li>
             </ul>
             <p className="text-[#1D5198] mt-4">
@@ -253,4 +249,4 @@ const RecipeDetails = () => {
   );
 };
 
-export default RecipeDetails;
+export default Bibimbap;

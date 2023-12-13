@@ -67,22 +67,22 @@ const VegetarianBurrito = () => {
             {/* First Column - 1/2 width */}
             <div className="w-1/2 p-4 pl-20">
               <p className="text-[#1D5198]">
-                2 cups cooked rice <br />
-                2 tbsp chopped fresh cilantro <br />
-                2 limes juiced <br />
-                ½ diced medium onion <br />
-                3 – 4 cloves minced garlic <br />
+                2 cups Cooked Rice <br />
+                2 tablespoon Chopped Fresh Cilantro <br />
+                2 Limes Juiced <br />
+                ½ Diced Medium Onion <br />
+                3 – 4 Cloves Minced Garlic <br />
               </p>
             </div>
 
             {/* Second Column - 1/2 width */}
             <div className="w-1/2 p-4">
               <p className="text-[#1D5198]">
-                2 tbsp vegetable oil <br />
-                1 can drained black beans <br />
-                4 large tortillas (10 inch) <br />
-                ½ tsp ground cumin <br />
-                1 tbsp hot sauce and chili powder <br />
+                2 tablespoon Vegetable Oil <br />
+                1 can Drained Black Beans <br />
+                4 large Temperatureortillas (10 inch) <br />
+                ½ teaspoon Ground Cumin <br />
+                1 tablespoon Hot Sauce and Chili Powder <br />
               </p>
             </div>
           </div>
