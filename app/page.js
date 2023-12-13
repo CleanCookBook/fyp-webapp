@@ -2,6 +2,8 @@
 "use client";
 import Welcome from "@/components/Welcome";
 import NewsFeed from "@/components/NewsFeed";
+import Bibimbap from "@/components/Bibimbap";
+import VegetarianBurrito from "@/components/VegetarianBurrito";
 
 //This too yall can delete
 //import { useEffect, useState } from 'react';
@@ -24,7 +26,9 @@ const Home = () => {
 
   return (
     <main className="">
-      <NewsFeed />
+      <Bibimbap />
+      <VegetarianBurrito />
+      {/* <NewsFeed /> */}
     </main>
   );
 };
