@@ -39,7 +39,6 @@ const RecipeDetails = () => {
             <a href="/reviews" style={{ textDecoration: "underline" }}>
               reviews
             </a>
-            .
           </p>
 
           <h2 className="text-3xl text-[#1D5198] font-bold">
@@ -119,7 +118,7 @@ const RecipeDetails = () => {
                 6.Spread the potatoes on a baking tray lined with parchment
                 paper.
                 <br />
-                6.Bake for 30-35 minutes or until golden brown and crispy,
+                7.Bake for 30-35 minutes or until golden brown and crispy,
                 flipping them halfway through for even cooking.
                 <br />
                 <br />
@@ -138,8 +137,8 @@ const RecipeDetails = () => {
                 <br />
                 4. Heat the remaining oil in a frying pan over medium-high heat.
                 <br />
-                5. Once the oil is hot, carefully add the breaded fish fillets to
-                the pan.
+                5. Once the oil is hot, carefully add the breaded fish fillets
+                to the pan.
                 <br />
                 6. Fry each fillet for about 3-4 minutes on each side until
                 golden brown and the fish is cooked through. Place them on a
@@ -177,43 +176,79 @@ const RecipeDetails = () => {
 
         {/* Second Column - 2/3 width */}
         <div className="w-3/5 p-4">
-        <div name="title" className="p-4 pl-20">
-            <h2 className="text-3xl text-[#1D5198] font-bold">Notes From the Chef!</h2>
+          <div name="title" className="p-4 pl-20">
+            <h2 className="text-3xl text-[#1D5198] font-bold">
+              Notes From the Chef!
+            </h2>
           </div>
           <div name="content" className="p-4 pl-20">
-              <h3 className="text-xl text-[#1D5198] font-bold">Selecting the Fish:</h3>
-                  <p className="text-[#1D5198]">Opt for fresh, firm white fish like cod, haddock, or halibut. The freshness of the fish is key to a great dish.</p>
-                  <h3 className="text-xl text-[#1D5198] font-bold"> Double Fry Technique: </h3>
-                  <p className="text-[#1D5198]">Fry the fish twice for that perfect crunch. After an initial fry to cook the fish, let it rest, then fry it again briefly just before serving for that ultimate crispy texture.</p>
-                  <h3 className="text-xl text-[#1D5198] font-bold">Temperature Matters: </h3>
-                  <p className="text-[#1D5198]">Maintain a consistent oil temperature (around 350-375°F or 175-190°C) when frying. This ensures the fish cooks evenly and the batter turns golden brown without burning.</p>
-                  <h3 className="text-xl text-[#1D5198] font-bold">Oil Selection: </h3>
-                  <p className="text-[#1D5198]">Use oils with high smoke points like peanut, sunflower, or canola oil for frying. They can withstand higher temperatures without imparting unwanted flavours.</p>
-
-            
-         
+            <h3 className="text-xl text-[#1D5198] font-bold">
+              Selecting the Fish:
+            </h3>
+            <p className="text-[#1D5198]">
+              Opt for fresh, firm white fish like cod, haddock, or halibut. The
+              freshness of the fish is key to a great dish.
+            </p>
+            <h3 className="text-xl text-[#1D5198] font-bold">
+              {" "}
+              Double Fry Technique:{" "}
+            </h3>
+            <p className="text-[#1D5198]">
+              Fry the fish twice for that perfect crunch. After an initial fry
+              to cook the fish, let it rest, then fry it again briefly just
+              before serving for that ultimate crispy texture.
+            </p>
+            <h3 className="text-xl text-[#1D5198] font-bold">
+              Temperature Matters:{" "}
+            </h3>
+            <p className="text-[#1D5198]">
+              Maintain a consistent oil temperature (around 350-375°F or
+              175-190°C) when frying. This ensures the fish cooks evenly and the
+              batter turns golden brown without burning.
+            </p>
+            <h3 className="text-xl text-[#1D5198] font-bold">
+              Oil Selection:{" "}
+            </h3>
+            <p className="text-[#1D5198]">
+              Use oils with high smoke points like peanut, sunflower, or canola
+              oil for frying. They can withstand higher temperatures without
+              imparting unwanted flavours.
+            </p>
+          </div>
+          <div className="border-t border-gray-500 my-4 pl-20"></div>
+          <div name="title" className="p-4 pl-20">
+            <h2 className="text-3xl text-[#1D5198] font-bold">
+              Nutritional Facts
+            </h2>
+          </div>
+          <div name="content" className="p-4 pl-20">
+            <ul className="list-disc text-[#1D5198] ml-4">
+              <li>
+                <b>Calories</b>: Around 2624 calories
+              </li>
+              <li>
+                <b>Protein</b>: Approximately 99 grams
+              </li>
+              <li>
+                <b>Fat</b>: Roughly 25 grams
+              </li>
+              <li>
+                <b>Carbohydrates</b>: About 397 grams
+              </li>
+              <li>
+                <b>Fiber</b>: Around 51 grams
+              </li>
+            </ul>
+            <p className="text-[#1D5198] mt-4">
+              Keep in mind that these values are estimations and can vary based
+              on factors like specific brands of ingredients, variations in
+              sizes, and preparation methods. Adjustments may be necessary based
+              on the actual ingredients used.
+            </p>
+          </div>
         </div>
-        <div className="border-t border-gray-500 my-4 pl-20"></div>
-        <div name="title" className="p-4 pl-20">
-            <h2 className="text-3xl text-[#1D5198] font-bold">Nutritional Facts</h2>
-          </div>
-          <div name="content" className="p-4 pl-20">
-  <ul className="list-disc text-[#1D5198] ml-4">
-    <li><b>Calories</b>: Around 2624 calories</li>
-    <li><b>Protein</b>: Approximately 99 grams</li>
-    <li><b>Fat</b>: Roughly 25 grams</li>
-    <li><b>Carbohydrates</b>: About 397 grams</li>
-    <li><b>Fiber</b>: Around 51 grams</li>
-  </ul>
-  <p className="text-[#1D5198] mt-4">
-    Keep in mind that these values are estimations and can vary based on factors like specific brands of ingredients, variations in sizes, and preparation methods. Adjustments may be necessary based on the actual ingredients used.
-  </p>
-</div>
-
-
       </div>
-    </div>
-    <Footer/>
+      <Footer />
     </div>
   );
 };
