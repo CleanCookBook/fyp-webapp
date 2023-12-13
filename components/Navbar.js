@@ -134,7 +134,9 @@ const Navbar = () => {
                 </div>
               )}
             </div>
+            <Link href="/NewsFeed">
             <button className="px-4 hover:opacity-[0.5]">NewsFeed</button>
+            </Link>
             <button className="px-4 hover:opacity-[0.5]">Meal Plans</button>
             <div
               className="relative inline-block text-left"
