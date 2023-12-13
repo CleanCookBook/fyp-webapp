@@ -18,7 +18,7 @@ const VegetarianBurrito = () => {
         {/* Division 1 - 1/3 width */}
         <div className="w-1/3">
           <img
-            src="" // Replace with the actual path to your image
+            src="veg burrito.jpg" // Replace with the actual path to your image
             alt="Vegetarian Burrito Image"
             className="w-full max-w-screen-xl mx-auto rounded-2xl shadow-2xl shadow-black"
           />
