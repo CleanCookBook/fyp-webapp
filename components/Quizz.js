@@ -493,40 +493,6 @@ const Quizz = () => {
                 <span className="text-sm">Vegetarian diet</span>
               </label>
 
-
-                        <label class="flex items-center space-x-2">
-                            <input type="checkbox" class="form-checkbox" />
-                            <span class="text-sm">Other(please specify) </span>
-                            <input type="text" class="border border-gray-300 p-1 pb-1 pr-8 rounded-md" />
-                        </label>
-                    </div>
-                </div>
-
-          <div className="bg-white p-6 rounded shadow-md">
-            <h2 className="text-lg font-semibold mb-4">
-              7. Are you following any specific diet plans or trends?
-            </h2>
-            <div className="space-y-2">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  onChange={() => handleDietMethod("Keto")}
-                  checked={isKeto}
-                  className="form-checkbox"
-                />
-                <span className="text-sm">Ketogenic diet</span>
-              </label>
-
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  onChange={() => handleDietMethod("Vegetarian")}
-                  checked={isVegetarian}
-                  className="form-checkbox"
-                />
-                <span className="text-sm">Vegetarian diet</span>
-              </label>
-
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
