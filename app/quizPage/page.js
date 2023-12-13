@@ -1,6 +1,7 @@
 "use client";
 import Quizz from '@/components/Quizz';
 
+
 const quizPage = () => {
 return (
     <main>

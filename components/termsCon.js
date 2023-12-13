@@ -1,11 +1,12 @@
-import { useState } from "react";
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from "react";
 
-const terms = () => {
+const TermsCon = () => {
+  const router = useRouter();
+  const [isChecked, setIsChecked] = useState(false);
 
-  const [isChecked, setIsChecked]=useState(false);
-
-  const handleCheckChange=(event) => {
+  const handleCheckChange = (event) => {
     setIsChecked(event.target.checked);
     if (!event.target.checked) {
       document.getElementById('required-error').classList.remove('hidden');
@@ -14,6 +15,32 @@ const terms = () => {
     }
   };
 
+  const handleCreateAccount = async () => {
+    if (isChecked) {
+      try {
+        const response = await fetch('http://localhost:3001/api/create-account', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ checked: isChecked }),
+        });
+
+        if (response.ok) {
+          // Successfully created account, navigate to the home page
+          console.log('Account created successfully');
+          router.push('/'); // Change '/home' to the actual path of your home page
+        } else {
+          console.error('Error creating account:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error creating account:', error.message);
+      }
+    } else {
+      // Handle the case where the checkbox is not checked
+      document.getElementById('required-error').classList.remove('hidden');
+    }
+  };
 return (
   <div className="flex flex-col h-screen justify-center items-center bg-[#F9D548] text-[#0A2A67]">
     
@@ -28,7 +55,7 @@ return (
     <div className="bg-white w-[1600px] h-[585px] mx-auto font-black text-2xl shadow-md flex-row -mt-9">
       <p className="text-xl font-bold flex py-5 px-5 top-0 left-75">Terms and Conditions :</p>
         <div className="bg-[#E5E4E2] w-[1510px] h-[495px] font-black text-2xl shadow-md border-4 border-gray-300 overflow-auto justify-center items-center ml-10">
-          <ol class="text-black text-base font-semibold pb-5 ajustify-center items-center">
+          <ol className="text-black text-base font-semibold pb-5 ajustify-center items-center">
             <li><b>Acceptance of Terms</b></li>
             <li>By accessing or using the CleanCookBook Healthy Recipe App ("the App"), you agree to comply with and be bound by the following terms and conditions. If you do not agree to these terms, please do not use the App.</li>
             <li><b>User Eligibility</b></li>
@@ -81,12 +108,14 @@ return (
         </div>
         
         <div class="flex justify-center items-center mt-3">
-          <Link href="/home">
-            <button class="w-[259px] h-[35px] bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] drop-shadow-xl">
-              Create Account
-            </button>
-          </Link>
-        </div>
+        {isChecked && (
+          <button
+            onClick={handleCreateAccount}
+            class="w-[259px] h-[35px] bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] drop-shadow-xl">
+            Create Account
+          </button>
+        )}
+      </div>
 
     </div>
   </div>
@@ -94,4 +123,4 @@ return (
 );
 };
 
-export default terms;
+export default TermsCon;
