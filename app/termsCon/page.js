@@ -1,9 +1,9 @@
 "use client";
-import Terms from "@/components/terms";
+import TermsCon from "@/components/termsCon";
 const termsPage = () => {
   return (
     <main>
-      { <Terms /> }
+      <TermsCon/>
     </main>
   );
 };
