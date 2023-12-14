@@ -1,3 +1,6 @@
+const session = require('express-session');
+const crypto = require('crypto');
+const secretKey = crypto.randomBytes(32).toString('hex');
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -16,7 +19,19 @@ app.use(
   })
 );
 
+
+app.use(
+  session({
+    secret: secretKey,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 600000 } // Adjust the maxAge to a larger value in milliseconds
+  })
+);
+
+
 app.use(bodyParser.json());
+
 
 // Handle requests to the root path
 app.get("/", (req, res) => {
@@ -136,9 +151,45 @@ app.post("/api/login", (req, res) => {
     console.log("Result of database query:", user);
 
     if (user) {
+      // Store user ID in the session
+      req.session.userId = user.UserID;
+    
+      console.log("Session after login:", req.session); // Log the session
       res.json({ message: "Login successful", user });
     } else {
       res.status(401).json({ error: "Invalid credentials" });
+    }
+  });
+});
+
+
+app.get("/api/profile", (req, res) => {
+    console.log("Session in profile route:", req.session); // Log the session
+  const userId = req.session.userId;// Replace with your actual session variable name
+
+  if (!userId) {
+    res.status(401).json({ error: "Unauthorized access" });
+    return;
+  }
+
+  // Query your database to retrieve user profile data
+  const profileQuery = `
+    SELECT Username, dob, gender, email
+    FROM User
+    WHERE UserID = ?
+  `;
+
+  db.get(profileQuery, [userId], (err, userProfile) => {
+    if (err) {
+      console.error("Database query error:", err.message);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    }
+
+    if (userProfile) {
+      res.json({ userProfile });
+    } else {
+      res.status(404).json({ error: "User not found" });
     }
   });
 });

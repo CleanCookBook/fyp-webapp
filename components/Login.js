@@ -14,8 +14,8 @@ const Login = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password }),
+        credentials: "include", // Include credentials (cookies) with the request
       });
-
       if (response.ok) {
         const data = await response.json();
         console.log('Login successful:', data);
