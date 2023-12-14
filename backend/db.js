@@ -2,7 +2,7 @@
 const sqlite3 = require('sqlite3');
 require('dotenv').config(); // Load environment variables
 
-const databasePath = process.env.DATABASE_PATH || "C:\\Users\\jessi\\OneDrive\\Documents\\fyp-webapp\\CleanCookBook.db";
+const databasePath = process.env.DATABASE_PATH || "C:\\sqlite\\fyp-webapp\\CleanCookBook.db";
 
 // Connect to your SQLite database with connection pooling
 const db = new sqlite3.Database(databasePath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {

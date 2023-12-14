@@ -1,13 +1,12 @@
-const session = require('express-session');
-const crypto = require('crypto');
-const secretKey = crypto.randomBytes(32).toString('hex');
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const db = require("./db"); // Import the database module
-
+const session = require('express-session');
 const app = express();
 const PORT = process.env.PORT || 3001;
+const crypto = require('crypto');
+const secretKey = crypto.randomBytes(32).toString('hex');
 
 app.use(
   cors({
@@ -194,6 +193,42 @@ app.get("/api/profile", (req, res) => {
       res.status(404).json({ error: "User not found" });
     }
   });
+});
+
+app.get('/api/aboutme', async (req, res) => {
+  try {
+    const userId = req.session.userId;
+
+    if (!userId) {
+      res.status(401).json({ error: 'Unauthorized access' });
+      return;
+    }
+
+    const aboutMeQuery = `
+      SELECT User.FName, User.Username, AboutMe.height, AboutMe.Weight, AboutMe.allergy, 
+             AboutMe.BMI, AboutMe.DietMethod, AboutMe.DietaryPreferance, AboutMe.HealthGoal
+      FROM User
+      LEFT JOIN AboutMe ON User.UserID = AboutMe.UserID
+      WHERE User.UserID = ?
+    `;
+
+    db.get(aboutMeQuery, [userId], (err, profileData) => {
+      if (err) {
+        console.error('Database query error:', err.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+        return;
+      }
+
+      if (profileData) {
+        res.json(profileData);
+      } else {
+        res.status(404).json({ error: 'Profile data not found' });
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching profile data:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 // Handle API request to retrieve data
