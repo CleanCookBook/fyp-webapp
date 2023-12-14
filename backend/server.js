@@ -55,7 +55,7 @@ app.post("/api/quiz", (req, res) => {
 
 app.post("/api/create-account", (req, res) => {
   const isChecked = req.body.checked;
-
+  //add another function for username cannot be duplicate
   if (isChecked) {
     console.log("Terms are accepted.");
     console.log("userData:", userData);
@@ -64,13 +64,15 @@ app.post("/api/create-account", (req, res) => {
     if (userData && userData1) {
       // Insert data into the "User" table
       db.run(
-        "INSERT INTO User (Username, password, email, FName, LName) VALUES (?, ?, ?, ?, ?)",
+        "INSERT INTO User (Username, password, email, FName, LName, gender, dob) VALUES (?, ?, ?, ?, ?, ?, ?)",
         [
           userData.username,
           userData.password,
           userData.email,
           userData.firstName,
           userData.lastName,
+          userData.gender,
+          userData.dob,
         ],
         function (err) {
           if (err) {

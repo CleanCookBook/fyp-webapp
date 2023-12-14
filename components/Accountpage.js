@@ -81,8 +81,8 @@ return (
             className="rounded-full shadow-lg" 
         /> 
         <div className="flex flex-col mt-9 ml-8 gap-1"> 
-          <h1 className="flex flex-row text-2xl font-bold text-black">Clean Cook Book</h1> 
-          <p className="text-xl text-black">@Cleancookbook</p> 
+          <h1 className="flex flex-row text-2xl font-bold text-black">{user.username}</h1> 
+          <p className="text-xl text-black">{user.email}</p> 
         </div> 
     </div> 
  
