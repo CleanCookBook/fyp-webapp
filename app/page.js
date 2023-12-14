@@ -1,5 +1,6 @@
 // app/page.js
 "use client";
+import LowCarbsMealPlan1 from "@/components/LowCarbsMealPlan1";
 import Welcome from "@/components/Welcome";
 
 //This too yall can delete
@@ -23,7 +24,8 @@ const Home = () => {
 
   return (
     <main className="">
-     <Welcome/>
+      <LowCarbsMealPlan1 />
+      {/* <Welcome/> */}
     </main>
   );
 };
