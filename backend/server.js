@@ -31,6 +31,7 @@ app.use(
 
 app.use(bodyParser.json());
 
+
 // Handle requests to the root path
 app.get("/", (req, res) => {
   res.send("Hello, this is your server!");
