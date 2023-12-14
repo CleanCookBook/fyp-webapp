@@ -1,6 +1,7 @@
 // app/page.js
 "use client";
 import Welcome from "@/components/Welcome";
+import LowCarbMealPlan3 from "@/components/LowCarbMealPlan3";
 
 //This too yall can delete
 //import { useEffect, useState } from 'react';
@@ -23,7 +24,8 @@ const Home = () => {
 
   return (
     <main className="">
-      <Welcome />
+      <LowCarbMealPlan3 />
+      {/* <Welcome /> */}
     </main>
   );
 };
