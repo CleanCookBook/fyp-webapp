@@ -79,9 +79,6 @@ const Navbar = () => {
       <div className="container mx-auto">
         <ul>
           <li className="text-white font-bold flex justify-end">
-            <button className="px-4 hover:opacity-[0.5]">
-              <Link href="/recipelist">Recipe</Link>
-            </button>
             <Link href="/aboutUs">
               <button className="px-4 hover:opacity-[0.5]">About Us</button>
             </Link>
