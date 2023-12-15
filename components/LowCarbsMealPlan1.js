@@ -1,5 +1,6 @@
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import Link from 'next/link';
 
 const LowCarbsMealPlan1 = () => {
   return (
@@ -7,11 +8,13 @@ const LowCarbsMealPlan1 = () => {
       <Navbar />
 
       <div className="flex-grow w-[1108px] mx-auto mt-8">
-        <button className="flex justify-center items-center w-[94px] h-[38px] bg-blue-950 rounded-[10px] shadow mb-9">
-          <div className="text-white font-medium focus:outline-none">
-            &lt; Back
-          </div>
-        </button>
+        <Link href="/mpfirst">
+          <button className="flex justify-center items-center w-[94px] h-[38px] bg-blue-950 rounded-[10px] shadow mb-9">
+            <div className="text-white font-medium focus:outline-none">
+              &lt; Back
+            </div>
+          </button>
+        </Link>
         <h1 className="text-blue-950 text-5xl font-extrabold text-left mb-8 pl-8">
           Low Carbs Diet{" "}
         </h1>
@@ -40,11 +43,13 @@ const LowCarbsMealPlan1 = () => {
           delicious and satisfying dishes that align with your dietary goals.
         </div>
         <div className="flex justify-center mt-11">
-          <button className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center">
-            <div className="text-white font-medium focus:outline-none">
-              Start Your Meal Plan Now
-            </div>
-          </button>
+          <Link href="/LowCarbMealPlan3">
+            <button className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center">
+              <div className="text-white font-medium focus:outline-none">
+                Start Your Meal Plan Now
+              </div>
+            </button>
+          </Link>
         </div>
       </div>
       <Footer className="mt-auto" />
