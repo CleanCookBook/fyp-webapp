@@ -45,12 +45,12 @@ const LowCarbMealPlan3 = () => {
               </h2>
               <div className="flex flex-col">
               <Link href="/Bibimbap">
-                <button
-                  onClick={() => handleRecipeClick(`Bibimbap`)}
-                  className="mb-2"
-                >
-                  Bibimbap
-                </button>
+                  <button
+                    onClick={() => handleRecipeClick(`Bibimbap`)}
+                    className="mb-2"
+                  >
+                    Bibimbap
+                  </button>
                 </Link>
                 <button
                   onClick={() => handleRecipeClick(`Recipe 2`)}
