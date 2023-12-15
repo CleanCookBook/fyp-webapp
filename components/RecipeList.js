@@ -7,10 +7,10 @@ const RecipeList = () => {
   const input = "Fish";
   const recipeList = [
     "Fish and Chips",
-    "Recipe 2",
-    "Recipe 3",
-    "Recipe 4",
-    "Recipe 5",
+    "ABC soup",
+    "Steamed egg",
+    "Vegetarian burrito",
+    "Bibimbap",
   ];
   const [currentPage, setCurrentPage] = useState(1);
   const recipesPerPage = 5; // Number of recipes per page
