@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const Navbar = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -9,6 +9,24 @@ const Navbar = () => {
     { id: 2, text: "Notification 2", isChecked: false },
     // Add more notifications as needed
   ]);
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/logout', {
+        method: 'GET',
+        credentials: 'include',
+      });
+  
+      if (response.ok) {
+        // Redirect the user to the login page or perform other actions as needed
+        window.location.href = '/loginPage';
+      } else {
+        console.error('Logout failed:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error during logout:', error.message);
+    }
+  };
 
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const notificationDropdownRef = useRef(null);
@@ -79,9 +97,6 @@ const Navbar = () => {
       <div className="container mx-auto">
         <ul>
           <li className="text-white font-bold flex justify-end">
-            <button className="px-4 hover:opacity-[0.5]">
-              <Link href="/recipelist">Recipe</Link>
-            </button>
             <Link href="/aboutUs">
               <button className="px-4 hover:opacity-[0.5]">About Us</button>
             </Link>
@@ -134,8 +149,12 @@ const Navbar = () => {
                 </div>
               )}
             </div>
+            <Link href="/NewsFeed">
             <button className="px-4 hover:opacity-[0.5]">NewsFeed</button>
+            </Link>
+            <Link href="/mpfirst">
             <button className="px-4 hover:opacity-[0.5]">Meal Plans</button>
+            </Link>
             <div
               className="relative inline-block text-left"
               ref={accountDropdownRef}
@@ -162,8 +181,8 @@ const Navbar = () => {
                       About Me
                     </a>
                     <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={handleLogout}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                     >
                       Log Out
                     </a>
