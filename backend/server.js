@@ -175,7 +175,7 @@ app.get("/api/profile", (req, res) => {
 
   // Query your database to retrieve user profile data
   const profileQuery = `
-    SELECT Username, dob, gender, email
+    SELECT Username, dob, gender, email, FName, LName
     FROM User
     WHERE UserID = ?
   `;
@@ -230,6 +230,20 @@ app.get('/api/aboutme', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+// server.js
+
+app.get('/api/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error destroying session:', err.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+      return;
+    }
+    res.json({ message: 'Logout successful' });
+  });
+});
+
 
 // Handle API request to retrieve data
 app.get("/api/data", (req, res) => {
