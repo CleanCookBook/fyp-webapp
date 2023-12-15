@@ -14,8 +14,8 @@ const Login = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password }),
+        credentials: "include", // Include credentials (cookies) with the request
       });
-
       if (response.ok) {
         const data = await response.json();
         console.log('Login successful:', data);
@@ -90,18 +90,10 @@ const Login = () => {
         </div>
         <div className="flex-row justify-normal items-start inline-flex">
           <img
-            className="flex w-[400px] h-[400px] object-cover drop-shadow-lg ml-28"
+            className="w-[400px] h-[400px] object-cover drop-shadow-lg"
             src="login-signupPage.jpg"
             alt="Sign Up Image"
           />
-        </div>
-        <div className="pt-3">
-          {/* Use the Link component to create a navigation link */}
-          <Link href="/home">
-            <button className="w-[110px] h-[44px] bg-[#154083] hover:bg-[#1c57b1] text-white font-bold rounded-[15px] mt-[2rem] drop-shadow-xl">
-              next
-            </button>
-          </Link>
         </div>
       </div>
     </div>
