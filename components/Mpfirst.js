@@ -24,7 +24,7 @@ const mpfirst = () => {
                 </Link>
                 
 
-                <Link href="/NewsFeed">
+                <Link href="/LowCarbsMealPlan1">
                     <div className="relative hover:brightness-75 transition-all">
                         <img
                         src="./low carbs diet.jpg" 

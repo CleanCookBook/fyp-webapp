@@ -1,7 +1,8 @@
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import Link from 'next/link';
 
-const MealPlanPage = () => {
+const LowCarbMealPlan3 = () => {
   const days = [
     "Monday",
     "Tuesday",
@@ -21,11 +22,13 @@ const MealPlanPage = () => {
     <section className="flex flex-col h-screen bg-[#F9D548]">
       <Navbar />
       <div className="flex-grow w-[1108px] mx-auto mt-8">
-        <button className="flex justify-center items-center w-[94px] h-[38px] bg-blue-950 rounded-[10px] shadow mb-9">
-          <div className="text-white font-medium focus:outline-none">
-            &lt; Back
-          </div>
-        </button>
+        <Link href="/LowCarbsMealPlan1">
+          <button className="flex justify-center items-center w-[94px] h-[38px] bg-blue-950 rounded-[10px] shadow mb-9">
+            <div className="text-white font-medium focus:outline-none">
+              &lt; Back
+            </div>
+          </button>
+        </Link>
         <h1 className="text-blue-950 text-5xl font-extrabold text-left mb-8 pl-8">
           Low Carbs Diet{" "}
         </h1>
@@ -78,4 +81,4 @@ const MealPlanPage = () => {
   );
 };
 
-export default MealPlanPage;
+export default LowCarbMealPlan3;
