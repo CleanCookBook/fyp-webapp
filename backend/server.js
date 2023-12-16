@@ -94,7 +94,7 @@ app.post("/api/create-account", (req, res) => {
 
           // Calculate BMI
           const heightInMeters = currentHeight / 100;
-          const bmi = currentWeight / (heightInMeters * heightInMeters);
+          const bmi = (currentWeight / (heightInMeters * heightInMeters)).toFixed(2);
 
           db.run(
             "INSERT INTO AboutMe (height, Weight, allergy, BMI, UserID, cookingTime, DietMethod, DietaryPreferance, HealthGoal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
