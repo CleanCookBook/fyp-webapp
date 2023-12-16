@@ -43,7 +43,24 @@ let userData1 = null;
 app.post("/api/signup", (req, res) => {
   userData = req.body;
   console.log("Received signup data:", userData);
-  res.status(200).json({ success: true });
+
+  // Check if a user with the same username already exists
+  const checkUserQuery = "SELECT * FROM User WHERE Username = ?";
+  db.get(checkUserQuery, [userData.username], (err, user) => {
+    if (err) {
+      console.error("Database query error:", err.message);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    }
+
+    if (user) {
+      // User with same username exists, return an error
+      res.status(400).json({ error: "Username already exists" });
+    } else {
+      // User does not exist, proceed with signup
+      res.status(200).json({ success: true });
+    }
+  });
 });
 
 app.post("/api/quiz", (req, res) => {
@@ -130,7 +147,7 @@ app.post("/api/create-account", (req, res) => {
     } else {
       res
         .status(400)
-        .json({ error: "Data not received from signup and quiz pages" });
+        .json({ error: "Data not received from signup and quiz pages or username already taken" });
     }
   } else {
     res.status(400).json({ error: "Terms not accepted" });
