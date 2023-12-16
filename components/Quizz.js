@@ -5,170 +5,125 @@ const Quizz = () => {
   const router = useRouter();
   const [currentWeight, setWeight] = useState("");
   const [currentHeight, setHeight] = useState("");
-  const [isDairyFree, setDairyFree] = useState(false);
-  const [isVegan, setVegan] = useState(false);
-  const [isGlutenFree, setGlutenFree] = useState(false);
-  const [isHalal, setHalal] = useState(false);
-  const [isSeafood, setSeafood] = useState(false);
-  const [isDairy, setDairy] = useState(false);
-  const [isNuts, setNuts] = useState(false);
-  const [isEggs, setEggs] = useState(false);
-  const [isFifteen, setFifteen] = useState(false);
-  const [isTwenty, setTwenty] = useState(false);
-  const [isFortyFive, setFortyFive] = useState(false);
-  const [isHour, setHour] = useState(false);
-  const [isWeightLoss, setWeightLoss] = useState(false);
-  const [isDietNutrition, setDietNutrition] = useState(false);
-  const [isOverallHealth, setOverallHealth] = useState(false);
-  const [isCalorieNeeds, setCalorieNeeds] = useState(false);
-  const [isKeto, setKeto] = useState(false);
-  const [isVegetarian, setVegetarian] = useState(false);
-  const [isIntermittent, setIntermittent] = useState(false);
-  const [isMediterranean, setMediterranean] = useState(false);
+  const [selectedDietaryPreferences, setSelectedDietaryPreferences] = useState("");
+  const [selectedAllergies, setSelectedAllergies] = useState("");
+  const [selectedCookingTimes, setSelectedCookingTimes] = useState("");
+  const [selectedHealthGoals, setSelectedHealthGoals] = useState("");
+  const [selectedDietMethods, setSelectedDietMethods] = useState("");
+  
 
-  const handleDietMethod = (checkboxName) => {
-    switch (checkboxName) {
-      case "Keto":
-        setKeto((prevValue) => !prevValue);
-        break;
-      case "Vegetarian":
-        setVegetarian((prevValue) => !prevValue);
-        break;
-      case "Intermittent":
-        setIntermittent((prevValue) => !prevValue);
-        break;
+const handleDietaryChange = (checkboxName) => {
+  setSelectedDietaryPreferences((prevValue) => {
+    // Toggle the state of the checkbox
+    const isSelected = !prevValue.includes(checkboxName);
 
-      case "Mediterranean":
-        setMediterranean((prevValue) => !prevValue);
-        break;
-      // Add more cases for other checkboxes
-      default:
-        break;
+    if (isSelected) {
+      // If not selected, add to the string
+      return prevValue + (prevValue ? `, ${checkboxName}` : checkboxName);
+    } else {
+      // If already selected, remove from the string
+      return prevValue.replace(`${checkboxName}, `, "").replace(`${checkboxName}`, "");
     }
-  };
-
-  const handleDietaryChange = (checkboxName) => {
-    switch (checkboxName) {
-      case "Dairy-free":
-        setDairyFree((prevValue) => !prevValue);
-        break;
-      case "Vegan":
-        setVegan((prevValue) => !prevValue);
-        break;
-      case "Gluten-free":
-        setGlutenFree((prevValue) => !prevValue);
-        break;
-
-      case "Halal":
-        setHalal((prevValue) => !prevValue);
-        break;
-      // Add more cases for other checkboxes
-      default:
-        break;
-    }
-  };
+  });
+};
+const isDairyFree = selectedDietaryPreferences.includes("Dairy-free");
+  const isVegan = selectedDietaryPreferences.includes("Vegan")
+  const isGlutenFree = selectedDietaryPreferences.includes("Gluten-free");
+  const isHalal= selectedDietaryPreferences.includes("Halal");
+  const isNil = selectedDietaryPreferences.includes("Nil");
 
   const handleAllergy = (checkboxName) => {
-    // Toggle the state of the checkbox
-    switch (checkboxName) {
-      case "seaFood":
-        setSeafood((prevValue) => !prevValue);
-        break;
-      case "Dairy":
-        setDairy((prevValue) => !prevValue);
-        break;
-      case "Nuts":
-        setNuts((prevValue) => !prevValue);
-        break;
-
-      case "Eggs":
-        setEggs((prevValue) => !prevValue);
-        break;
-      // Add more cases for other checkboxes
-      default:
-        break;
-    }
+    setSelectedAllergies((prevValue) => {
+      const isSelected = !prevValue.includes(checkboxName);
+  
+      if (isSelected) {
+        // If not selected, add to the string
+        return prevValue + (prevValue ? `, ${checkboxName}` : checkboxName);
+      } else {
+        // If already selected, remove from the string
+        return prevValue.replace(`${checkboxName}, `, "").replace(`${checkboxName}`, "");
+      }
+    });
   };
 
-  const handleCooking = (checkboxName) => {
+const isSeafood = selectedAllergies.includes("Seafood");
+const isDairy = selectedAllergies.includes("Dairy");
+const isNuts = selectedAllergies.includes("Nuts");
+const isEggs = selectedAllergies.includes("Eggs");
+const isNil1= selectedAllergies.includes("Nil");
+
+const handleCooking = (checkboxName) => {
+  setSelectedCookingTimes((prevValue) => {
     // Toggle the state of the checkbox
-    switch (checkboxName) {
-      case "fifteen":
-        setFifteen((prevValue) => !prevValue);
-        break;
-      case "twenty":
-        setTwenty((prevValue) => !prevValue);
-        break;
-      case "fortyfive":
-        setFortyFive((prevValue) => !prevValue);
-        break;
+    const isSelected = !prevValue.includes(checkboxName);
 
-      case "hour":
-        setHour((prevValue) => !prevValue);
-        break;
-      // Add more cases for other checkboxes
-      default:
-        break;
+    if (isSelected) {
+      // If not selected, add to the string
+      return prevValue + (prevValue ? `, ${checkboxName}` : checkboxName);
+    } else {
+      // If already selected, remove from the string
+      return prevValue.replace(`${checkboxName}, `, "").replace(`${checkboxName}`, "");
     }
-  };
+  });
+};
 
-  const handleHealthGoal = (checkboxName) => {
-    // Toggle the state of the checkbox
-    switch (checkboxName) {
-      case "WeightLoss":
-        setWeightLoss((prevValue) => !prevValue);
-        break;
-      case "DietNutrition":
-        setDietNutrition((prevValue) => !prevValue);
-        break;
-      case "OverallHealth":
-        setOverallHealth((prevValue) => !prevValue);
-        break;
+const isFifteen = selectedCookingTimes.includes("15 mins or less");
+const isTwenty = selectedCookingTimes.includes("20-30 minutes");
+const isFortyFive = selectedCookingTimes.includes("45-60 minutes");
+const isHour = selectedCookingTimes.includes("More than an hour");
+const isNil2 = selectedCookingTimes.includes("Nil");
 
-      case "CalorieNeeds":
-        setCalorieNeeds((prevValue) => !prevValue);
-        break;
-      // Add more cases for other checkboxes
-      default:
-        break;
+const handleHealthGoal = (checkboxName) => {
+  setSelectedHealthGoals((prevValue) => {
+    const isSelected = !prevValue.includes(checkboxName);
+  
+    if (isSelected) {
+      // If not selected, add to the string
+      return prevValue + (prevValue ? `, ${checkboxName}` : checkboxName);
+    } else {
+      // If already selected, remove from the string
+      return prevValue.replace(`${checkboxName}, `, "").replace(`${checkboxName}`, "");
     }
-  };
+  });
+};
+
+const isWeightLoss = selectedHealthGoals.includes("Weight Loss");
+const isDietNutrition = selectedHealthGoals.includes("Diet Nutrition");
+const isOverallHealth = selectedHealthGoals.includes("Overall Health");
+const isCalorieNeeds = selectedHealthGoals.includes("Calorie Needs");
+const isNil3 = selectedHealthGoals.includes("Nil");
+
+const handleDietMethod = (checkboxName) => {
+  setSelectedDietMethods((prevValue) => {
+    const isSelected = !prevValue.includes(checkboxName);
+  
+    if (isSelected) {
+      // If not selected, add to the string
+      return prevValue + (prevValue ? `, ${checkboxName}` : checkboxName);
+    } else {
+      // If already selected, remove from the string
+      return prevValue.replace(`${checkboxName}, `, "").replace(`${checkboxName}`, "");
+    }
+  });
+};
+
+const isKeto = selectedDietMethods.includes("Keto");
+const isVegetarian= selectedDietMethods.includes("Vegetarian");
+const isIntermittent = selectedDietMethods.includes("Intermittent Fasting");
+const isMediterranean = selectedDietMethods.includes("Mediterranean");
+const isNil4 = selectedDietMethods.includes("Nil");
+
 
     const handleSubmit = async () => {
       // Gather only the user-selected data
       const userData1 = {
         currentWeight,
         currentHeight,
-        dietaryPreferences: {
-          ...(isDairyFree && { dietaryPreference: "Dairy-Free" }),
-          ...(isVegan && { dietaryPreference: "Vegan" }),
-          ...(isGlutenFree && { dietaryPreference: "Gluten-Free" }),
-          ...(isHalal && { dietaryPreference: "Halal" }), 
-        },
-        allergies: {
-          ...(isSeafood && { allergy: "Seafood" }),
-          ...(isDairy && { allergy: "Dairy" }),
-          ...(isNuts && { allergy: "Nuts" }),
-          ...(isEggs && { allergy: "Eggs" }),
-        },
-        cookingTime: {
-          ...(isFifteen && { isFifteen: "Less than 15" }),
-          ...(isTwenty && { isTwenty: "20 to 30 minutes" }),
-          ...(isFortyFive && { isFortyFive: "45 to 60 minutes" }),
-          ...(isHour && { isHour: "More than an hour" }),
-        },
-        healthGoals: {
-          ...(isWeightLoss && { healthGoal: "Weight Loss" }),
-          ...(isDietNutrition && { healthGoal: "Diet and Nutrition" }),
-          ...(isOverallHealth && { healthGoal: "Overall Health" }),
-          ...(isCalorieNeeds && { healthGoal: "Calorie Needs" }), 
-        },
-        dietMethods: {
-          ...(isKeto && { dietMethod: "Keto" }), // Map isKeto to 'Keto'
-          ...(isVegetarian && { dietMethod: "Vegetarian" }), // Map isVegetarian to 'Another String'
-          ...(isIntermittent && { dietMethod: "Intermittent" }),
-          ...(isMediterranean && { dietMethod: "Mediterranean" })
-        },
+        dietaryPreferences: selectedDietaryPreferences,
+        allergies: selectedAllergies,
+        cookingTime: selectedCookingTimes,
+        healthGoals: selectedHealthGoals,
+        dietMethods: selectedDietMethods,
       };
       console.log(userData1);
 
@@ -256,8 +211,20 @@ const Quizz = () => {
                 />
                 <span className="text-sm">Halal</span>
               </label>
+
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  className="form-checkbox"
+                  onChange={() => handleDietaryChange("Nil")}
+                  checked={isNil}
+                />
+                <span className="text-sm">Nil</span>
+              </label>
             </div>
           </div>
+
+          
 
           <div className="bg-white p-6 rounded shadow-md">
             <h2 className="text-lg font-semibold mb-4">
@@ -304,7 +271,7 @@ const Quizz = () => {
                 <input
                   type="checkbox"
                   className="form-checkbox"
-                  onChange={() => handleAllergy("seaFood")}
+                  onChange={() => handleAllergy("Seafood")}
                   checked={isSeafood}
                 />
                 <span className="text-sm">
@@ -347,6 +314,16 @@ const Quizz = () => {
                   Eggs 
                 </span>
               </label>
+
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  className="form-checkbox"
+                  onChange={() => handleAllergy("Nil")}
+                  checked={isNil1}
+                />
+                <span className="text-sm">Nil</span>
+              </label>
             </div>
           </div>
 
@@ -359,7 +336,7 @@ const Quizz = () => {
                 <input
                   type="checkbox"
                   className="form-checkbox"
-                  onChange={() => handleCooking("fifteen")}
+                  onChange={() => handleCooking("15 mins or less")}
                   checked={isFifteen}
                 />
                 <span className="text-sm">15 minutes or less</span>
@@ -369,7 +346,7 @@ const Quizz = () => {
                 <input
                   type="checkbox"
                   className="form-checkbox"
-                  onChange={() => handleCooking("twenty")}
+                  onChange={() => handleCooking("20-30 minutes")}
                   checked={isTwenty}
                 />
                 <span className="text-sm">20-30 minutes</span>
@@ -379,7 +356,7 @@ const Quizz = () => {
                 <input
                   type="checkbox"
                   className="form-checkbox"
-                  onChange={() => handleCooking("fortyfive")}
+                  onChange={() => handleCooking("45-60 minutes")}
                   checked={isFortyFive}
                 />
                 <span className="text-sm">45-60 minutes</span>
@@ -389,10 +366,20 @@ const Quizz = () => {
                 <input
                   type="checkbox"
                   className="form-checkbox"
-                  onChange={() => handleCooking("hour")}
+                  onChange={() => handleCooking("More than an hour")}
                   checked={isHour}
                 />
                 <span className="text-sm">More than an hour</span>
+              </label>
+
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  className="form-checkbox"
+                  onChange={() => handleCooking("Nil")}
+                  checked={isNil2}
+                />
+                <span className="text-sm">Nil</span>
               </label>
             </div>
           </div>
@@ -405,7 +392,7 @@ const Quizz = () => {
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  onChange={() => handleHealthGoal("WeightLoss")}
+                  onChange={() => handleHealthGoal("Weight Loss")}
                   checked={isWeightLoss}
                   className="form-checkbox"
                 />
@@ -415,7 +402,7 @@ const Quizz = () => {
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  onChange={() => handleHealthGoal("DietNutrition")}
+                  onChange={() => handleHealthGoal("Diet Nutrition")}
                   checked={isDietNutrition}
                   className="form-checkbox"
                 />
@@ -425,7 +412,7 @@ const Quizz = () => {
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  onChange={() => handleHealthGoal("OverallHealth")}
+                  onChange={() => handleHealthGoal("Overall Health")}
                   checked={isOverallHealth}
                   className="form-checkbox"
                 />
@@ -435,11 +422,21 @@ const Quizz = () => {
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  onChange={() => handleHealthGoal("CalorieNeeds")}
+                  onChange={() => handleHealthGoal("Calorie Needs")}
                   checked={isCalorieNeeds}
                   className="form-checkbox"
                 />
                 <span className="text-sm">Adequate Nutrients Within Calorie Needs</span>
+              </label>
+
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  className="form-checkbox"
+                  onChange={() => handleHealthGoal("Nil")}
+                  checked={isNil3}
+                />
+                <span className="text-sm">Nil</span>
               </label>
             </div>
           </div>
@@ -472,7 +469,7 @@ const Quizz = () => {
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  onChange={() => handleDietMethod("Intermittent")}
+                  onChange={() => handleDietMethod("Intermittent Fasting")}
                   checked={isIntermittent}
                   className="form-checkbox"
                 />
@@ -487,6 +484,16 @@ const Quizz = () => {
                   className="form-checkbox"
                 />
                 <span className="text-sm">Mediterranean Diet</span>
+              </label>
+
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  className="form-checkbox"
+                  onChange={() => handleDietMethod("Nil")}
+                  checked={isNil4}
+                />
+                <span className="text-sm">Nil</span>
               </label>
             </div>
           </div>

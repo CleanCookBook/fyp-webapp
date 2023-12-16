@@ -23,6 +23,12 @@ const Signup = () => {
       dob,
     };
 
+    if (!firstName || !lastName || !email || !username || !gender || !dob || !password) {
+      // Display an error message or prevent the user from proceeding
+      alert("Please fill in all fields before proceeding.");
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:3001/api/signup", {
         method: 'POST',
