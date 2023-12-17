@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const Signup = () => {
   const router = useRouter();
@@ -11,8 +11,9 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [gender, setGender] = useState('');
   const [dob, setDOB] = useState('');
+  const [isUsernameTaken, setIsUsernameTaken] = useState(false);
 
- const handleNext = async () => {
+  const handleNext = async () => {
     const userData = {
       firstName,
       lastName,
@@ -22,37 +23,46 @@ const Signup = () => {
       gender,
       dob,
     };
+  
+    // Validate password requirements
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{6,}$/;
+    if (!passwordRegex.test(password)) {
+      alert('Password must contain at least 6 characters, 1 uppercase letter, and 1 symbol.');
+      return;
+    }
 
     if (!firstName || !lastName || !email || !username || !gender || !dob || !password) {
       // Display an error message or prevent the user from proceeding
       alert("Please fill in all fields before proceeding.");
       return;
     }
-
+  
     try {
       const response = await fetch("http://localhost:3001/api/signup", {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
       });
-
+  
       if (response.ok) {
-        // The server accepted the data, navigate to the next page (e.g., quizPage)
         const responseData = await response.json();
-        console.log('Server response:', responseData);
-        router.push('/quizPage');
+        console.log("Server response:", responseData);
+        router.push("/quizPage");
       } else {
-        // Handle error scenarios, e.g., display an error message to the user
-        console.error('Error submitting signup data:', response.statusText);
+        const errorData = await response.json();
+        if (errorData.error === "Username already exists") {
+          setIsUsernameTaken(true);
+        } else {
+          console.error("Error submitting signup data:", response.statusText);
+        }
       }
     } catch (error) {
-      console.error('Error submitting signup data:', error.message);
+      console.error("Error submitting signup data:", error.message);
     }
   };
 
-  
     return (
       <div className="flex flex-col h-screen justify-center items-center bg-[#F9D548] text-[#0A2A67]">
         <div className="lg:w-4/5 lg:pr-8 p-8 flex flex-col items-center">
@@ -112,7 +122,7 @@ const Signup = () => {
               <br />
               <div class="w-[400px] h-[60px] flex-col justify-start items-start inline-flex">
                 <div class="justify-start items-start gap-2.5 inline-flex">
-                  <div class="text-blue-950 text-sm font-medium">Username :</div>
+                  <div class="text-blue-950 text-sm font-medium ">Username :</div>
                   {/*username cannot be the same*/}
                 </div>
                 <div className="w-[404px] h-8 pl-2.5 py-2.5 bg-white rounded-[10px] justify-start items-start gap-2.5 inline-flex">
@@ -124,6 +134,9 @@ const Signup = () => {
                   className="text-neutral-400 text-[10px] font-medium border-none outline-none w-full"
                 />
               </div>
+              {isUsernameTaken && (
+                <p className="text-red-500 font-bold text-[10px]">This username is already taken. Please choose another one.</p>
+              )}
             </div>
             <br />
               <div class="w-[400px] h-[60px] flex-col justify-start items-start inline-flex">
@@ -169,14 +182,17 @@ const Signup = () => {
                   type="password"
                   placeholder='Enter your Password'
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                  required
                   className="text-neutral-400 text-[10px] font-medium border-none outline-none w-full"
                 />
               </div>
             </div>
               <br />
               <div>
-        <button onClick={handleNext} className="w-[259px] h-7 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow">
+        <button onClick={handleNext} className="w-[259px] h-7 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow mt-[2rem]">
           Next
         </button>
       </div>
