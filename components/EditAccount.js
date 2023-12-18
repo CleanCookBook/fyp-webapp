@@ -1,14 +1,16 @@
 import Image from "next/image";
-import { useState } from "react";
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from "react";
 import Footer from "./Footer";
 import Modal from "./Modal"; // Adjust the path based on your file structure
 import Navbar from "./Navbar";
-import Link from 'next/link';
 
 const EditAccount = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const router = useRouter();
     const [formData, setFormData] = useState({
+        username: "",
         name : "",
         dob : "",
         gender : "",
@@ -31,29 +33,81 @@ const EditAccount = () => {
         [fieldName]: fieldValue
       }));
     }
+   // ...
 
-    const submitForm = (e) => {
-        e.preventDefault()
-        const data = new FormData()
-        Object.entries(formData).forEach(([key, value]) => {
-            data.append(key, value);
-        })
-        fetch(formURL, {
-            method: "POST",
-            body: data,
-            headers: {
-              'accept': 'application/json',
-            },
-        }).then((response) => response.json())
-          .then((data) => {
-            setFormData({
-                name : "",
-                dob : "",
-                gender : "",
-                email : ""
-            })
-        })
-    }
+const submitForm = async (e) => {
+  e.preventDefault();
+
+  try {
+      const response = await fetch("http://localhost:3001/api/update-profile", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+              console.log("Profile updated successfully");
+              router.push('/profile');
+              // You might want to perform additional actions after a successful update
+          } else {
+              console.error("Failed to update profile");
+          }
+      } else if (response.status === 401) {
+          console.error("Unauthorized access");
+      } else {
+          console.error("Failed to update profile");
+      }
+  } catch (error) {
+      console.error("Error updating profile:", error.message);
+  }
+};
+
+// ...
+
+
+  useEffect(() => {
+      // Fetch user data when the component mounts
+      const fetchUserData = async () => {
+          try {
+              const response = await fetch("http://localhost:3001/api/profile", {
+                  method: "GET",
+                  headers: {
+                      "Content-Type": "application/json",
+                  },
+                  credentials: "include",
+              });
+
+              if (response.ok) {
+                  const data = await response.json();
+                  const userProfile = data.userProfile;
+
+                  setFormData({
+                      username:userProfile.Username,
+                      name: userProfile.FName + " " + userProfile.LName,
+                      dob: userProfile.dob,
+                      gender: userProfile.gender,
+                      email: userProfile.email,
+                  });
+              } else if (response.status === 401) {
+                  console.error("Unauthorized access");
+              } else if (response.status === 404) {
+                  console.error("User not found");
+              } else {
+                  console.error("Failed to fetch profile");
+              }
+          } catch (error) {
+              console.error("Error during profile fetch:", error.message);
+          }
+      };
+
+      fetchUserData();
+  }, []); // Empty dependency array ensures the effect runs only once when the component mounts
+
 
 return (
 <div className="flex flex-col h-screen bg-[#F9D548]">
@@ -68,8 +122,8 @@ return (
             className="rounded-full shadow-lg"
         />
         <div className="flex flex-col mt-9 ml-8 gap-1">
-          <h1 className="flex flex-row text-2xl font-bold text-black">Clean Cook Book</h1>
-          <p className="text-xl text-black">@Cleancookbook</p>
+          <h1 className="flex flex-row text-2xl font-bold text-black">{formData.name}</h1>
+          <p className="text-xl text-black">{formData.username}</p>
         </div>
     </div>
 
@@ -121,7 +175,11 @@ return (
             </div>
             <div className="flex flex-row mt-20 gap-4">
             <Link href="/profile">
-              <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
+            <button
+                         type="submit" 
+                        onClick={submitForm}
+                        className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow"
+                    >
                 Confirm Update
               </button>
             </Link>
