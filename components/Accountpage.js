@@ -129,7 +129,17 @@ const Accountpage = () => {
             <p className="text-xl text-black">{user.email}</p>
           </div>
           <div className="flex flex-row mt-28 gap-4">
-            <Link href="/editAccount">
+          <Link
+            href={{
+              pathname: "/editAccount",
+              query: {
+                name: user.FName + " " + user.LName,
+                dob: user.dob,
+                gender: user.gender,
+                email: user.email,
+              },
+            }}
+          >
               <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
                 Edit
               </button>

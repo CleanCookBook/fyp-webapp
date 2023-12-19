@@ -247,10 +247,10 @@ app.get('/api/aboutme', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 // server.js
 
 app.get('/api/logout', (req, res) => {
+
   req.session.destroy((err) => {
     if (err) {
       console.error('Error destroying session:', err.message);
@@ -260,6 +260,49 @@ app.get('/api/logout', (req, res) => {
     res.json({ message: 'Logout successful' });
   });
 });
+
+// Add this to your server.js file
+
+app.post("/api/update-profile", (req, res) => {
+  const userId = req.session.userId;
+
+  if (!userId) {
+      res.status(401).json({ error: "Unauthorized access" });
+      return;
+  }
+
+  const { name, dob, gender, email } = req.body;
+
+  // Perform the database update with the new data
+  const updateProfileQuery = `
+      UPDATE User
+      SET FName = ?, LName = ?, dob = ?, gender = ?, email = ?
+      WHERE UserID = ?
+  `;
+
+  db.run(
+      updateProfileQuery,
+      [
+          // Extract values from the req.body or formData
+          // Make sure to handle the data appropriately to prevent SQL injection
+          // For simplicity, assuming name is a combination of first and last name
+          ...name.split(" "),
+          dob,
+          gender,
+          email,
+          userId,
+      ],
+      (err) => {
+          if (err) {
+              console.error("Error updating profile:", err.message);
+              res.status(500).json({ error: `Internal Server Error: ${err.message}` });
+          } else {
+              res.json({ success: true });
+          }
+      }
+  );
+});
+
 
 
 // Handle API request to retrieve data
