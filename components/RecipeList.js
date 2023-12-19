@@ -1,20 +1,26 @@
-import Link from "next/link";
-import { useState } from "react";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+// RecipeList.js
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import Footer from './Footer';
+import Navbar from './Navbar';
 
 const RecipeList = () => {
-  const input = "Fish";
-  const recipeList = [
-    "Fish and Chips",
-    "ABC soup",
-    "Steamed egg",
-    "Vegetarian burrito",
-    "Bibimbap",
-  ];
+  const searchParams = useSearchParams();
+  const searchInput = searchParams.get('searchInput');
+  const searchResults = JSON.parse(searchParams.get('searchResults'));
+
+  // Ensure searchResults is an array
+  const resultsArray = Array.isArray(searchResults) ? searchResults : [searchResults];
+
   const [currentPage, setCurrentPage] = useState(1);
   const recipesPerPage = 5; // Number of recipes per page
-  const totalPages = Math.ceil(recipeList.length / recipesPerPage);
+
+  const totalPages = Math.ceil(resultsArray.length / recipesPerPage);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [resultsArray]);
 
   const goToNextPage = () => {
     if (currentPage < totalPages) {
@@ -30,26 +36,23 @@ const RecipeList = () => {
 
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  const currentRecipes = recipeList.slice(
-    indexOfFirstRecipe,
-    indexOfLastRecipe
-  );
+  const currentRecipes = resultsArray.slice(indexOfFirstRecipe, indexOfLastRecipe);
 
   return (
     <section className="flex flex-col h-screen bg-[#F9D548]">
       <Navbar />
       <div className="flex flex-col justify-start items-center">
         <h1 className="pr-[60rem] pt-10 text-7xl text-[#0A2A67] font-black">
-          {input}
+          {searchInput}
         </h1>
         <div className="mt-8 bg-white w-[70%] max-w-[1114px]">
-          {recipeList.map((recipe, index) => (
+          {currentRecipes.map((recipe, index) => (
             <div
               key={index}
               className="flex items-center h-[60px] border-b-2 border-gray-300"
             >
-              <Link href="detailRecipe">
-                <p className="ml-2 text-black text-xl font-medium">{recipe}</p>
+               <Link href={`/detailRecipe/${encodeURIComponent(recipe.Rname.replace(/\s/g, '-'))}`}>
+                <p className="ml-2 text-black text-xl font-medium">{recipe.Rname}</p>
               </Link>
             </div>
           ))}

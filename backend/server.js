@@ -304,6 +304,50 @@ app.post("/api/update-profile", (req, res) => {
 });
 
 
+app.get('/api/search', async (req, res) => {
+  const { query } = req.query;
+  console.log('Received query:', query);
+
+  try {
+    const sql = 'SELECT * FROM Recipe_Np WHERE Rname LIKE ?';
+    const params = `%${query}%`;
+
+    console.log('Executing SQL query:', sql);
+    console.log('Query parameters:', params);
+
+    // Function to execute a SQL query and return a promise
+    function executeQuery(sql, params) {
+      return new Promise((resolve, reject) => {
+        db.all(sql, params, (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            // Extract only the desired columns for each result
+            const extractedResults = results.map(result => ({
+              Rname: result.Rname,
+            }));
+            resolve(extractedResults);
+          }
+        });
+      });
+    }
+
+    const results = await executeQuery(sql, params);
+
+    console.log('Query results:', results);
+
+    if (results.length > 0) {
+      // Recipes with the specified Rname exist
+      res.json(results);
+    } else {
+      // No recipes found with the specified Rname
+      res.json({ error: 'Recipe not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching search results:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 // Handle API request to retrieve data
 app.get("/api/data", (req, res) => {
