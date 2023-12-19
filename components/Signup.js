@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const Signup = () => {
   const router = useRouter();
@@ -12,6 +12,8 @@ const Signup = () => {
   const [gender, setGender] = useState('');
   const [dob, setDOB] = useState('');
   const [isUsernameTaken, setIsUsernameTaken] = useState(false);
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
 
   const handleNext = async () => {
     const userData = {
@@ -23,12 +25,15 @@ const Signup = () => {
       gender,
       dob,
     };
-  
-    // Validate password requirements
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{6,}$/;
-    if (!passwordRegex.test(password)) {
-      alert('Password must contain at least 6 characters, 1 uppercase letter, and 1 symbol.');
-      return;
+
+    let isValid = true;
+
+    // Validate email
+    if (!email.includes('@')) {
+      setIsEmailValid(false);
+      isValid = false;
+    } else {
+      setIsEmailValid(true);
     }
 
     if (!firstName || !lastName || !email || !username || !gender || !dob || !password) {
@@ -36,7 +41,7 @@ const Signup = () => {
       alert("Please fill in all fields before proceeding.");
       return;
     }
-  
+
     try {
       const response = await fetch("http://localhost:3001/api/signup", {
         method: "POST",
@@ -45,7 +50,7 @@ const Signup = () => {
         },
         body: JSON.stringify(userData),
       });
-  
+
       if (response.ok) {
         const responseData = await response.json();
         console.log("Server response:", responseData);
@@ -54,15 +59,30 @@ const Signup = () => {
         const errorData = await response.json();
         if (errorData.error === "Username already exists") {
           setIsUsernameTaken(true);
+          isValid = false;
         } else {
-          console.error("Error submitting signup data:", response.statusText);
+          setIsUsernameTaken(false);
         }
+        console.error("Error submitting signup data:", response.statusText);
       }
     } catch (error) {
       console.error("Error submitting signup data:", error.message);
     }
-  };
 
+    // Validate password requirements
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{6,}$/;
+    if (!passwordRegex.test(password)) {
+      setIsPasswordValid(false);
+      return;
+    } else {
+      setIsPasswordValid(true);
+    }
+    
+    if (!isValid) {
+      return;
+    }
+  };
+      
     return (
       <div className="flex flex-col h-screen justify-center items-center bg-[#F9D548] text-[#0A2A67]">
         <div className="lg:w-4/5 lg:pr-8 p-8 flex flex-col items-center">
@@ -118,6 +138,9 @@ const Signup = () => {
                   className="text-neutral-400 text-[10px] font-medium border-none outline-none w-full"
                 />
               </div>
+              {!isEmailValid && (
+                <p className="text-red-500 font-bold text-[10px]">Please enter a valid email address.</p>
+              )}
             </div>
               <br />
               <div class="w-[400px] h-[60px] flex-col justify-start items-start inline-flex">
@@ -182,13 +205,14 @@ const Signup = () => {
                   type="password"
                   placeholder='Enter your Password'
                   value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                   className="text-neutral-400 text-[10px] font-medium border-none outline-none w-full"
                 />
               </div>
+              {!isPasswordValid && (
+                <p className="text-red-500 font-bold text-[10px]">Password must contain at least 6 characters, 1 uppercase letter, and 1 symbol.</p>
+              )}
             </div>
               <br />
               <div>
