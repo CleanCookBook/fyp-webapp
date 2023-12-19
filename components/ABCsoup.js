@@ -1,7 +1,7 @@
-import Navbar from "@/components/Navbar";
 import Footer from "./Footer";
+import Navbar from "./Navbar";
 
-const abcsoup = () => {
+const ABCsoup = () => {
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       {/* Navbar */}
@@ -172,4 +172,4 @@ const abcsoup = () => {
   );
 };
 
-export default abcsoup;
+export default ABCsoup;
