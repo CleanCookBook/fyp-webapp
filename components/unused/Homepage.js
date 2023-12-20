@@ -56,9 +56,20 @@ const Homepage = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search our library of recipes"
+            className="w-full text-lg text-black outline-none"
           />
           <div className="ml-auto m-[5px]">
-            <button onClick={openModal}>
+            <button className="ml-2" onClick={handleSearch}>
+          <Image
+                src="/search.png"
+                alt="Filter"
+                width={20}
+                height={20}
+                style={{ filter: "brightness(0)" }}
+              />
+          </button>
+          </div>
+          <button onClick={openModal}>
               <Image
                 src="/filter.png"
                 alt="Filter"
@@ -67,10 +78,6 @@ const Homepage = () => {
                 style={{ filter: "brightness(0)" }}
               />
             </button>
-          </div>
-          <button className="ml-2" onClick={handleSearch}>
-            Search
-          </button>
         </div>
         {noResults && <p className="text-red-500 mt-2">No such recipe</p>}
       </div>

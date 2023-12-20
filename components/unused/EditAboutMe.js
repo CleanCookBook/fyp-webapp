@@ -1,9 +1,9 @@
 import Image from "next/image";
+import Link from 'next/link';
 import { useState } from "react";
 import Footer from "./Footer";
 import Modal from "./Modal"; // Adjust the path based on your file structure
 import Navbar from "./Navbar";
-import Link from 'next/link';
 
 const EditAboutMe = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);

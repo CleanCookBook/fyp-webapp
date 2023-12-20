@@ -18,13 +18,13 @@ app.use(
   })
 );
 
-
+const oneHour = 3600000;
 app.use(
   session({
     secret: secretKey,
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 600000 } // Adjust the maxAge to a larger value in milliseconds
+    cookie: { maxAge: oneHour} // Adjust the maxAge to a larger value in milliseconds
   })
 );
 
