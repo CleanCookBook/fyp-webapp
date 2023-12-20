@@ -1,10 +1,9 @@
-"use client";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Footer from "./Footer";
+import Navbar from "./Navbar";
 
 const AboutMe = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

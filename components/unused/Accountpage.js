@@ -69,12 +69,12 @@ const Accountpage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen bg-[#F9D548]">
+    <div className="flex flex-col h-full bg-[#F9D548]">
       {/* Navbar */}
       <Navbar />
 
       {/* Main Content */}
-      <div className=" lg:w-4/5 lg:pr-8 p-8 flex flex-col h-screen bg-[#F9D548] text-[#0A2A67] justify-start items-start">
+      <div className="lg:w-4/5 lg:pr-8 p-8 flex flex-col h-screen bg-[#F9D548] text-[#0A2A67] justify-start items-start ml-20">
         <div className="w-full max-w-md flex flex-row mt-7">
           <Image
             src="/logo.jpg"
@@ -128,18 +128,8 @@ const Accountpage = () => {
             </p>
             <p className="text-xl text-black">{user.email}</p>
           </div>
-          <div className="flex flex-row mt-28 gap-4">
-          <Link
-            href={{
-              pathname: "/editAccount",
-              query: {
-                name: user.FName + " " + user.LName,
-                dob: user.dob,
-                gender: user.gender,
-                email: user.email,
-              },
-            }}
-          >
+          <div className="flex flex-row mt-20 gap-4">
+            <Link href="/editAccount">
               <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
                 Edit
               </button>
@@ -151,6 +141,7 @@ const Accountpage = () => {
           </div>
         </div>
       </div>
+
       <Footer />
       {isModalOpen && <Modal onClose={closeModal} />}
     </div>
