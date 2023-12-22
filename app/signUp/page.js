@@ -40,7 +40,21 @@ const Signup = () => {
     if (!firstName || !lastName || !email || !username || !gender || !dob || !password) {
       // Display an error message or prevent the user from proceeding
       alert("Please fill in all fields before proceeding.");
+      isValid = false;
       return;
+    }
+
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{6,}$/;
+    if (!passwordRegex.test(password)) {
+      setIsPasswordValid(false);
+      isValid = false;
+      return;
+    } else {
+      setIsPasswordValid(true);
+    }
+
+    if (!isValid) {
+      return; // Don't proceed with the fetch request if any validation fails
     }
 
     try {
@@ -68,19 +82,6 @@ const Signup = () => {
       }
     } catch (error) {
       console.error("Error submitting signup data:", error.message);
-    }
-
-    // Validate password requirements
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{6,}$/;
-    if (!passwordRegex.test(password)) {
-      setIsPasswordValid(false);
-      return;
-    } else {
-      setIsPasswordValid(true);
-    }
-    
-    if (!isValid) {
-      return;
     }
   };
       
