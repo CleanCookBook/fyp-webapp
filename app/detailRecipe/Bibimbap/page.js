@@ -217,6 +217,22 @@ const Bibimbap = () => {
           <div className="border-t border-gray-500 my-4 pl-20"></div>
           <div name="title" className="p-4 pl-20">
             <h2 className="text-3xl text-[#1D5198] font-bold">
+              Fun Facts
+            </h2>
+          </div>
+          <div name="content" className="p-4 pl-20">
+          <ul className="list-disc text-[#1D5198] ml-4">
+          <li>Bibimbap, a beloved Korean dish, has roots that trace back to the 14th-century Joseon Dynasty. It was considered a
+             royal court dish and featured a variety of colorful and nutritious vegetables arranged beautifully on top of a bed of
+              rice. </li>
+          <li>Bibimbap has made its mark on the international culinary scene and even took a trip to space! In 2008, South Korea's 
+            first astronaut, Ko San, brought a version of bibimbap aboard the Russian spacecraft Soyuz. The dish was specially prepared
+             to withstand the conditions of space travel, highlighting the cultural significance of Korean cuisine on a global scale.</li>
+          </ul>
+          </div>
+          <div className="border-t border-gray-500 my-4 pl-20"></div>
+          <div name="title" className="p-4 pl-20">
+            <h2 className="text-3xl text-[#1D5198] font-bold">
               Nutritional Facts
             </h2>
           </div>

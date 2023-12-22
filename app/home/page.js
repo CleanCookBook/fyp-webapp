@@ -14,6 +14,7 @@ const Homepage = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [noResults, setNoResults] = useState(false);
+  const [emptyQuery, setEmptyQuery] = useState(false);
   const router = useRouter();
 
   const openModal = () => {
@@ -25,6 +26,11 @@ const Homepage = () => {
   };
 
   const handleSearch = async () => {
+    if (searchQuery.trim() === '') {
+      // Display a message for the user to type something
+      setEmptyQuery(true);
+      return;
+    }
     // Fetch data from the API endpoint
     const encodedQuery = encodeURIComponent(searchQuery);
     const response = await fetch(`http://localhost:3001/api/search?query=${encodedQuery}`);
@@ -70,7 +76,15 @@ const Homepage = () => {
               />
           </button>
           </div>
-          <button onClick={openModal}>
+          <button onClick={openModal}
+          onKeyDown={(e) => {
+            console.log('Key pressed:', e.key);
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleSearch();
+            }
+          }}
+          tabIndex={0} >
               <Image
                 src="/filter.png"
                 alt="Filter"
@@ -81,6 +95,7 @@ const Homepage = () => {
             </button>
         </div>
         {noResults && <p className="text-red-500 mt-2">No such recipe</p>}
+        {emptyQuery && <p className="text-red-500 mt-2">Please type something!</p>}
       </div>
       <Footer />
       {isModalOpen && <Modal onClose={closeModal} />}
