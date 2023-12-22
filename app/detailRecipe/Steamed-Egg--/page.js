@@ -142,11 +142,26 @@ const steamedegg = () => {
                   <p className="text-[#1D5198]">Control the water ratio in the steaming process. Too much water can lead to a wet surface on the steamed eggs. Aim for a gentle steam, and cover the dish with a lid or foil to prevent condensation.</p>
                   <h3 className="text-xl text-[#1D5198] font-bold">Steaming Time: </h3>
                   <p className="text-[#1D5198]">Steaming time is crucial. Oversteaming can result in a rubbery texture, while understeaming may leave the eggs watery. Aim for a custard-like consistency by checking doneness with a toothpick or fork.</p>
-
-            
-         
         </div>
         <div className="border-t border-gray-500 my-4 pl-20"></div>
+        <div name="title" className="p-4 pl-20">
+            <h2 className="text-3xl text-[#1D5198] font-bold">
+              Fun Facts
+            </h2>
+          </div>
+          <div name="content" className="p-4 pl-20">
+          <ul className="list-disc text-[#1D5198] ml-4">
+          <li>Steamed eggs have a long history and have been enjoyed for centuries. In ancient China, a dish called "luweidan" 
+            was a precursor to modern steamed eggs. It was often served to Chinese emperors during the Tang Dynasty (618-907 AD) 
+            and is a testament to the enduring appeal and sophistication of this seemingly simple culinary creation.</li>
+          <li>In Japan, there is an intricate and traditional method of making steamed eggs known as "Tamagoyaki." Chefs skilled 
+            in this artistry create thin layers of egg, delicately rolled to form a log. What makes it mind-blowing is the precision
+             and patience required—sometimes over 20 layers are meticulously crafted, resulting in a visually stunning and flavorful
+              culinary masterpiece. The layers are so meticulously done that some chefs can create intricate designs within the layers,
+               showcasing an extraordinary level of culinary skill and artistry.</li>
+          </ul>
+          </div>
+          <div className="border-t border-gray-500 my-4 pl-20"></div>
         <div name="title" className="p-4 pl-20">
             <h2 className="text-3xl text-[#1D5198] font-bold">Nutritional Facts</h2>
           </div>

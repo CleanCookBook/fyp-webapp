@@ -152,6 +152,23 @@ const ABCsoup = () => {
          
         </div>
         <div className="border-t border-gray-500 my-4 pl-20"></div>
+          <div name="title" className="p-4 pl-20">
+            <h2 className="text-3xl text-[#1D5198] font-bold">
+              Fun Facts
+            </h2>
+          </div>
+          <div name="content" className="p-4 pl-20">
+          <ul className="list-disc text-[#1D5198] ml-4">
+          <li>ABC soup reflects the cultural blending in Southeast Asian cuisine. While the dish has its roots in Chinese cooking, it has become 
+            a staple in many Singaporean and Malaysian households. The simplicity of ingredients and the adaptability to different 
+            dietary preferences showcase how culinary traditions can evolve and adapt over time. </li>
+          <li>ABC Soup is not only known for its nutritional value but also for its ability to evolve in flavor over time.
+             Many enthusiasts claim that the soup tastes even better when reheated the next day. The ingredients have more time to mingle,
+            allowing the flavors to deepen and create a more robust and savory broth. This quality adds an intriguing dimension to the soup,
+             making it a favorite for leftovers.</li>
+          </ul>
+          </div>
+        <div className="border-t border-gray-500 my-4 pl-20"></div>
         <div name="title" className="p-4 pl-20">
             <h2 className="text-3xl text-[#1D5198] font-bold">Nutritional Facts</h2>
           </div>
