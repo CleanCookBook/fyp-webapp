@@ -1,11 +1,14 @@
 "use client";
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleLogin = async () => {
     try {
@@ -20,9 +23,10 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
         console.log('Login successful:', data);
+        setIsAuthenticated(true);
 
-        // Redirect to the '/home' page
-        window.location.href = '/home';
+        // Redirect to the Homepage after successful login
+        router.push('/home');
       } else {
         const errorData = await response.json();
         console.error('Login failed:', errorData);
