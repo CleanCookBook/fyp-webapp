@@ -18,18 +18,26 @@ app.use(
   })
 );
 
-const oneHour = 3600000;
 app.use(
   session({
     secret: secretKey,
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: oneHour} // Adjust the maxAge to a larger value in milliseconds
+    cookie: { maxAge: null} // Adjust the maxAge to a larger value in milliseconds
   })
 );
 
 
 app.use(bodyParser.json());
+
+app.get("/api/check-auth", (req, res) => {
+  // Check if the user is authenticated based on session information
+  if (req.session && req.session.userId) {
+    res.status(200).json({ message: "Authenticated" });
+  } else {
+    res.status(401).json({ error: "Not authenticated" });
+  }
+});
 
 
 // Handle requests to the root path
@@ -153,6 +161,26 @@ app.post("/api/create-account", (req, res) => {
     res.status(400).json({ error: "Terms not accepted" });
   }
 });
+
+const isAuthenticated = (req, res, next) => {
+  console.log("Checking authentication...");
+
+  if (req.session && req.session.userId) {
+    console.log("User is authenticated. Proceeding...");
+    return next();
+  } else {
+    console.log("User is not authenticated. Sending 401 Unauthorized...");
+    res.status(401).json({ error: "Unauthorized" });
+  }
+};
+
+
+// Protected route example: '/home'
+app.get('/home', isAuthenticated, (req, res) => {
+  // If the user is authenticated, render the home page
+  res.json({ message: "Welcome to the home page!" });
+});
+
 
 app.post("/api/login", (req, res) => {
   const { username, password } = req.body;
@@ -283,9 +311,6 @@ app.post("/api/update-profile", (req, res) => {
   db.run(
       updateProfileQuery,
       [
-          // Extract values from the req.body or formData
-          // Make sure to handle the data appropriately to prevent SQL injection
-          // For simplicity, assuming name is a combination of first and last name
           ...name.split(" "),
           dob,
           gender,
