@@ -52,7 +52,7 @@ const RecipeList = () => {
               key={index}
               className="flex items-center h-[60px] border-b-2 border-gray-300"
             >
-               <Link href={`/detailRecipe/${encodeURIComponent(recipe.Rname.replace(/\s/g, '-'))}`}>
+               <Link href={`/detailRecipe`}>
                 <p className="ml-2 text-black text-xl font-medium">{recipe.Rname}</p>
               </Link>
             </div>
