@@ -328,6 +328,43 @@ app.post("/api/update-profile", (req, res) => {
   );
 });
 
+app.post("/api/reset-password", (req, res) => {
+  const userId = req.session.userId;
+
+  if (!userId) {
+    res.status(401).json({ error: "Unauthorized access" });
+    return;
+  }
+
+  const { oldPassword, newPassword } = req.body;
+
+  // Fetch the current password from the database
+  const getPasswordQuery = 'SELECT password FROM User WHERE UserID = ?';
+  db.get(getPasswordQuery, [userId], (err, row) => {
+    if (err) {
+      console.error("Error fetching password:", err.message);
+      res.status(500).json({ error: `Internal Server Error: ${err.message}` });
+      return;
+    }
+
+    if (!row || row.password !== oldPassword) {
+      // The old password is incorrect
+      res.status(401).json({ error: "Incorrect old password" });
+      return;
+    }
+
+    // Update the password in the database
+    const updatePasswordQuery = 'UPDATE User SET password = ? WHERE UserID = ?';
+    db.run(updatePasswordQuery, [newPassword, userId], (err) => {
+      if (err) {
+        console.error("Error updating password:", err.message);
+        res.status(500).json({ error: `Internal Server Error: ${err.message}` });
+      } else {
+        res.json({ success: true });
+      }
+    });
+  });
+});
 
 app.get('/api/search', async (req, res) => {
   const { query } = req.query;

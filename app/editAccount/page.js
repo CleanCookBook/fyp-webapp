@@ -124,7 +124,7 @@ return (
         />
         <div className="flex flex-col mt-9 ml-8 gap-1">
           <h1 className="flex flex-row text-2xl font-bold text-black">{formData.name}</h1>
-          <p className="text-xl text-black">{formData.username}</p>
+          <p className="text-xl text-black">@ {formData.username}</p>
         </div>
     </div>
 
