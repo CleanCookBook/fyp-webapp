@@ -136,9 +136,11 @@ const Accountpage = () => {
               </button>
             </Link>
 
-            <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
-              <a href="#">Reset Password</a>
-            </button>
+            <Link href="/resetPassword">
+              <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
+                Reset Password
+              </button>
+            </Link>
           </div>
         </div>
       </div>
