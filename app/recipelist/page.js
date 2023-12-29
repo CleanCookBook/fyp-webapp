@@ -1,5 +1,5 @@
-"use client";
 // RecipeList.js
+"use client";
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
@@ -48,11 +48,8 @@ const RecipeList = () => {
         </h1>
         <div className="mt-8 bg-white w-[70%] max-w-[1114px]">
           {currentRecipes.map((recipe, index) => (
-            <div
-              key={index}
-              className="flex items-center h-[60px] border-b-2 border-gray-300"
-            >
-               <Link href={`/detailRecipe`}>
+            <div key={index} className="flex items-center h-[60px] border-b-2 border-gray-300">
+              <Link href={`/detailRecipe?recipeName=${encodeURIComponent(recipe.Rname)}`}>
                 <p className="ml-2 text-black text-xl font-medium">{recipe.Rname}</p>
               </Link>
             </div>
@@ -84,4 +81,3 @@ const RecipeList = () => {
 };
 
 export default RecipeList;
-
