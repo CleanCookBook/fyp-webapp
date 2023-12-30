@@ -1,7 +1,7 @@
 // authRoutes.js
 const express = require('express');
 const router = express.Router();
-const db = require('./db'); // Import your database module here
+const db = require('../db'); // Import your database module here
 const crypto = require('crypto');
 
 // Middleware to check if the user is authenticated
