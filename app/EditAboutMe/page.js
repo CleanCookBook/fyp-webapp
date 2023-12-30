@@ -38,24 +38,24 @@ const EditAboutMe = () => {
           { value: 'Nil', label: 'Nil' },
         ],
         allergyOptions: [
-          { value: 'seafood', label: 'Seafood' },
-          { value: 'dairy', label: 'Dairy' },
-          { value: 'nuts', label: 'Nuts' },
-          { value: 'eggs', label: 'Eggs' },
-          { value: 'nil', label: 'Nil' },
+          { value: 'Seafood', label: 'Seafood' },
+          { value: 'Dairy', label: 'Dairy' },
+          { value: 'Nuts', label: 'Nuts' },
+          { value: 'Eggs', label: 'Eggs' },
+          { value: 'Nil', label: 'Nil' },
         ],
         DietMethodOptions: [
-          { value: 'Keto', label: 'Ketogenic diet' },
-          { value: 'Vegetarian', label: 'Vegetarian diet' },
-          { value: 'Intermittent Fasting', label: 'Intermittent fasting' },
-          { value: 'Mediterranean', label: 'Mediterranean Diet' },
+          { value: 'Ketogenic diet', label: 'Ketogenic diet' },
+          { value: 'Vegetarian diet', label: 'Vegetarian diet' },
+          { value: 'Intermittent Fasting', label: 'Intermittent Fasting' },
+          { value: 'Mediterranean Diet', label: 'Mediterranean Diet' },
           { value: 'Nil', label: 'Nil' },
         ],
         HealthGoalOptions: [
           { value: 'Weight Loss', label: 'Weight Loss' },
-          { value: 'Diet Nutrition', label: 'Improve my diet and nutrition' },
-          { value: 'Overall Health', label: 'Improve my overall health' },
-          { value: 'Calorie Needs', label: 'Adequate Nutrients Within Calorie Needs' },
+          { value: 'Improve my diet and nutrition', label: 'Improve my diet and nutrition' },
+          { value: 'Improve my overall health', label: 'Improve my overall health' },
+          { value: 'Adequate Nutrients Within Calorie Needs', label: 'Adequate Nutrients Within Calorie Needs' },
           { value: 'Nil', label: 'Nil' },
         ],
       };
@@ -101,10 +101,10 @@ const EditAboutMe = () => {
         e.preventDefault();
 
         // Get the values from the selected options
-        const dietaryPreferences = selectedDietaryPreferences.map(option => option.value);
-        const allergies = selectedAllergies.map(option => option.value);
-        const dietMethods = selectedDietMethods.map(option => option.value);
-        const healthGoals = selectedHealthGoals.map(option => option.value);
+        const dietaryPreferences = selectedDietaryPreferences.map(option => option.value).join(', ');
+        const allergies = selectedAllergies.map(option => option.value).join(', ');
+        const dietMethods = selectedDietMethods.map(option => option.value).join(', ');
+        const healthGoals = selectedHealthGoals.map(option => option.value).join(', ');
 
         // Merge them with the rest of the form data
         const finalFormData = {
