@@ -26,6 +26,7 @@ const EditAboutMe = () => {
       HealthGoal: [],
       height: "",
       Weight: "",
+      BMI: "",
       DietMethod: [], // Corrected the variable name
     })
 
@@ -101,10 +102,10 @@ const EditAboutMe = () => {
         e.preventDefault();
 
         // Get the values from the selected options
-        const dietaryPreferences = selectedDietaryPreferences.map(option => option.value).join(', ');
-        const allergies = selectedAllergies.map(option => option.value).join(', ');
-        const dietMethods = selectedDietMethods.map(option => option.value).join(', ');
-        const healthGoals = selectedHealthGoals.map(option => option.value).join(', ');
+        const dietaryPreferences = selectedDietaryPreferences.length > 0 ? selectedDietaryPreferences.map(option => option.value).join(', ') : formData.DietaryPreferance;
+        const allergies = selectedAllergies.length > 0 ? selectedAllergies.map(option => option.value).join(', ') : formData.allergy;
+        const dietMethods = selectedDietMethods.length > 0 ? selectedDietMethods.map(option => option.value).join(', ') : formData.DietMethod;
+        const healthGoals = selectedHealthGoals.length > 0 ? selectedHealthGoals.map(option => option.value).join(', ') : formData.HealthGoal;
 
         // Merge them with the rest of the form data
         const finalFormData = {
@@ -113,6 +114,7 @@ const EditAboutMe = () => {
           allergy: allergies,
           DietMethod: dietMethods,
           HealthGoal: healthGoals,
+          BMI,
         };
       
         try {
@@ -140,6 +142,16 @@ const EditAboutMe = () => {
     } 
 };
 
+const [BMI, setBMI] = useState(0); // Add this state variable for BMI
+// This effect will run every time `formData.height` or `formData.Weight` changes
+useEffect(() => {
+    if (formData.height && formData.Weight) {
+      const heightInMeters = formData.height / 100;
+      const newBMI = formData.Weight / (heightInMeters * heightInMeters);
+      setBMI(newBMI.toFixed(2));
+    }
+  }, [formData.height, formData.Weight]);
+
 useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -164,6 +176,7 @@ useEffect(() => {
           HealthGoal: data.HealthGoal ? JSON.parse(data.HealthGoal) : [],
           height: data.height,
           Weight: data.Weight,
+          BMI: data.BMI,
         });
       } catch (error) {
         console.error("Error during About Me fetch:", error.message);
@@ -175,7 +188,7 @@ useEffect(() => {
 return (
 <div className="flex flex-col h-full bg-[#F9D548]">
     <Navbar />
-    <div className=" lg:w-4/5 lg:pr-8 p-8 flex flex-col h-screen bg-[#F9D548] text-[#0A2A67] justify-start items-start">
+    <div className="lg:w-4/5 lg:pr-8 p-8 flex flex-col h-full bg-[#F9D548] text-[#0A2A67] justify-start items-start ml-20">
     <div className="w-full max-w-md flex flex-row mt-7">
         <Image
             src="/logo.jpg"
@@ -308,6 +321,7 @@ return (
                   placeholder="Enter new height" />
                   <label className="text-xl text-black font-semibold mt-2">cm</label>
             </div>
+
             <div className="flex flex-row mt-9 gap-4">
                 <label className="text-xl text-black font-semibold mt-2">Weight :</label>
                 <input 
@@ -319,8 +333,19 @@ return (
                   placeholder="Enter new weight" />
                   <label className="text-xl text-black font-semibold mt-2">kg</label> 
             </div>
-            
-            <div className="flex flex-row mt-20 gap-4">
+
+            <div className="flex flex-row mt-9 gap-4">
+                <label className="text-xl text-black font-semibold mt-2">BMI :</label>
+                <input 
+                className="text-xl text-black w-[490px] h-12 rounded-[10px] -mt-0.5 p-2 bg-[#F9D548]" 
+                type="number" 
+                name="BMI" 
+                value={BMI} 
+                placeholder="Your BMI" 
+                readOnly />
+            </div>
+
+            <div className="flex flex-row mt-16 gap-4">
               <button 
                 type="submit"
                 onClick={submitForm}

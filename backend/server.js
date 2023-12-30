@@ -215,12 +215,12 @@ app.post("/api/update-aboutme", (req, res) => {
     return;
   }
 
-  const { height, Weight, DietaryPreferance, allergy, HealthGoal, DietMethod } = req.body;
+  const { height, Weight, DietaryPreferance, allergy, HealthGoal, DietMethod, BMI } = req.body;
 
   // Perform the database update with the new data
   const updateAboutMeQuery = `
     UPDATE AboutMe
-    SET height = ?, Weight = ?, DietaryPreferance = ?, allergy = ?, HealthGoal = ?, DietMethod = ?
+    SET height = ?, Weight = ?, DietaryPreferance = ?, BMI = ?, allergy = ?, HealthGoal = ?, DietMethod = ?
     WHERE UserID = ?;
   `;
 
@@ -233,6 +233,7 @@ app.post("/api/update-aboutme", (req, res) => {
       JSON.stringify(allergy),
       JSON.stringify(HealthGoal),
       JSON.stringify(DietMethod),
+      BMI,
       userId,
     ],
     (err) => {

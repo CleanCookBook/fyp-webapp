@@ -41,6 +41,7 @@ const AboutMe = () => {
 
       if (response.ok) {
         const data = await response.json();
+        let bmi = (data.Weight / ((data.height / 100) ** 2)).toFixed(2);
         setUserData({
           FName: data.FName,
           LName: data.LName,
@@ -53,7 +54,7 @@ const AboutMe = () => {
           HealthGoal: data.HealthGoal ? JSON.parse(data.HealthGoal) : "",
           height: data.height,
           Weight: data.Weight,
-          BMI: data.BMI,
+          BMI: bmi,
         });
       } else if (response.status === 401) {
         console.error("Unauthorized access");
