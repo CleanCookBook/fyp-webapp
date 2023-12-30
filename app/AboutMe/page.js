@@ -10,6 +10,7 @@ const AboutMe = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userData, setUserData] = useState({
     FName: "",
+    LName: "",
     Username: "",
     DietaryPreferance: "",
     allergy: "",
@@ -40,8 +41,10 @@ const AboutMe = () => {
 
       if (response.ok) {
         const data = await response.json();
+        let bmi = (data.Weight / ((data.height / 100) ** 2)).toFixed(2);
         setUserData({
           FName: data.FName,
+          LName: data.LName,
           Username: data.Username,
           DietaryPreferance: data.DietaryPreferance
             ? JSON.parse(data.DietaryPreferance)
@@ -51,11 +54,11 @@ const AboutMe = () => {
           HealthGoal: data.HealthGoal ? JSON.parse(data.HealthGoal) : "",
           height: data.height,
           Weight: data.Weight,
-          BMI: data.BMI,
+          BMI: bmi,
         });
       } else if (response.status === 401) {
         console.error("Unauthorized access");
-        router.push("/login");
+        router.push("/loginPage");
       } else {
         console.error("Failed to fetch user data");
       }
@@ -85,7 +88,7 @@ const AboutMe = () => {
           />
           <div className="flex flex-col mt-9 ml-8 gap-1">
             <h1 className="flex flex-row text-2xl font-bold text-black">
-              {userData.FName}
+              {userData.FName} {userData.LName}
             </h1>
             <p className="text-xl text-black">@ {userData.Username}</p>
           </div>
@@ -151,9 +154,6 @@ const AboutMe = () => {
                 Edit
               </button>
             </Link>
-            <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
-              <a href="#">Reset Password</a>
-            </button>
           </div>
         </div>
       </div>
