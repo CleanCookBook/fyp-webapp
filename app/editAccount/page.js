@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 
+
 const EditAccount = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const router = useRouter();
@@ -40,7 +41,7 @@ const submitForm = async (e) => {
   e.preventDefault();
 
   try {
-      const response = await fetch("http://localhost:3001/api/update-profile", {
+      const response = await fetch("http://localhost:3001/api/profile/update-profile", {
           method: "POST",
           headers: {
               "Content-Type": "application/json",
@@ -124,7 +125,7 @@ return (
         />
         <div className="flex flex-col mt-9 ml-8 gap-1">
           <h1 className="flex flex-row text-2xl font-bold text-black">{formData.name}</h1>
-          <p className="text-xl text-black">@ {formData.username}</p>
+          <p className="text-xl text-black">{formData.username}</p>
         </div>
     </div>
 

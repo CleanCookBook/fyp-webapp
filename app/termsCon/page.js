@@ -19,7 +19,7 @@ const TermsCon = () => {
   const handleCreateAccount = async () => {
     if (isChecked) {
       try {
-        const response = await fetch('http://localhost:3001/api/create-account', {
+        const response = await fetch('http://localhost:3001/api/user/create-account', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

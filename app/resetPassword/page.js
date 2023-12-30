@@ -1,8 +1,8 @@
 "use client";
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
-import Link from 'next/link';
 import Image from "next/image";
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 
@@ -59,7 +59,7 @@ const submitForm = async (e) => {
     }
 
     try {
-        const response = await fetch("http://localhost:3001/api/reset-password", {
+        const response = await fetch("http://localhost:3001/api/profile/update-password", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

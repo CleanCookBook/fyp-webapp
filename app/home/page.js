@@ -71,7 +71,7 @@ const Homepage = () => {
 
     // Fetch data from the API endpoint
     const encodedQuery = encodeURIComponent(searchQuery);
-    const response = await fetch(`http://localhost:3001/api/search?query=${encodedQuery}`);
+    const response = await fetch(`http://localhost:3001/api/recipe/search?query=${encodedQuery}`);
     const data = await response.json();
   
     console.log('API Response:', data); // Add this line

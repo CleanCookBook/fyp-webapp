@@ -1,7 +1,7 @@
 // profileRoutes.js
 const express = require('express');
 const router = express.Router();
-const db = require('./db'); // Import your database module here
+const db = require('../db'); // Import your database module here
 
 const isAuthenticated = (req, res, next) => {
   if (req.session && req.session.userId) {
@@ -38,6 +38,7 @@ router.get('/', isAuthenticated, (req, res) => {
 });
 
 // Route for updating user profile
+// Route for updating user profile
 router.post('/update-profile', isAuthenticated, (req, res) => {
   const userId = req.session.userId;
 
@@ -48,6 +49,9 @@ router.post('/update-profile', isAuthenticated, (req, res) => {
 
   const { name, dob, gender, email } = req.body;
 
+  // Ensure name is defined and split it, or provide an empty array
+  const nameArray = name ? name.split(' ') : [];
+
   // Perform the database update with the new data
   const updateProfileQuery = `
     UPDATE User
@@ -57,7 +61,7 @@ router.post('/update-profile', isAuthenticated, (req, res) => {
 
   db.run(
     updateProfileQuery,
-    [...name.split(' '), dob, gender, email, userId],
+    [...nameArray, dob, gender, email, userId],
     (err) => {
       if (err) {
         console.error('Error updating profile:', err.message);
@@ -67,6 +71,46 @@ router.post('/update-profile', isAuthenticated, (req, res) => {
       }
     }
   );
+});
+
+
+// Route for updating user password
+router.post('/update-password', isAuthenticated, (req, res) => {
+  const userId = req.session.userId;
+
+  if (!userId) {
+    res.status(401).json({ error: 'Unauthorized access' });
+    return;
+  }
+
+  const { oldPassword, newPassword } = req.body;
+
+  // Fetch the current password from the database
+  const getPasswordQuery = 'SELECT password FROM User WHERE UserID = ?';
+  db.get(getPasswordQuery, [userId], (err, row) => {
+    if (err) {
+      console.error('Error fetching password:', err.message);
+      res.status(500).json({ error: `Internal Server Error: ${err.message}` });
+      return;
+    }
+
+    if (!row || row.password !== oldPassword) {
+      // The old password is incorrect
+      res.status(401).json({ error: 'Incorrect old password' });
+      return;
+    }
+
+    // Update the password in the database
+    const updatePasswordQuery = 'UPDATE User SET password = ? WHERE UserID = ?';
+    db.run(updatePasswordQuery, [newPassword, userId], (err) => {
+      if (err) {
+        console.error('Error updating password:', err.message);
+        res.status(500).json({ error: `Internal Server Error: ${err.message}` });
+      } else {
+        res.json({ success: true });
+      }
+    });
+  });
 });
 
 module.exports = router;

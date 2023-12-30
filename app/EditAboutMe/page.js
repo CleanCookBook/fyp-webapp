@@ -117,7 +117,7 @@ const EditAboutMe = () => {
         };
       
         try {
-          const response = await fetch("http://localhost:3001/api/update-aboutme", {
+          const response = await fetch("http://localhost:3001/api/aboutme/update-aboutme", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

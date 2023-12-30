@@ -69,7 +69,7 @@ const RecipeDetails = () => {
           {/* Division 1 - 1/3 width */}
           <div className="w-1/3">
             <Image
-              src={recipeDetails?.image || "/placeholder-image.jpg"} // Replace with your placeholder image path
+              src={recipeDetails?.image || "/placeholder-image.jpg"}
               alt={recipeDetails?.RName || "Recipe Image"}
               width={500}
               height={500}
