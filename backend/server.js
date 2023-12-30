@@ -179,7 +179,7 @@ app.get('/api/aboutme', async (req, res) => {
     }
 
     const aboutMeQuery = `
-      SELECT User.FName, User.Username, AboutMe.height, AboutMe.Weight, AboutMe.allergy, 
+      SELECT User.FName, User.LName, User.Username, AboutMe.height, AboutMe.Weight, AboutMe.allergy, 
              AboutMe.BMI, AboutMe.DietMethod, AboutMe.DietaryPreferance, AboutMe.HealthGoal
       FROM User
       LEFT JOIN AboutMe ON User.UserID = AboutMe.UserID
@@ -203,6 +203,48 @@ app.get('/api/aboutme', async (req, res) => {
     console.error('Error fetching profile data:', error.message);
     res.status(500).json({ error: 'Internal Server Error' });
   }
+});
+
+// Add this to your server.js file
+
+app.post("/api/update-aboutme", (req, res) => {
+  const userId = req.session.userId;
+
+  if (!userId) {
+    res.status(401).json({ error: "Unauthorized access" });
+    return;
+  }
+
+  const { height, Weight, DietaryPreferance, allergy, HealthGoal, DietMethod, BMI } = req.body;
+
+  // Perform the database update with the new data
+  const updateAboutMeQuery = `
+    UPDATE AboutMe
+    SET height = ?, Weight = ?, DietaryPreferance = ?, allergy = ?, HealthGoal = ?, DietMethod = ?, BMI = ?
+    WHERE UserID = ?;
+  `;
+
+  db.run(
+    updateAboutMeQuery,
+    [
+      height,
+      Weight,
+      JSON.stringify(DietaryPreferance),
+      JSON.stringify(allergy),
+      JSON.stringify(HealthGoal),
+      JSON.stringify(DietMethod),
+      BMI,
+      userId,
+    ],
+    (err) => {
+      if (err) {
+        console.error("Error updating about me:", err.message);
+        res.status(500).json({ error: `Internal Server Error: ${err.message}` });
+      } else {
+        res.json({ success: true });
+      }
+    }
+  );
 });
 
 app.post("/api/reset-password", (req, res) => {
