@@ -220,7 +220,7 @@ app.post("/api/update-aboutme", (req, res) => {
   // Perform the database update with the new data
   const updateAboutMeQuery = `
     UPDATE AboutMe
-    SET height = ?, Weight = ?, DietaryPreferance = ?, BMI = ?, allergy = ?, HealthGoal = ?, DietMethod = ?
+    SET height = ?, Weight = ?, DietaryPreferance = ?, allergy = ?, HealthGoal = ?, DietMethod = ?, BMI = ?
     WHERE UserID = ?;
   `;
 

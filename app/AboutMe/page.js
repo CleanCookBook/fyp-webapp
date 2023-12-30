@@ -58,7 +58,7 @@ const AboutMe = () => {
         });
       } else if (response.status === 401) {
         console.error("Unauthorized access");
-        router.push("/login");
+        router.push("/loginPage");
       } else {
         console.error("Failed to fetch user data");
       }

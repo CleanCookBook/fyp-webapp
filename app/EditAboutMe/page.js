@@ -3,7 +3,6 @@ import Footer from "@/components/Footer";
 import Modal from "@/components/Modal"; // Adjust the path based on your file structure
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import Select from 'react-select';
