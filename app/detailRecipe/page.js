@@ -40,6 +40,7 @@ const RecipeDetails = () => {
             funFacts: factsArray,
             calorie: data.calorie,
             tips_tricks: data.tips_tricks,
+            cookingTime: data.cTime
           });
         } else {
           console.error("Error fetching recipe details:", data.error);
@@ -112,6 +113,8 @@ const RecipeDetails = () => {
           <div name="Instruction">
             <div name="header" className="p-4 pl-20">
               <h2 className="text-3xl text-[#1D5198] font-bold">Instruction</h2>
+              
+              <div className="text-l text-[#1D5198] font-bold mt-4">Cooking time: Around {recipeDetails?.cookingTime} minutes </div>
             </div>
             <Instructions instruction={recipeDetails?.instruction} />
           </div>

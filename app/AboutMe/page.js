@@ -74,6 +74,31 @@ const AboutMe = () => {
     fetchAboutMeData();
   }, []);
 
+  const heightInMeters = userData.height / 100;
+  const minNormalWeight = 18.5 * (heightInMeters ** 2);
+  const maxNormalWeight = 24.9 * (heightInMeters ** 2);
+
+  const classifyBMI = (bmi, weight, height) => {
+    const maxNormalWeight = 24.9 * ((height / 100) ** 2);
+    const minNormalWeight = 18.5 * ((height / 100) ** 2);
+  
+    if (bmi < 18.5) {
+      const underweightBy = minNormalWeight - weight;
+      return ` Underweight by ${underweightBy.toFixed(2)} kg, `;
+    }
+    if (bmi >= 18.5 && bmi <= 24.9) {
+      return ' Normal weight';
+    }
+    if (bmi >= 25 && bmi <= 29.9) {
+      const overweightBy = weight - maxNormalWeight;
+      return ` Overweight by ${overweightBy.toFixed(2)} kg, `;
+    }
+    if (bmi >= 30) {
+      const obeseBy = weight - maxNormalWeight;
+      return ` Obese by ${obeseBy.toFixed(2)} kg, `;
+    }
+  };
+
   return (
     <div className="flex flex-col h-full bg-[#F9D548]">
       <Navbar />
@@ -142,11 +167,28 @@ const AboutMe = () => {
             </p>
             <p className="text-xl text-black">{userData.Weight} kg</p>
           </div>
-          <div className="flex flex-row mt-9 gap-4">
-            <p className="flex flex-row text-xl text-black font-semibold">
-              BMI :
-            </p>
-            <p className="text-xl text-black">{userData.BMI}</p>
+          <div className="flex flex-col mt-9 gap-4">
+            <div className="flex flex-row">
+              <p className="flex flex-row text-xl text-black gap-4 font-semibold">
+                {`BMI (Body Mass Index) : `}
+              </p>
+              <p className="text-xl text-black" style={{ color: (userData.BMI < 18.5 || userData.BMI >= 30) ? 'red' : (userData.BMI >= 18.5 && userData.BMI <= 24.9) ? 'green' : 'red' }}>
+                {userData.BMI} kg/m²
+              </p>
+              <p className="text-xl text-black font-semibold ml-4">
+                Healthy BMI range: 18.5 kg/m² - 24.9 kg/m²
+              </p>
+            </div>
+            <div className="flex flex-row">
+              <p className={`text-xl text-black font-semibold mt-3 ${userData.BMI >= 30 ? 'blink' : ''}`} style={{ color: (userData.BMI < 18.5 || userData.BMI >= 30) ? 'red' : (userData.BMI >= 18.5 && userData.BMI <= 24.9) ? 'green' : 'red' }}>
+                {classifyBMI(userData.BMI, userData.Weight, userData.height)}
+              </p>
+              {(userData.BMI < 18.5 || userData.BMI >= 25) && (
+                <p className="text-xl text-black font-semibold ml-4 mt-3">
+                  Normal weight range for your height: {minNormalWeight.toFixed(2)} kg - {maxNormalWeight.toFixed(2)} kg
+                </p>
+              )}
+            </div>
           </div>
           <div className="flex flex-row mt-20 gap-4">
             <Link href="/EditAboutMe">

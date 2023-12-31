@@ -55,7 +55,8 @@ router.get('/:recipeName', async (req, res) => {
   const recipeName = req.params.recipeName;
 
   // Fetch the description and image from the database based on the recipeName
-  const query = 'SELECT description, image, ratings,ingredients,instruction,info,calorie,tips_tricks FROM Recipe_Np WHERE Rname = ?';
+  const query = 'SELECT description, image, ratings, ingredients, instruction, info, calorie, tips_tricks, cTime FROM Recipe_Np WHERE Rname = ?';
+
   db.get(query, [recipeName], (err, result) => {
     if (err) {
       console.error('Error fetching recipe details:', err.message);
@@ -66,7 +67,7 @@ router.get('/:recipeName', async (req, res) => {
     if (result) {
       res.json({ description: result.description, image: result.image, ratings: result.ratings, 
         ingredients:result.ingredients, instruction:result.instruction, info:result.info, 
-        calorie:result.calorie,tips_tricks:result.tips_tricks });
+        calorie:result.calorie,tips_tricks:result.tips_tricks, cTime:result.cTime });
     } else {
       res.status(404).json({ error: 'Recipe not found' });
     }
