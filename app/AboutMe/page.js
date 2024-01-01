@@ -21,7 +21,7 @@ const AboutMe = () => {
     DietMethod: "", // Corrected the variable name
     // Add other user data properties
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const openModal = () => {
@@ -40,6 +40,7 @@ const AboutMe = () => {
       });
 
       if (response.ok) {
+        setIsLoading(true);
         const data = await response.json();
         let bmi = (data.Weight / ((data.height / 100) ** 2)).toFixed(2);
         setUserData({
@@ -63,7 +64,6 @@ const AboutMe = () => {
         console.error("Failed to fetch user data");
       }
 
-      setIsLoading(false);
     } catch (error) {
       console.error("Error during user data fetch:", error.message);
       setIsLoading(false);
@@ -73,6 +73,10 @@ const AboutMe = () => {
   useEffect(() => {
     fetchAboutMeData();
   }, []);
+  
+  if (!isLoading && !userData.Username) {
+    return null; // or render a loading spinner/message
+  }
 
   const heightInMeters = userData.height / 100;
   const minNormalWeight = 18.5 * (heightInMeters ** 2);
