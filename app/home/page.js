@@ -101,25 +101,25 @@ const Homepage = () => {
       <div className="flex flex-col h-screen bg-[#F9D548] text-[#0A2A67] justify-center items-center">
         <h1 className="text-7xl font-black py-5">What's Cooking Today?</h1>
         <div className="w-[748px] bg-white rounded-[20px] flex items-center text-sm p-2 pl-9 text-stone-300">
-          <input
+        <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search our library of recipes"
             className="w-full text-lg text-black outline-none"
           />
-          <div className="ml-auto m-[5px]">
-            <button className="ml-2" onClick={handleSearch}>
-          <Image
-                src="/search.png"
-                alt="Filter"
-                width={20}
-                height={20}
-                style={{ filter: "brightness(0)" }}
-              />
-          </button>
+          <div className="ml-auto m-[6px] border-r border-gray-500 mr-3">
+            <button className="mr-3 mt-1" onClick={handleSearch}>
+            <Image
+              src="/search.png"
+              alt="Search"
+              width={25}
+              height={20}
+              style={{ filter: "brightness(0)" }}
+            />
+            </button>
           </div>
-          <button onClick={openModal}
+          <button onClick={openModal} className="mr-3"
           onKeyDown={(e) => {
             console.log('Key pressed:', e.key);
             if (e.key === 'Enter') {
@@ -131,8 +131,8 @@ const Homepage = () => {
               <Image
                 src="/filter.png"
                 alt="Filter"
-                width={20}
-                height={20}
+                width={25}
+                height={25}
                 style={{ filter: "brightness(0)" }}
               />
             </button>
