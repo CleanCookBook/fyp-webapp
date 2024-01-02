@@ -10,6 +10,9 @@ import { useEffect, useState } from "react";
 
 const EditAccount = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [email, setEmail] = useState('');
+    const [initialEmail, setInitialEmail] = useState('');
+    const [isEmailValid, setIsEmailValid] = useState(true);
     const router = useRouter();
     const [formData, setFormData] = useState({
         username: "",
@@ -34,11 +37,36 @@ const EditAccount = () => {
         ...prevState,
         [fieldName]: fieldValue
       }));
+
+      if (fieldName === 'email') {
+        setEmail(fieldValue);
+      }
     }
    // ...
 
+   
+
 const submitForm = async (e) => {
   e.preventDefault();
+  
+  let isValid = true;
+
+    // Validate email
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    // Get the value from the email field
+    const finalEmail = formData.email !== initialEmail ? formData.email : initialEmail;
+
+    if (!emailRegex.test(finalEmail)) {
+        setIsEmailValid(false);
+        isValid = false;
+    } else {
+        setIsEmailValid(true);
+    }
+
+    if (!isValid) {
+        return; // Don't proceed with the fetch request if any validation fails
+    }
 
   try {
       const response = await fetch("http://localhost:3001/api/profile/update-profile", {
@@ -67,10 +95,10 @@ const submitForm = async (e) => {
   } catch (error) {
       console.error("Error updating profile:", error.message);
   }
+  
 };
 
 // ...
-
 
   useEffect(() => {
       // Fetch user data when the component mounts
@@ -95,6 +123,8 @@ const submitForm = async (e) => {
                       gender: userProfile.gender,
                       email: userProfile.email,
                   });
+
+                  setInitialEmail(userProfile.email);
               } else if (response.status === 401) {
                   console.error("Unauthorized access");
               } else if (response.status === 404) {
@@ -175,6 +205,9 @@ return (
                   value={formData.email} 
                   placeholder="Enter new e-mail" />
             </div>
+            {!isEmailValid && (
+                <p className="text-red-500 font-bold text-lg mt-1">Please enter a valid email address.</p>
+            )}
             <div className="flex flex-row mt-20 gap-4">
             <Link href="/profile">
             <button
