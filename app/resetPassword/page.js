@@ -46,7 +46,7 @@ const submitForm = async (e) => {
       setIsPasswordValid(true);
     }
 
-    // Validate New Password
+    // Validate New Passworda
     if (newPassword !== confirmNewPassword) {
       setIsNewPasswordValid(false);
       isValid = false;
@@ -80,17 +80,16 @@ const submitForm = async (e) => {
               setConfirmNewPassword('');
               router.push('/profile'); // Redirect to the profile page
             } else {
-              // If the old password is incorrect, show an error message
-              setErrorMessage('The old password you entered is incorrect.');
+              setErrorMessage('Failed to update password.');
             }
-          } else if (response.status === 401) {
-            console.error("Unauthorized access");
-          } else {
-            console.error("Failed to update password");
+        } else {
+            const errorData = await response.json();
+            console.error('Update Password failed:', errorData);
+            setErrorMessage(errorData.error);
           }
         } catch (error) {
-            console.error("Error updating password:", error.message);
-          }
+          console.error("Error updating password:", error.message);
+        }
       };
 
     useEffect(() => {
@@ -175,8 +174,8 @@ return (
                         width={20} 
                         height={20} />
                     </button>
-                {errorMessage && <p className="text-red-500">{errorMessage}</p>}
             </div>
+            {errorMessage && <p className="text-red-500 font-bold text-lg mt-1">{errorMessage}</p>}
             
             <div className="flex flex-row mt-9 gap-4">
                 <label className="flex flex-row text-xl text-black font-semibold mt-2">New password :</label>
@@ -225,16 +224,17 @@ return (
             )}
             
             <div className="flex flex-row mt-20 gap-4">
-            <Link href="/profile">
-            <button
-                type="submit" 
-                onClick={submitForm}
-                className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow"
-            >
-                Reset Password
-            </button>
-            </Link>
+                <Link href="/profile">
+                    <button
+                        type="submit" 
+                        onClick={submitForm}
+                        className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow"
+                    >
+                        Reset Password
+                    </button>
+                </Link>
             </div>
+            
         </div>
     </form>
         
