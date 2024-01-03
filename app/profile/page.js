@@ -145,7 +145,7 @@ const Accountpage = () => {
               </button>
             </Link>
 
-            <Link href="/resetPassword">
+            <Link href="/password">
               <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
                 Reset Password
               </button>

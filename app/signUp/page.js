@@ -30,7 +30,9 @@ const Signup = () => {
     let isValid = true;
 
     // Validate email
-    if (!email.includes('@')) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailRegex.test(email)) {
       setIsEmailValid(false);
       isValid = false;
     } else {

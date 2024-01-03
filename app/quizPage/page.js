@@ -89,9 +89,9 @@ const handleHealthGoal = (checkboxName) => {
 };
 
 const isWeightLoss = selectedHealthGoals.includes("Weight Loss");
-const isDietNutrition = selectedHealthGoals.includes("Diet Nutrition");
-const isOverallHealth = selectedHealthGoals.includes("Overall Health");
-const isCalorieNeeds = selectedHealthGoals.includes("Calorie Needs");
+const isDietNutrition = selectedHealthGoals.includes("Improve my diet and nutrition");
+const isOverallHealth = selectedHealthGoals.includes("Improve my overall health");
+const isCalorieNeeds = selectedHealthGoals.includes("Adequate Nutrients Within Calorie Needs");
 const isNil3 = selectedHealthGoals.includes("Nil");
 
 const handleDietMethod = (checkboxName) => {
@@ -108,10 +108,10 @@ const handleDietMethod = (checkboxName) => {
   });
 };
 
-const isKeto = selectedDietMethods.includes("Keto");
-const isVegetarian= selectedDietMethods.includes("Vegetarian");
+const isKeto = selectedDietMethods.includes("Ketogenic diet");
+const isVegetarian= selectedDietMethods.includes("Vegetarian diet");
 const isIntermittent = selectedDietMethods.includes("Intermittent Fasting");
-const isMediterranean = selectedDietMethods.includes("Mediterranean");
+const isMediterranean = selectedDietMethods.includes("Mediterranean diet");
 const isNil4 = selectedDietMethods.includes("Nil");
 
 

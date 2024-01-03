@@ -127,18 +127,18 @@ const EditAboutMe = () => {
           });
       
           if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      if (data.success) {
-        alert("About Me updated successfully");
-        router.push('/AboutMe');
-      } else {
-        alert("Failed to update About Me");
-      }
-    } catch (error) {
-      alert("Error updating About Me: " + error.message);
-    } 
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          if (data.success) {
+            console.log("About Me updated successfully");
+            router.push('/AboutMe');
+          } else {
+            console.log("Failed to update About Me");
+          }
+          } catch (error) {
+            console.log("Error updating About Me: " + error.message);
+          }
 };
 
 const [BMI, setBMI] = useState(0); // Add this state variable for BMI
