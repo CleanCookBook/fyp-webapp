@@ -147,7 +147,7 @@ useEffect(() => {
     if (formData.height && formData.Weight) {
       const heightInMeters = formData.height / 100;
       const newBMI = formData.Weight / (heightInMeters * heightInMeters);
-      setBMI(newBMI.toFixed(2));
+      setBMI(newBMI.toFixed(1));
     }
   }, [formData.height, formData.Weight]);
 
@@ -272,7 +272,7 @@ return (
                       borderRadius: '10px', // This makes the box rounded
                       borderColor: '#D1D5DB', // This is equivalent to border-gray-300 in Tailwind
                       boxShadow: 'none', // Removes the default react-select styles
-                      height: '50px', // Adjust the height here
+                      height: `${selectedDietMethods.length * 10 + 50}px`, // Adjust the height here
                       width: '619px', // Adjust the width here
                       fontSize: '20px', // Adjust the font size here
                       '&:hover': {
@@ -298,7 +298,7 @@ return (
                       borderRadius: '10px', // This makes the box rounded
                       borderColor: '#D1D5DB', // This is equivalent to border-gray-300 in Tailwind
                       boxShadow: 'none', // Removes the default react-select styles
-                      height: '50px', // Adjust the height here
+                      height: `${selectedHealthGoals.length * 20 + 50}px`, // Adjust the height here
                       width: '617px', // Adjust the width here
                       fontSize: '20px', // Adjust the font size here
                       '&:hover': {
