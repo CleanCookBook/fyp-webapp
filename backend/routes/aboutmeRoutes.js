@@ -22,7 +22,7 @@ router.get('/', isAuthenticated, (req, res) => {
     }
 
     const aboutMeQuery = `
-      SELECT User.FName, User.LName, User.Username, AboutMe.height, AboutMe.Weight, AboutMe.allergy, 
+      SELECT User.FName, User.LName, User.Username, User.gender, AboutMe.height, AboutMe.Weight, AboutMe.allergy, 
              AboutMe.BMI, AboutMe.DietMethod, AboutMe.DietaryPreferance, AboutMe.HealthGoal
       FROM User
       LEFT JOIN AboutMe ON User.UserID = AboutMe.UserID
