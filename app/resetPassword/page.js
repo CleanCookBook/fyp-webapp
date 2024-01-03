@@ -46,7 +46,7 @@ const submitForm = async (e) => {
       setIsPasswordValid(true);
     }
 
-    // Validate New Passworda
+    // Validate New Password
     if (newPassword !== confirmNewPassword) {
       setIsNewPasswordValid(false);
       isValid = false;
