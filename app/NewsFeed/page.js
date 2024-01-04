@@ -2,7 +2,7 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 
 const Pagination = ({ totalPages, currentPage, setCurrentPage }) => {
@@ -58,31 +58,44 @@ const Pagination = ({ totalPages, currentPage, setCurrentPage }) => {
 };
 
 const NewsFeed = () => {
+  const newsPerPage = 4;
+  const [newsItems, setNewsItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const newsPerPage = 5;
-  const newsItems = [
-    {
-      title:
-        "Why is healthy eating so hard to do in a food paradise like Singapore?",
-      source: "CNA",
-    },
-    {
-      title:
-        "The best New Year's Eve dinner and parties in Singapore to count down to 2024",
-      source: "AsiaOne",
-    },
-    {
-      title:
-        "Ex-Kilo Kitchen Head Chef, 27, Sells Tasty Handmade Duck Ramen From HDB Flat",
-      source: "Today",
-    },
-    // Add more news items here if needed
-  ];
 
-  const totalPages = Math.ceil(newsItems.length / newsPerPage);
-  const start = (currentPage - 1) * newsPerPage;
-  const end = currentPage * newsPerPage;
-  const currentNews = newsItems.slice(start, end);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNewsData = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/news");
+        const data = await response.json();
+        console.log("API Response:", data);
+  
+        if (Array.isArray(data)) {
+          setNewsItems(data);
+        } else {
+          console.error("Invalid data format:", data);
+        }
+      } catch (error) {
+        console.error("Error fetching news data:", error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchNewsData();
+  }, []);
+
+  // ... rest of your component code ...
+
+const totalPages = Math.ceil((newsItems || []).length / newsPerPage);
+const start = (currentPage - 1) * newsPerPage;
+const end = currentPage * newsPerPage;
+const currentNews = (newsItems || []).slice(start, end);
+
+
+// ... rest of your component code ...
+
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
@@ -102,7 +115,7 @@ const NewsFeed = () => {
             </div>
             <div className="w-full border-b-2 border-black mt-2"></div>
             <div className="mt-2 flex justify-end items-center text-black text-sm font-medium">
-              <Link href="#" passHref>
+              <Link href={news.link} passHref>
                 <span className="flex items-center">
                   Read More <IoIosArrowForward className="ml-.5" />
                 </span>
@@ -122,4 +135,3 @@ const NewsFeed = () => {
 };
 
 export default NewsFeed;
-

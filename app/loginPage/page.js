@@ -1,11 +1,16 @@
 "use client";
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import Image from "next/image";
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleLogin = async () => {
     try {
@@ -20,9 +25,10 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
         console.log('Login successful:', data);
+        setIsAuthenticated(true);
 
-        // Redirect to the '/home' page
-        window.location.href = '/home';
+        // Redirect to the Homepage after successful login
+        router.push('/home');
       } else {
         const errorData = await response.json();
         console.error('Login failed:', errorData);
@@ -53,7 +59,7 @@ const Login = () => {
               placeholder="Enter your Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="text-neutral-400 text-[20px] font-medium border-none outline-none"
+              className="text-neutral-400 text-[20px] -mt-1 font-medium border-none outline-none"
             />
           </div>
 
@@ -64,12 +70,21 @@ const Login = () => {
           </div>
           <div className="w-[404px] h-10 pl-2.5 py-2.5 bg-white rounded-[10px] justify-start items-start gap-2.5 inline-flex">
             <input
-              type="password"
+              type={isPasswordHidden ? "password" : "text"}
               placeholder="Enter your Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="text-neutral-400 text-[20px] font-medium border-none outline-none"
+              className="text-neutral-400 text-[20px] -mt-1 font-medium border-none outline-none"
             />
+            <button 
+              onClick={() => setIsPasswordHidden(!isPasswordHidden)}
+              className="flex items-center cursor-pointer ml-28 mt-0.5">
+              <Image 
+                src={isPasswordHidden ? "/hide.png" : "/show.png"} 
+                alt="Toggle password visibility" 
+                width={20} 
+                height={20} />
+            </button>
           </div>
 
           <div className="pt-3">
