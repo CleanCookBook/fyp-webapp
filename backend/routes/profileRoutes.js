@@ -73,6 +73,36 @@ router.post('/update-profile', isAuthenticated, (req, res) => {
   );
 });
 
+// Route for verifying old password
+router.post('/verify-password', isAuthenticated, (req, res) => {
+  const userId = req.session.userId;
+
+  if (!userId) {
+    res.status(401).json({ error: 'Unauthorized access' });
+    return;
+  }
+
+  const { oldPassword } = req.body;
+
+  // Fetch the current password from the database
+  const getPasswordQuery = 'SELECT password FROM User WHERE UserID = ?';
+  db.get(getPasswordQuery, [userId], (err, row) => {
+    if (err) {
+      console.error('Error fetching password:', err.message);
+      res.status(500).json({ error: `Internal Server Error: ${err.message}` });
+      return;
+    }
+
+    if (!row || row.password !== oldPassword) {
+      // The old password is incorrect
+      res.status(401).json({ error: 'Incorrect password. Try Again.' });
+      return;
+    }
+
+    // If old password is correct, send a success response
+    res.json({ success: true });
+  });
+});
 
 // Route for updating user password
 router.post('/update-password', isAuthenticated, (req, res) => {
@@ -96,7 +126,7 @@ router.post('/update-password', isAuthenticated, (req, res) => {
 
     if (!row || row.password !== oldPassword) {
       // The old password is incorrect
-      res.status(401).json({ error: 'Incorrect old password' });
+      res.status(401).json({ error: 'Incorrect password. Try Again.' });
       return;
     }
 
@@ -112,5 +142,7 @@ router.post('/update-password', isAuthenticated, (req, res) => {
     });
   });
 });
+
+
 
 module.exports = router;

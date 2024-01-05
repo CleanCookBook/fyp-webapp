@@ -18,7 +18,7 @@ const submitPass = async (e) => {
     e.preventDefault();
 
     try {
-        const response = await fetch("http://localhost:3001/api/profile/update-password", {
+        const response = await fetch("http://localhost:3001/api/profile/verify-password", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -59,10 +59,10 @@ return (
             <div className="h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-black bg-opacity-50">
                 <div className="bg-white rounded-[12px] shadow-lg w-1/4 h-1/3 relative">
                 <button 
-                    onClick={() => router.back()} 
-                    className="absolute top-0 right-0 m-4 text-2xl"
+                onClick={() => window.history.back()} 
+                className="absolute top-0 right-0 m-4 text-2xl"
                 >
-                    <FaTimes />
+                <FaTimes />
                 </button>
                     <div className="px-4 py-2 text-center text-2xl text-black font-bold mt-6">
                         <h3>Enter your Password <br /> to Reset Password</h3>
@@ -73,7 +73,7 @@ return (
                             type={isOldPasswordHidden ? "password" : "text"} 
                             value={oldPassword} 
                             onChange={(e) => setOldPassword(e.target.value)} 
-                            className="text-xl text-black w-[248px] h-12 rounded-[10px] border p-2"
+                            className="text-lg text-black w-[248px] h-12 rounded-[10px] border p-2"
                             placeholder="Enter Old Password"
                             required />
                         <button 
@@ -92,14 +92,12 @@ return (
                     <div className="flex justify-center items-center w-100 p-3 mt-4">
                         <Link href="/resetPassword">
                         <button
-                            type="submit" 
-                            onClick={submitPass}
+                            type="submit"
                             className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow"
                         >
                         Enter
                         </button>
                         </Link>
-                        
                     </div>
                 </div>
             </div>
