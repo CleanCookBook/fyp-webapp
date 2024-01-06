@@ -1,11 +1,18 @@
 "use client";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const TermsCon = () => {
   const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
+  const [userType, setUserType] = useState("user"); 
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const userTypeFromQuery = params.get("userType");
+    setUserType(userTypeFromQuery === "nutritionist" ? "nutritionist" : "user");
+  }, []);
 
   const handleCheckChange = (event) => {
     setIsChecked(event.target.checked);
@@ -16,7 +23,7 @@ const TermsCon = () => {
     }
   };
 
-  const handleCreateAccount = async () => {
+  const createUserAccount = async () => {
     if (isChecked) {
       try {
         const response = await fetch('http://localhost:3001/api/user/create-account', {
@@ -30,7 +37,7 @@ const TermsCon = () => {
         if (response.ok) {
           // Successfully created account, navigate to the home page
           console.log('Account created successfully');
-          router.push('/'); // Change '/home' to the actual path of your home page
+          router.push('/loginPage'); // Change '/home' to the actual path of your home page
         } else {
           console.error('Error creating account:', response.statusText);
         }
@@ -42,6 +49,31 @@ const TermsCon = () => {
       document.getElementById('required-error').classList.remove('hidden');
     }
   };
+
+  const createNutritionistAccount = async () => {
+    // Implement the API call for creating a nutritionist account
+    // Adjust the API endpoint and request format accordingly
+    try {
+      const response = await fetch('http://localhost:3001/api/user/create-account-n', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ checked: isChecked }),
+      });
+
+      if (response.ok) {
+        // Successfully created nutritionist account, navigate to the nutritionist dashboard
+        console.log('Nutritionist account being submitted');
+        router.push('/loginPage'); // Change to the actual path of your nutritionist dashboard
+      } else {
+        console.error('Error creating nutritionist account:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error creating nutritionist account:', error.message);
+    }
+  };
+
 return (
   <div className="flex flex-col h-screen justify-center items-center bg-[#F9D548] text-[#0A2A67]">
     
@@ -111,9 +143,9 @@ return (
         <div class="flex justify-center items-center mt-3">
         {isChecked && (
           <button
-            onClick={handleCreateAccount}
-            class="w-[259px] h-[35px] bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] drop-shadow-xl">
-            Create Account
+            onClick={userType === "nutritionist" ? createNutritionistAccount : createUserAccount}
+            className="w-[259px] h-[35px] bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] drop-shadow-xl">
+            Create Account {userType === "nutritionist" ? "(N)" : "(U)"}
           </button>
         )}
       </div>
