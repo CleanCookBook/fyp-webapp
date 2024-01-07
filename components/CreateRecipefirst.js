@@ -18,8 +18,8 @@ const CreateRecipefirst = () => {
             <div className="w-1/2 border-r border-gray-400 pr-8">
                 <form className="flex flex-col items-start mb-8">
                     
-                        <label className="text-blue-950 text-sm font-medium mb-2 self-start">
-                            Enter recipe name:
+                        <label className="text-blue-950 text-base font-medium mb-2 self-start">
+                            Enter Recipe Name:
                         </label>
                         <input
                             type="text"
@@ -29,8 +29,8 @@ const CreateRecipefirst = () => {
                         />
                     
 
-                    <label className="text-blue-950 text-sm font-medium mb-2 mt-8 self-start">
-                        Enter recipe image:
+                    <label className="text-blue-950 text-base font-medium mb-2 mt-8 self-start">
+                        Enter Recipe Image:
                     </label>
                     <div className="flex items-center justify-center w-1/2 h-32 pl-2.5 py-2.5 bg-white rounded-[10px] mb-4">
                         {/* Recipe image Upload */}
@@ -59,8 +59,8 @@ const CreateRecipefirst = () => {
                         </svg>
                     </div>
 
-                    <label className="text-blue-950 text-sm font-medium mb-2 mt-8 self-start">
-                        Enter recipe description:
+                    <label className="text-blue-950 text-base font-medium mb-2 mt-8 self-start">
+                        Enter Recipe Description:
                     </label>
                     <div className="flex items-center justify-center w-full h-32 pl-2.5 py-2.5 bg-white rounded-[10px] mb-4">
                         <textarea
@@ -74,7 +74,7 @@ const CreateRecipefirst = () => {
             <div className="w-1/2 pl-8">
                 <form className="flex flex-col items-start mb-8">
                     
-                        <label className="text-blue-950 text-sm font-medium mb-2">
+                        <label className="text-blue-950 text-base font-medium mb-2">
                             Enter Cooking Time:
                         </label>
                         <input
@@ -84,8 +84,8 @@ const CreateRecipefirst = () => {
                             required
                         />
                     
-                    <label className="text-blue-950 text-sm font-medium mb-2 mt-8">
-                        Enter recipe Ingredients:
+                    <label className="text-blue-950 text-base font-medium mb-2 mt-8">
+                        Enter Recipe Ingredients:
                     </label>
                     <div className="flex items-center justify-center w-full h-32 pl-2.5 py-2.5 bg-white rounded-[10px] mb-4">
                         <textarea
@@ -99,7 +99,7 @@ const CreateRecipefirst = () => {
         </div>
 
         <div className="w-full mt-auto">
-            <div className="fixed bottom-18 right-0 px-4 py-4">
+            <div className="fixed bottom-32 right-16 px-4 py-4">
                 <button className="w-[259px] h-7 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow self-end">
                     Next
                 </button>
