@@ -218,7 +218,7 @@ const Signup = () => {
                   type="date"
                   value={dob}
                   onChange={(e) => setDOB(e.target.value)}
-                  className="text-neutral-400 text-[10px] font-medium border-none outline-none w-full"
+                  className="text-neutral-400 text-[10px] font-medium border-none outline-none w-[388px] -mt-0.5"
                 />
               </div>
             </div>
