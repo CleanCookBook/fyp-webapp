@@ -1,8 +1,8 @@
 "use client";
+import Image from "next/image";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import Image from "next/image";
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -26,9 +26,19 @@ const Login = () => {
         const data = await response.json();
         console.log('Login successful:', data);
         setIsAuthenticated(true);
+        console.log('UserType:', data.userType);
+  console.log('Status:', data.status);
 
-        // Redirect to the Homepage after successful login
-        router.push('/home');
+  // Check the user type and redirect accordingly
+  if (data.userType === 'nutritionist' && data.status === 'approved') {
+    // Redirect to the BPHomepage for approved nutritionists
+    router.push('/home/BPHomepage');
+  } else {
+    // Redirect to the Homepage after successful login for other user types
+    router.push('/home');
+  }
+
+        
       } else {
         const errorData = await response.json();
         console.error('Login failed:', errorData);
