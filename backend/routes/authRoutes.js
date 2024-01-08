@@ -28,7 +28,7 @@ module.exports = (isAuthenticated) => {
         console.log('User:', user);
   
         if (user.UserType === 'nutritionist') {
-          // Check NutritionistSignUp table for pending status
+          // Check NutritionistSignUp table for approval status
           const nutritionistQuery = 'SELECT * FROM NutritionistSignUp WHERE UserID = ?';
           db.get(nutritionistQuery, [user.UserID], (err, nutritionistData) => {
             if (err) {
@@ -39,13 +39,13 @@ module.exports = (isAuthenticated) => {
   
             console.log('Nutritionist Data:', nutritionistData);
   
-            if (nutritionistData && nutritionistData.Status === 'Pending') {
-              console.log('Nutritionist account is pending');
-              res.status(401).json({ error: 'Nutritionist account is pending approval' });
-            } else {
+            if (nutritionistData && nutritionistData.Status === 'approved') {
               console.log('Login successful');
               req.session.userId = user.UserID;
-              res.json({ message: 'Login successful', user });
+              res.json({ message: 'Login successful', user, userType: 'nutritionist', status: 'approved' });
+            } else {
+              console.log('Nutritionist account is pending');
+              res.status(401).json({ error: 'Nutritionist account is pending approval' });
             }
           });
         } else {
@@ -58,6 +58,7 @@ module.exports = (isAuthenticated) => {
         console.log('Invalid credentials');
         res.status(401).json({ error: 'Invalid credentials' });
       }
+      
     });
   });
   
