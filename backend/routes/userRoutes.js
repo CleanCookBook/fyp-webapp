@@ -24,6 +24,7 @@ router.post("/upload", upload.fields([
   const userPhoto = req.files['userPhoto'][0];
   const experienceFile = req.files['experienceFile'][0];
   const testimonyFile = req.files['testimonyFile'][0];
+  const linkedinUrl = req.body.linkedinUrl;
 
   userData2 = {
     
@@ -31,6 +32,7 @@ router.post("/upload", upload.fields([
     userPhoto: userPhoto,
     experienceFile: experienceFile,
     testimonyFile: testimonyFile,
+    linkedinUrl: linkedinUrl,
   };
 
   res.json({ message: 'Files uploaded successfully' });
@@ -71,7 +73,7 @@ router.post("/create-account-n", (req, res) => {
   if (isChecked) {
     console.log("Terms are accepted.");
     console.log("userData:", userData);
-    console.log("userData1:", userData2);
+    console.log("userData2:", userData2);
 
     if (userData && userData2) {
       // Insert data into the "User" table
@@ -97,7 +99,7 @@ router.post("/create-account-n", (req, res) => {
           // Insert data into the "NutritionistSignUp" table
           const userId = this.lastID; // ID of the last inserted row in the "User" table
           const {
-            linkedInURL,
+            linkedinUrl,
             licenseImage,
             userPhoto,
             experienceFile,
@@ -108,7 +110,7 @@ router.post("/create-account-n", (req, res) => {
             "INSERT INTO NutritionistSignUp (UserID, LinkedInURL, LicenseImage, UserPhoto, ExperienceFile, TestimonyFile) VALUES (?, ?, ?, ?, ?, ?)",
             [
               userId,
-              linkedInURL,
+              linkedinUrl,
               licenseImage.buffer, // Assuming licenseImage is a multer file object
               userPhoto.buffer,    // Assuming userPhoto is a multer file object
               experienceFile.buffer,// Assuming experienceFile is a multer file object
