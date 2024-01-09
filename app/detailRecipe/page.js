@@ -8,10 +8,21 @@ import Navbar from "@/components/Navbar";
 import NutritionalFact from "@/components/NutritionalFact";
 import StarRating from "@/components/StarRating";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const RecipeDetails = () => {
   const [recipeDetails, setRecipeDetails] = useState(null);
+  const router = useRouter();
+
+  const navigateToReviewPage = () => {
+    const recipeName = recipeDetails?.RName;
+    if (recipeName) {
+      router.push(
+        `/detailRecipe/review?recipeName=${encodeURIComponent(recipeName)}`
+      );
+    }
+  };
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -40,7 +51,7 @@ const RecipeDetails = () => {
             funFacts: factsArray,
             calorie: data.calorie,
             tips_tricks: data.tips_tricks,
-            cookingTime: data.cTime
+            cookingTime: data.cTime,
           });
         } else {
           console.error("Error fetching recipe details:", data.error);
@@ -82,9 +93,17 @@ const RecipeDetails = () => {
           <div className="w-2/3  justify-center text-center">
             {/* Content for Division 2 with blue-colored stars */}
             <StarRating rating={recipeDetails?.rating || 0} />
+
             <p className="text-blue-950">
               Read the{" "}
-              <a href="/reviews" style={{ textDecoration: "underline" }}>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateToReviewPage(recipeDetails?.RName);
+                }}
+                style={{ textDecoration: "underline", cursor: "pointer" }}
+              >
                 reviews
               </a>
             </p>
@@ -113,8 +132,10 @@ const RecipeDetails = () => {
           <div name="Instruction">
             <div name="header" className="p-4 pl-20">
               <h2 className="text-3xl text-[#1D5198] font-bold">Instruction</h2>
-              
-              <div className="text-l text-[#1D5198] font-bold mt-4">Cooking time: Around {recipeDetails?.cookingTime} minutes </div>
+
+              <div className="text-l text-[#1D5198] font-bold mt-4">
+                Cooking time: Around {recipeDetails?.cookingTime} minutes{" "}
+              </div>
             </div>
             <Instructions instruction={recipeDetails?.instruction} />
           </div>
