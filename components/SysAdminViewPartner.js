@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SysAdminNavBar from "./SysAdminNavBar";
 import Footer from "./Footer";
 
-const SysAdminViewUser = () => {
+const SysAdminViewPartner = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(5);
   // Mock user data for demonstration
@@ -56,9 +56,9 @@ const SysAdminViewUser = () => {
       <div className="flex flex-col items-start flex-1">
         <div className="container mx-auto p-4">
           <div className="flex items-center">
-            <h2 className="text-6xl font-black">User Accounts</h2>
+            <h2 className="text-6xl font-black">Partner Accounts</h2>
             <button className="bg-[#0A2A67] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded ml-5">
-              User Info
+              Partner Info
             </button>
           </div>
         </div>
@@ -142,4 +142,4 @@ const SysAdminViewUser = () => {
   );
 };
 
-export default SysAdminViewUser;
+export default SysAdminViewPartner;

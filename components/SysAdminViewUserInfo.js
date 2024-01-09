@@ -2,30 +2,34 @@ import React, { useState, useEffect } from "react";
 import SysAdminNavBar from "./SysAdminNavBar";
 import Footer from "./Footer";
 
-const SysAdminViewUser = () => {
+const SysAdminViewUserInfo = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(5);
   // Mock user data for demonstration
   const users = [
     {
       id: 1,
-      username: "example_user",
-      password: "********",
-      email: "user@example.com",
-      firstName: "John",
-      lastName: "Doe",
-      gender: "Male",
-      dob: "1990-01-01",
+      height: "175 cm",
+      weight: "75 kg",
+      age: 31,
+      allergies: "Peanuts, Shellfish",
+      dietaryPreferences: "Vegetarian",
+      healthGoals: "Loose Weight",
+      dietMethod: "Intermitten Fasting",
+      cookTime: "1 hour",
+      bmi: "24.5",
     },
     {
       id: 2,
-      username: "example_user",
-      password: "********",
-      email: "user@example.com",
-      firstName: "John",
-      lastName: "Doe",
-      gender: "Male",
-      dob: "1990-01-01",
+      height: "160 cm",
+      weight: "60 kg",
+      age: 33,
+      allergies: "Dairy",
+      dietaryPreferences: "Gluten-free",
+      healthGoals: "Gain Muscles",
+      dietMethod: "High Protien Diet",
+      cookTime: "30 minutes",
+      bmi: "23.4",
     },
     // Add more user data here...
   ];
@@ -34,7 +38,7 @@ const SysAdminViewUser = () => {
     // Fetch users from API or database
   }, []);
 
-  const handleEdit = (userID) => {
+  const handleEdit = (userId) => {
     // Edit logic
     console.log(`Edit user with ID: ${userId}`);
   };
@@ -56,9 +60,9 @@ const SysAdminViewUser = () => {
       <div className="flex flex-col items-start flex-1">
         <div className="container mx-auto p-4">
           <div className="flex items-center">
-            <h2 className="text-6xl font-black">User Accounts</h2>
+            <h2 className="text-6xl font-black">User Information</h2>
             <button className="bg-[#0A2A67] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded ml-5">
-              User Info
+              User Accounts
             </button>
           </div>
         </div>
@@ -68,13 +72,15 @@ const SysAdminViewUser = () => {
               <thead>
                 <tr>
                   <th className="border p-2">UserID</th>
-                  <th className="border p-2">Username</th>
-                  <th className="border p-2">Password</th>
-                  <th className="border p-2">Email</th>
-                  <th className="border p-2">First Name</th>
-                  <th className="border p-2">Last Name</th>
-                  <th className="border p-2">Gender</th>
-                  <th className="border p-2">Date of Birth</th>
+                  <th className="border p-2">Height</th>
+                  <th className="border p-2">Weight</th>
+                  <th className="border p-2">Age</th>
+                  <th className="border p-2">Allergies</th>
+                  <th className="border p-2">Dietary Preferences</th>
+                  <th className="border p-2">Health Goals</th>
+                  <th className="border p-2">Diet Method</th>
+                  <th className="border p-2">Amount of Time to Cook</th>
+                  <th className="border p-2">BMI</th>
                   <th className="border p-2">Actions</th>
                 </tr>
               </thead>
@@ -82,13 +88,21 @@ const SysAdminViewUser = () => {
                 {users.map((user) => (
                   <tr key={user.id}>
                     <td className="border p-2 text-center">{user.id}</td>
-                    <td className="border p-2 text-center">{user.username}</td>
-                    <td className="border p-2 text-center">{user.password}</td>
-                    <td className="border p-2 text-center">{user.email}</td>
-                    <td className="border p-2 text-center">{user.firstName}</td>
-                    <td className="border p-2 text-center">{user.lastName}</td>
-                    <td className="border p-2 text-center">{user.gender}</td>
-                    <td className="border p-2 text-center">{user.dob}</td>
+                    <td className="border p-2 text-center">{user.height}</td>
+                    <td className="border p-2 text-center">{user.weight}</td>
+                    <td className="border p-2 text-center">{user.age}</td>
+                    <td className="border p-2 text-center">{user.allergies}</td>
+                    <td className="border p-2 text-center">
+                      {user.dietaryPreferences}
+                    </td>
+                    <td className="border p-2 text-center">
+                      {user.healthGoals}
+                    </td>
+                    <td className="border p-2 text-center">
+                      {user.dietMethod}
+                    </td>
+                    <td className="border p-2 text-center">{user.cookTime}</td>
+                    <td className="border p-2 text-center">{user.bmi}</td>
                     <td className="border p-2">
                       <div className="flex justify-center">
                         {/* Edit/Delete buttons */}
@@ -142,4 +156,4 @@ const SysAdminViewUser = () => {
   );
 };
 
-export default SysAdminViewUser;
+export default SysAdminViewUserInfo;
