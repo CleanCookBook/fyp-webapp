@@ -94,7 +94,6 @@ const Homepage = () => {
     return <p>Loading...</p>;
   }
 
-
   return (
     <div className="flex flex-col h-screen bg-[#F9D548]">
       <Navbar />
@@ -106,7 +105,7 @@ const Homepage = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search our library of recipes"
-            className="w-full text-lg text-black outline-none"
+            className="w-full text-lg text-black outline-none -ml-3"
           />
           <div className="ml-auto m-[6px] border-r border-gray-500 mr-3">
             <button className="mr-3 mt-1" onClick={handleSearch}>
