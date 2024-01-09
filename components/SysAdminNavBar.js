@@ -149,12 +149,7 @@ const SysAdminNavBar = () => {
                 </div>
               )}
             </div>
-            <Link href="/NewsFeed">
-              <button className="px-4 hover:opacity-[0.5]">NewsFeed</button>
-            </Link>
-            <Link href="/mpfirst">
-              <button className="px-4 hover:opacity-[0.5]">Meal Plans</button>
-            </Link>
+
             <div
               className="relative inline-block text-left"
               ref={accountDropdownRef}
