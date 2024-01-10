@@ -14,7 +14,6 @@ module.exports = (isAuthenticated) => {
   // Route for user login
   router.post('/login', (req, res) => {
     const { username, password } = req.body;
-  
     const query = 'SELECT * FROM User WHERE Username = ? AND password = ?';
     db.get(query, [username, password], (err, user) => {
       if (err) {
@@ -75,6 +74,28 @@ module.exports = (isAuthenticated) => {
       res.json({ message: 'Logout successful' });
     });
   });
+
+  // Add this after the existing routes in authRoutes.js
+router.get('/userID', isAuthenticated, (req, res) => {
+  const userId = req.session.userId;
+  // Handle fetching user details or anything related to the user
+  const query = 'SELECT UserID FROM User WHERE UserID = ?';
+  db.get(query, [userId], (err, user) => {
+    if (err) {
+      console.error('Database query error:', err.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+      return;
+    }
+
+    if (user) {
+      // Respond with user details
+      res.json({ user });
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  });
+});
+
 
   return router;
 };
