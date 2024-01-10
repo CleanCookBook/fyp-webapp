@@ -3,11 +3,19 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
+const isAuthenticated = (req, res, next) => {
+  if (req.session && req.session.userId) {
+    return next();
+  } else {
+    res.status(401).json({ error: "Not authenticated" });
+  }
+};
+
 router.get('/:recipeName', async (req, res) => {
   const { recipeName } = req.params;
 
   const query = `
-    SELECT review.comment, user.Username
+    SELECT review.comment, user.Username, review.stars
     FROM review
     INNER JOIN User ON review.UserID = User.UserID
     WHERE review.Rname = ?
@@ -31,4 +39,63 @@ router.get('/:recipeName', async (req, res) => {
   }
 });
 
+// Middleware to check if the user is authenticated
+
+// POST endpoint for submitting a review
+// Assuming req.body has { userId, recipeName, comment }
+// POST endpoint for submitting a review
+// Assuming req.body has { userId, recipeName, comment, stars }
+router.post("/", async (req, res) => {
+  const { userId, recipeName, comment, stars } = req.body;
+
+  const insertQuery = `
+    INSERT INTO review (UserID, Rname, comment, stars)
+    VALUES (?, ?, ?, ?)
+  `;
+
+  const updateAvgRatingQuery = `
+    UPDATE Recipe_Np
+    SET ratings = (
+        SELECT AVG(stars) 
+        FROM review 
+        WHERE review.Rname = Recipe_Np.Rname
+    )
+    WHERE Recipe_Np.Rname = ?;
+  `;
+
+  try {
+    await new Promise((resolve, reject) => {
+      // Insert the review
+      db.run(insertQuery, [userId, recipeName, comment, stars], (err) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve();
+      });
+    });
+
+    await new Promise((resolve, reject) => {
+      // Update the average ratings
+      db.run(updateAvgRatingQuery, [recipeName], (err) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve();
+      });
+    });
+
+    res.json({ success: true, message: "Review submitted successfully" });
+  } catch (error) {
+    console.error("Error submitting review:", error.message);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
+});
+
+
+
 module.exports = router;
+
+
+

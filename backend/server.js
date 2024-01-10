@@ -48,9 +48,8 @@ app.use(bodyParser.json());
 // Configure Multer for handling file uploads
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-const authRouter = authRoutes(isAuthenticated); 
 
-app.use('/api', authRouter); 
+app.use('/api', authRoutes(isAuthenticated)); 
 app.use('/api/profile', profileRoutes);
 app.use('/api/news', newsfeedRoutes);
 app.use('/api/user', userRoutes);
