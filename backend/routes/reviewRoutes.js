@@ -1,7 +1,7 @@
 // reviewRoutes.js
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const db = require('../db');
+const db = require("../db");
 
 const isAuthenticated = (req, res, next) => {
   if (req.session && req.session.userId) {
@@ -11,15 +11,24 @@ const isAuthenticated = (req, res, next) => {
   }
 };
 
-router.get('/:recipeName', async (req, res) => {
+router.get("/:recipeName", async (req, res) => {
   const { recipeName } = req.params;
 
   const query = `
-    SELECT review.comment, user.Username, review.stars
-    FROM review
-    INNER JOIN User ON review.UserID = User.UserID
-    WHERE review.Rname = ?
-  `;
+  SELECT
+  review.ReviewID AS reviewId,
+  review.comment,
+  user.UserID,  -- Include UserID in the result
+  user.Username,
+  review.stars
+FROM
+  review
+INNER JOIN
+  User ON review.UserID = user.UserID
+WHERE
+  review.Rname = ?;
+
+`;
 
   try {
     const reviews = await new Promise((resolve, reject) => {
@@ -35,7 +44,7 @@ router.get('/:recipeName', async (req, res) => {
     res.json({ reviews });
   } catch (error) {
     console.error("Error fetching reviews:", error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -93,9 +102,31 @@ router.post("/", async (req, res) => {
   }
 });
 
+// DELETE endpoint for deleting a review
+router.delete("/:reviewId", async (req, res) => {
+  const { reviewId } = req.params;
 
+  const deleteQuery = `
+    DELETE FROM review
+    WHERE ReviewID = ?;
+  `;
+
+  try {
+    await new Promise((resolve, reject) => {
+      db.run(deleteQuery, [reviewId], (err) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve();
+      });
+    });
+
+    res.json({ success: true, message: "Review deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting review:", error.message);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
+});
 
 module.exports = router;
-
-
-

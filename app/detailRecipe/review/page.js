@@ -7,6 +7,8 @@ import StarRating from "@/components/StarRating";
 import Pagination from "@/components/pagination";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaTrash } from 'react-icons/fa';
+
 
 const Review = () => {
   const [wordCount, setWordCount] = useState(50); // Initialize word count to 50
@@ -16,9 +18,34 @@ const Review = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [commentsPerPage] = useState(5);
   const [comment, setComment] = useState("");
+  const [userId, setUserId] = useState(""); 
 
   const router = useRouter();
   const [userRating, setUserRating] = useState(0);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userResponse = await fetch("http://localhost:3001/api/userID", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!userResponse.ok) {
+          console.error("Error fetching user ID:", userResponse.statusText);
+          return;
+        }
+
+        const userData = await userResponse.json();
+        const userId = userData.user.UserID;
+        setUserId(userId); // Set the userId state
+      } catch (error) {
+        console.error("Error fetching user data:", error.message);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   // Calculate overall rating based on user ratings
   const calculateOverallRating = () => {
@@ -126,6 +153,29 @@ const Review = () => {
     }
   };
 
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      // Make a DELETE request to the backend API
+      const deleteResponse = await fetch(`http://localhost:3001/api/reviews/${reviewId}`, {
+        method: "DELETE",
+        credentials: "include", // Include credentials for cookie authentication
+      });
+
+      if (!deleteResponse.ok) {
+        console.error("Error deleting review:", deleteResponse.statusText);
+        return;
+      }
+
+      const deleteData = await deleteResponse.json();
+      console.log(deleteData.message);
+
+      // Remove the deleted review from the local state
+      setReviews((prevReviews) => prevReviews.filter((review) => review.reviewId !== reviewId));
+    } catch (error) {
+      console.error("Error deleting review:", error.message);
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       {/* Navbar */}
@@ -144,13 +194,11 @@ const Review = () => {
               Be the first one to comment!
             </div>
           )) || (
-            <div className="flex justify-between items-center mb-4 mt-10">
+            <div className="flex justify-between items-center mb-4">
               <h2 className="text-3xl font-bold text-blue-950 text-center">
                 Read what others are saying!
               </h2>
-              <p className="text-blue-950 ">
-                {reviews.length} review(s)
-              </p>
+              <p className="text-blue-950">{reviews.length} reviews</p>
             </div>
           )}
 
@@ -183,6 +231,15 @@ const Review = () => {
                   <div>
                     <SmallStarRating rating={review.stars} />
                   </div>
+
+                  {userId === review.UserID  && (
+                <button
+                  onClick={() => handleDeleteReview(review.reviewId)}
+                  className="text-red-500 ml-right"
+                >
+                  <FaTrash/>
+                </button>
+              )}
                 </div>
               </div>
             ))}
