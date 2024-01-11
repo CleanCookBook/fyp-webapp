@@ -11,6 +11,26 @@ let userData2 = null;
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+router.get("/", async (req, res) => {
+  try {
+    const users = await new Promise((resolve, reject) => {
+      db.all("SELECT * FROM User", (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+
+    res.send(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
 // Move the upload middleware here
 router.post("/upload", upload.fields([
   { name: 'licenseImage', maxCount: 1 },

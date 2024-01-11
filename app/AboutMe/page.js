@@ -262,7 +262,7 @@ const AboutMe = () => {
               </p>
             </div>
             <div className="flex flex-row mt-20 gap-4">
-              <Link href="/EditAboutMe">
+              <Link href="/AboutMe/EditAboutMe">
                 <button className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow">
                   Edit
                 </button>
