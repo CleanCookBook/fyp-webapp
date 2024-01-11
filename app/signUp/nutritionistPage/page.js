@@ -31,7 +31,7 @@ const BusinessPartnerSignup = () => {
     let isValid = true;
 
     // Check if all required files are uploaded
-    if (!licenseImage || !userPhoto || !experienceFile || !testimonyFile) {
+    if (!linkedinUrl|| !licenseImage || !userPhoto || !experienceFile || !testimonyFile) {
       alert("Please upload all required files.");
       isValid = false;
     }
@@ -57,7 +57,7 @@ const BusinessPartnerSignup = () => {
 
       if (response.ok) {
         console.log("Received Files!");
-        router.push('/termsCon?userType=nutritionist');
+        router.push('/signUp/termsCon?userType=nutritionist');
       } else {
         try {
           const errorData = await response.json();

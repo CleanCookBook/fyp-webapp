@@ -84,9 +84,9 @@ const Signup = () => {
         const responseData = await response.json();
         console.log("Server response:", responseData);
         if (userType === "user") {
-          router.push("/quizPage");
+          router.push("/signUp/quizPage");
         } else if (userType === "nutritionist") {
-          router.push("/nutritionistPage");
+          router.push("/signUp/nutritionistPage");
         } else {
           // Handle other user types or provide a default redirection
           console.error("Unknown userType:", userType);

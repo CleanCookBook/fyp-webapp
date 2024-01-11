@@ -144,7 +144,7 @@ const isNil4 = selectedDietMethods.includes("Nil");
         // Parse the response if needed
         const responseData = await response.json();
         console.log("Server response:", responseData);
-        router.push("/termsCon");
+        router.push("/signUp/termsCon");
       } else {
         // Handle errors
         console.error(
