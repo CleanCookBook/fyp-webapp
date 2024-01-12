@@ -84,7 +84,7 @@ const SysAdminNavBar = () => {
       <div className="text-white flex w-1/2 justify-start font-black text-2xl px-10">
         {/* Circular Logo Image */}
         <div className="overflow-hidden w-16 h-16 flex-shrink-0">
-          <Link href="/home">
+          <Link href="/home/SysAdminHome">
             <Image
               src="/logo.jpg" // Update the path based on your actual file structure
               alt="Logo"

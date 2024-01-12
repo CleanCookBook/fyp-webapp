@@ -11,16 +11,22 @@ const SysAdminHome = () => {
         <h2 className="text-6xl font-black mt-20">What Shall We Do Today?</h2>
         <div className="flex space-x-4 py-10">
           <button className="bg-white hover:bg-gray-200 rounded-lg py-8 px-8 text-[#0A2A67] font-black text-2xl">
-          <Link href="/ViewUser" className="text-[#0A2A67]">
+          <Link href="/AccountInfo/ViewUser" className="text-[#0A2A67]">
             View Users
             </Link>
           </button>
+
           <button className="bg-white hover:bg-gray-200 rounded-lg py-8 px-8 text-[#0A2A67] font-black text-2xl">
+          <Link href="/AccountInfo/ViewPartner" className="text-[#0A2A67]">
             View Partners
+            </Link>
           </button>
+        
           <button className="bg-white hover:bg-gray-200 rounded-lg py-8 px-8 text-[#0A2A67] font-black text-2xl">
+          <Link href="/AccountInfo/ReviewInfo" className="text-[#0A2A67]">
             Review Partner's
             <br /> Application
+            </Link>
           </button>
         </div>
       </div>
