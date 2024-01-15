@@ -1,8 +1,8 @@
 "use client"
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import BPNavBar from "@/components/BPNavBar";
 import Footer from "@/components/Footer";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const CreateRecipefirst = () => {
   const router = useRouter();
@@ -101,16 +101,16 @@ const CreateRecipefirst = () => {
     };
   
     const formData = new FormData();
-    formData.append("recipeName", recipeData.recipeName);
-    formData.append("recipeImage", selectedImage);
-    formData.append("recipeDescription", recipeData.recipeDescription);
-    formData.append("cookingTimeValue", recipeData.cookingTime);
-    formData.append("recipeIngredients", recipeData.recipeIngredients);
-  
-    // Check if selectedImage exists before appending
-    if (selectedImage) {
-      formData.append("recipeImage", selectedImage);
-    }
+    
+formData.append("recipeName", recipeData.recipeName);
+formData.append("recipeDescription", recipeData.recipeDescription);
+formData.append("cookingTimeValue", recipeData.cookingTime);
+formData.append("recipeIngredients", recipeData.recipeIngredients);
+
+// Check if selectedImage exists before appending
+if (selectedImage) {
+  formData.append("recipeImage", selectedImage);
+}
   
     try {
       const response = await fetch("http://localhost:3001/api/recipe/createRecipe", {

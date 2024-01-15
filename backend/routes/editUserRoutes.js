@@ -116,9 +116,6 @@ router.post("/update-profile", async (req, res) => {
         updatedDetails.dob,
         updatedDetails.gender,
         updatedDetails.email,
-        // Assuming you're storing UserID in the database
-        // Adjust this based on your actual primary key
-        // If your primary key is different, replace 'UserID' with the correct column name
         updatedDetails.UserID,
       ]
     );
@@ -132,14 +129,98 @@ router.post("/update-profile", async (req, res) => {
   }
 });
 
-module.exports = router;
+const aboutMeQuery = `
+  SELECT
+    height,
+    Weight,
+    allergy,
+    BMI,
+    DietMethod,
+    DietaryPreferance,
+    HealthGoal
+  FROM
+    AboutMe
+  WHERE
+    UserID = ?
+`;
+
+router.get('/userInfo/:userId', (req, res) => {
+  try {
+    const userId = req.params.userId;
+    console.log(userId);
+
+    db.get(aboutMeQuery, [userId], (err, profileData) => {
+      if (err) {
+        console.error('Database query error:', err.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+        return;
+      }
+
+      if (profileData) {
+        res.json(profileData);
+      } else {
+        res.status(404).json({ error: 'Profile data not found' });
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching profile data:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 
+router.post('/update-AboutMe/:userId', async (req, res) => {
+  const userId = req.params.userId; // Get the user ID from the URL parameters
 
+  const {
+    DietaryPreferance,
+    allergy,
+    DietMethod,
+    HealthGoal,
+    height,
+    Weight,
+    BMI,
+  } = req.body;
 
+  try {
+    // Assuming you have a table named 'AboutMe' with a column 'UserID' to identify the user
+    const updateAboutMeQuery = `
+      UPDATE AboutMe
+      SET
+        DietaryPreferance = ?,
+        allergy = ?,
+        DietMethod = ?,
+        HealthGoal = ?,
+        height = ?,
+        Weight = ?,
+        BMI = ?
+      WHERE UserID = ?
+    `;
 
+    const params = [
+      JSON.stringify(DietaryPreferance),
+      JSON.stringify(allergy),
+      JSON.stringify(DietMethod),
+      JSON.stringify(HealthGoal),
+      height,
+      Weight,
+      BMI,
+      userId,
+    ];
 
-
+    db.run(updateAboutMeQuery, params, function (err) {
+      if (err) {
+        console.error('Database update error:', err.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        res.json({ success: true });
+      }
+    });
+  } catch (error) {
+    console.error('Error updating About Me:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
   
   
   module.exports = router;

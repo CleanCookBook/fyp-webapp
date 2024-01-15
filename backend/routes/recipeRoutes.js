@@ -5,8 +5,12 @@ const router = express.Router();
 const multer = require("multer");
 const db = require("../db");
 
+
+// Assuming 'uploads' is the folder where you want to save the images
+
 const storage = multer.memoryStorage(); // Use memory storage for handling in-memory file processing
 const upload = multer({ storage: storage });
+
 
 // Search for recipes
 router.get('/search', async (req, res) => {
@@ -93,21 +97,42 @@ router.get('/:recipeName', async (req, res) => {
 
 let temporaryRecipeData = null;
 
-router.post('/createRecipe', upload.single('recipeImage'), (req, res) => {
-  // Store the recipe data temporarily
-  temporaryRecipeData = {
-    ...req.body,
-    recipeImage: req.file, // Access the uploaded image
-  };
+router.post('/createRecipe', upload.fields([
+  { name: 'recipeImage', maxCount: 1 }, // Assuming 'recipeImage' is the field name for the image
+]), (req, res) => {
+  try {
+    // Access the uploaded image using the specified field name
+    const uploadedImage = req.files['recipeImage'][0];
 
-  console.log("Received data:", temporaryRecipeData);
+    // Access other form fields
+    const { recipeName, recipeDescription, cookingTimeValue, recipeIngredients } = req.body;
 
-  res.status(200).json({ success: true });
+    // Store the data temporarily
+    temporaryRecipeData = {
+      recipeName,
+      recipeDescription,
+      cookingTimeValue,
+      recipeIngredients,
+      uploadedImage,
+    };
+
+    // Process the data as needed
+    console.log("Received data:", temporaryRecipeData)
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error("Error processing recipe data:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
+
+
 
 router.post('/createRecipeSecond', (req, res) => {
   const recipeData = req.body;
   console.log("Received data:", recipeData);
+  const FirstRecipeData = temporaryRecipeData;
+  console.log("First Data:",FirstRecipeData)
 
   // Assuming "Recipe_Np" table structure matches the provided schema
   const sql = `
@@ -118,19 +143,19 @@ router.post('/createRecipeSecond', (req, res) => {
   `;
 
   const values = [
-    recipeData.recipeName,
+    FirstRecipeData.recipeName,
     recipeData.recipeSteps,      // instruction
     "",                          // ratings (empty for now, update based on your needs)
     "",                          // review (empty for now, update based on your needs)
-    recipeData.recipeIngredients,// ingredients
-    recipeData.imageUrl,         // image
-    recipeData.recipeDescription,
+    FirstRecipeData.recipeIngredients,// ingredients
+    FirstRecipeData.uploadedImage.buffer,         // image
+    FirstRecipeData.recipeDescription,
     "",                          // allergy_tags (empty for now, update based on your needs)
     "",                          // dp_tags (empty for now, update based on your needs)
     recipeData.tips,             // tips_tricks (empty for now, update based on your needs)
     recipeData.funFacts,         // info (empty for now, update based on your needs)
-    recipeData.cookingTime,
-    0                            // calorie (you need to update this based on your needs)
+    FirstRecipeData.cookingTimeValue,
+    recipeData.nutritionalFacts                           // calorie (you need to update this based on your needs)
   ];
 
   console.log("SQL Statement:", sql);
