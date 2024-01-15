@@ -11,6 +11,123 @@ let userData2 = null;
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+router.get("/", async (req, res) => {
+  try {
+    const users = await new Promise((resolve, reject) => {
+      db.all("SELECT * FROM User WHERE UserType = 'user'", (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+
+    res.send(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/partner", async (req, res) => {
+  try {
+    const users = await new Promise((resolve, reject) => {
+      db.all('SELECT User.* FROM User INNER JOIN NutritionistSignUp ON User.UserID = NutritionistSignUp.UserID WHERE User.UserType = "nutritionist" AND NutritionistSignUp.Status = "approved"', (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+
+    res.send(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get('/partnerInfo', async (req, res) => {
+  try {
+    const users = await new Promise((resolve, reject) => {
+      // Assuming there's a 'Status' column in your table
+      db.all("SELECT * FROM NutritionistSignUp WHERE Status = 'approved'", (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+
+    // Convert BLOB to Base64
+    const usersWithBase64 = users.map(user => {
+      return {
+        ...user,
+        LicenseImage: user.LicenseImage ? user.LicenseImage.toString('base64') : null,
+        UserPhoto: user.UserPhoto ? user.UserPhoto.toString('base64') : null,
+        ExperienceFile: user.ExperienceFile ? user.ExperienceFile.toString('base64') : null,
+        TestimonyFile: user.TestimonyFile ? user.TestimonyFile.toString('base64') : null,
+      };
+    });
+
+    res.json(usersWithBase64);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/ReviewInfo', async (req, res) => {
+  try {
+    const users = await new Promise((resolve, reject) => {
+      db.all("SELECT * FROM User INNER JOIN NutritionistSignUp ON User.UserID = NutritionistSignUp.UserID", (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+
+    // Convert BLOB to Base64
+    const usersWithBase64 = users.map(user => {
+      const userWithBase64 = { ...user };
+      Object.keys(user).forEach(key => {
+        if (Buffer.isBuffer(user[key])) {
+          userWithBase64[key] = user[key].toString('base64');
+        }
+      });
+      return userWithBase64;
+    });
+
+    res.json(usersWithBase64);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get("/userInfo", async (req, res) => {
+  try {
+    const usersInfo = await new Promise((resolve, reject) => {
+      db.all("SELECT * FROM AboutMe", (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+
+    res.send(usersInfo);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
 // Move the upload middleware here
 router.post("/upload", upload.fields([
   { name: 'licenseImage', maxCount: 1 },

@@ -35,23 +35,28 @@ module.exports = (isAuthenticated) => {
               res.status(500).json({ error: 'Internal Server Error' });
               return;
             }
-  
-            console.log('Nutritionist Data:', nutritionistData);
-  
+        
             if (nutritionistData && nutritionistData.Status === 'approved') {
-              console.log('Login successful');
+              console.log('Login successful for approved nutritionist');
               req.session.userId = user.UserID;
               res.json({ message: 'Login successful', user, userType: 'nutritionist', status: 'approved' });
-            } else {
-              console.log('Nutritionist account is pending');
+            } else if (nutritionistData && nutritionistData.Status !== 'approved') {
+              console.log('Nutritionist account is pending approval');
               res.status(401).json({ error: 'Nutritionist account is pending approval' });
+            } else {
+              console.log('Nutritionist account not found');
+              res.status(401).json({ error: 'Invalid credentials for a nutritionist account' });
             }
           });
+        } else if (user.UserType === 'system admin') {
+          console.log('Login successful for system admin');
+          req.session.userId = user.UserID;
+          res.json({ message: 'Login successful', user, userType: 'system admin' });
         } else {
           console.log('Login successful for non-nutritionist user');
           // For non-nutritionist users, proceed with login
           req.session.userId = user.UserID;
-          res.json({ message: 'Login successful', user });
+          res.json({ message: 'Login successful', user,userType: 'user' });
         }
       } else {
         console.log('Invalid credentials');
