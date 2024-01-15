@@ -3,6 +3,7 @@ import DeleteUser from "@/components/DeleteUser";
 import Footer from "@/components/Footer";
 import SysAdminNavBar from "@/components/SysAdminNavBar";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const SysAdminViewUser = () => {
@@ -11,6 +12,8 @@ const SysAdminViewUser = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null); // Add this line
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const router = useRouter();
+  
   // Mock user data for demonstration
 
   const handleDeleteClick = (user) => {
@@ -63,7 +66,8 @@ const SysAdminViewUser = () => {
 
   const handleEdit = (userID) => {
     // Edit logic
-    console.log(`Edit user with ID: ${userId}`);
+    console.log(`Edit user with ID: ${userID}`);
+    router.push(`/AccountInfo/editAccount?UserID=${userID}`);
   };
 
  
@@ -119,7 +123,7 @@ const SysAdminViewUser = () => {
                       <div className="flex justify-center">
                         {/* Edit/Delete buttons */}
                         <button
-                          onClick={() => handleEdit(user.id)}
+                          onClick={() => handleEdit(user.UserID)}
                           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
                         >
                           Edit
