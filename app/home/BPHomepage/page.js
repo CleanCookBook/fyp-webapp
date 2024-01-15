@@ -1,6 +1,7 @@
 "use client";
 import BPNavBar from "@/components/BPNavBar";
 import Footer from "@/components/Footer";
+import Link from "next/link";
 
 const BPHomepage = () => {
   return (
@@ -12,9 +13,11 @@ const BPHomepage = () => {
           {/* Buttons container */}
           <div className="flex space-x-4 py-10">
             {/* Buttons */}
-            <button className="bg-white hover:bg-gray-200 text-[#0A2A67] font-bold py-8 px-8 rounded-lg text-2xl">
-              Create/View Recipe
-            </button>
+            <Link href="/CreateRecipefirst">
+              <button className="bg-white hover:bg-gray-200 text-[#0A2A67] font-bold py-8 px-8 rounded-lg text-2xl">
+                Create/View Recipe
+              </button>
+            </Link>
             <button className="bg-white hover:bg-gray-200 text-[#0A2A67] font-bold py-8 px-8 rounded-lg text-2xl">
               Create/View Announcement
             </button>
