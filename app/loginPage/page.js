@@ -30,7 +30,7 @@ const Login = () => {
         console.log("Status:", data.status);
 
         // Check the user type and redirect accordingly
-        if (data.userType === "nutritionist" && userData.status === "approved") {
+        if (data.userType === "nutritionist" && data.status === "approved") {
           // Redirect to the BPHomepage for approved nutritionists
           router.push("/home/BPHomepage");
         } else if (data.userType === "system admin") {
@@ -49,6 +49,13 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Error during login:", error.message);
+    }
+  };
+
+  // Can now login by either pressing the Enter key in keyboard or clicking the login button
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleLogin();
     }
   };
 
@@ -90,6 +97,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="text-neutral-400 text-[20px] -mt-1 font-medium border-none outline-none"
+                onKeyDown={handleKeyDown}
               />
               <button
                 onClick={() => setIsPasswordHidden(!isPasswordHidden)}

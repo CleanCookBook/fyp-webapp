@@ -94,6 +94,12 @@ const Homepage = () => {
     return <p>Loading...</p>;
   }
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen bg-[#F9D548]">
       <Navbar />
@@ -103,7 +109,8 @@ const Homepage = () => {
         <input
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(event) => setSearchQuery(event.target.value)} //can click enter without click the search button
+            onKeyDown={handleKeyDown}
             placeholder="Search our library of recipes"
             className="w-full text-lg text-black outline-none -ml-3"
           />
