@@ -52,7 +52,7 @@ const Login = () => {
     }
   };
 
-  // Can now login by either pressing the Enter key in keyboard or clicking the login button
+  // Can now login by either pressing the Enter key or clicking the login button
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       handleLogin();

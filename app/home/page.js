@@ -94,6 +94,7 @@ const Homepage = () => {
     return <p>Loading...</p>;
   }
 
+  // Can click enter key without click the search button
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       handleSearch();
@@ -109,7 +110,7 @@ const Homepage = () => {
         <input
             type="text"
             value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)} //can click enter without click the search button
+            onChange={(event) => setSearchQuery(event.target.value)} 
             onKeyDown={handleKeyDown}
             placeholder="Search our library of recipes"
             className="w-full text-lg text-black outline-none -ml-3"
