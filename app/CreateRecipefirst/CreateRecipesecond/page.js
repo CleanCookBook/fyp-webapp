@@ -31,7 +31,6 @@ const CreateRecipesecond = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Get the data from the state
     const recipeData = {
       recipeSteps,
       nutritionalFacts,
@@ -39,23 +38,19 @@ const CreateRecipesecond = () => {
       tips,
     };
   
-    const formData = new FormData();
-    formData.append("recipeSteps", recipeData.recipeSteps);
-    formData.append("nutritionalFacts", recipeData.nutritionalFacts);
-    formData.append("funFacts", recipeData.funFacts);
-    formData.append("tips", recipeData.tips);
-  
     try {
-      const response = await fetch("http://localhost:3001/api/recipe/createRecipe", {
+      const response = await fetch("http://localhost:3001/api/recipe/createRecipeSecond", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json", // Set content type to JSON
+        },
+        body: JSON.stringify(recipeData), // Convert to JSON string
       });
   
       console.log("Response status:", response.status);
   
       if (response.ok) {
         console.log("Recipe created successfully!");
-        // Redirect to the desired page after successful creation
         router.push('/home/BPHomepage');
       } else {
         try {
@@ -72,7 +67,6 @@ const CreateRecipesecond = () => {
       // Handle error as needed
     }
   };
-  
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">

@@ -2,7 +2,11 @@
 
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
 const db = require("../db");
+
+const storage = multer.memoryStorage(); // Use memory storage for handling in-memory file processing
+const upload = multer({ storage: storage });
 
 // Search for recipes
 router.get('/search', async (req, res) => {
@@ -87,57 +91,113 @@ router.get('/:recipeName', async (req, res) => {
   });
 });
 
-router.post('/createRecipe', (req, res) => {
+let temporaryRecipeData = null;
+
+router.post('/createRecipe', upload.single('recipeImage'), (req, res) => {
+  // Store the recipe data temporarily
+  temporaryRecipeData = {
+    ...req.body,
+    recipeImage: req.file, // Access the uploaded image
+  };
+
+  console.log("Received data:", temporaryRecipeData);
+
+  res.status(200).json({ success: true });
+});
+
+router.post('/createRecipeSecond', (req, res) => {
   const recipeData = req.body;
-  console.log("Received createRecipe data:", recipeData);
+  console.log("Received data:", recipeData);
 
-  // Check if a recipe with the same name already exists
-  const checkRecipeQuery = "SELECT * FROM Recipe_Np WHERE Rname = ?";
-  db.get(checkRecipeQuery, [recipeData.recipeName], (err, existingRecipe) => {
+  // Assuming "Recipe_Np" table structure matches the provided schema
+  const sql = `
+    INSERT INTO Recipe_Np (
+      Rname, instruction, ratings, review, ingredients, image,
+      description, allergy_tags, dp_tags, tips_tricks, info, cTime, calorie
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const values = [
+    recipeData.recipeName,
+    recipeData.recipeSteps,      // instruction
+    "",                          // ratings (empty for now, update based on your needs)
+    "",                          // review (empty for now, update based on your needs)
+    recipeData.recipeIngredients,// ingredients
+    recipeData.imageUrl,         // image
+    recipeData.recipeDescription,
+    "",                          // allergy_tags (empty for now, update based on your needs)
+    "",                          // dp_tags (empty for now, update based on your needs)
+    recipeData.tips,             // tips_tricks (empty for now, update based on your needs)
+    recipeData.funFacts,         // info (empty for now, update based on your needs)
+    recipeData.cookingTime,
+    0                            // calorie (you need to update this based on your needs)
+  ];
+
+  console.log("SQL Statement:", sql);
+  console.log("Values:", values);
+
+  db.run(sql, values, function (err) {
     if (err) {
-      console.error("Database query error:", err.message);
-      res.status(500).json({ error: "Internal Server Error" });
-      return;
-    }
-
-    if (existingRecipe) {
-      // Recipe with the same name exists, return an error
-      res.status(400).json({ error: "Recipe with the same name already exists" });
+      console.error("Error inserting recipe:", err.message);
+      res.status(500).json({ success: false, error: err.message });
     } else {
-      // Recipe does not exist, proceed with creating the recipe
+      console.log(`Recipe inserted with ID ${this.lastID}`);
       res.status(200).json({ success: true });
-
-      const insertRecipeQuery = `
-        INSERT INTO Recipe_Np (Rname, image, description, cTime, ingredients, instruction, calorie, info, tips_tricks)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `;
-
-      db.run(
-        insertRecipeQuery,
-        [
-          recipeData.recipeName, 
-          recipeData.imageUrl, 
-          recipeData.recipeDescription, 
-          recipeData.cookingTime, 
-          recipeData.recipeIngredients,
-          recipeData.recipeSteps,
-          recipeData.nutritionalFacts,
-          recipeData.funFacts,
-          recipeData.tips,
-        ],
-        function (err) {
-          if (err) {
-            console.error('Error creating recipe:', err.message);
-            res.status(500).json({ error: 'Internal Server Error' });
-            return;
-          }
-
-          res.status(201).json({ success: true, message: 'Recipe created successfully.' });
-        }
-      );
     }
   });
 });
+
+  // const recipeData = req.body;
+  // console.log("Received createRecipe data:", recipeData);
+
+  // // Check if a recipe with the same name already exists
+  // const checkRecipeQuery = "SELECT * FROM Recipe_Np WHERE Rname = ?";
+  // db.get(checkRecipeQuery, [recipeData.recipeName], (err, existingRecipe) => {
+  //   if (err) {
+  //     console.error("Database query error:", err.message);
+  //     res.status(500).json({ error: "Internal Server Error" });
+  //     return;
+  //   }
+
+  //   if (existingRecipe) {
+  //     // Recipe with the same name exists, return an error
+  //     res.status(400).json({ error: "Recipe with the same name already exists" });
+  //   } else {
+  //     // Recipe does not exist, proceed with creating the recipe
+  //     res.status(200).json({ success: true });
+
+  //     const insertRecipeQuery = `
+  //       INSERT INTO Recipe_Np (Rname, image, description, cTime, ingredients, instruction, calorie, info, tips_tricks)
+  //       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  //     `;
+
+  //     db.run(
+  //       insertRecipeQuery,
+  //       [
+  //         recipeData.recipeName, 
+  //         recipeData.imageUrl, 
+  //         recipeData.recipeDescription, 
+  //         recipeData.cookingTime, 
+  //         recipeData.recipeIngredients,
+  //         recipeData.recipeSteps,
+  //         recipeData.nutritionalFacts,
+  //         recipeData.funFacts,
+  //         recipeData.tips,
+  //       ],
+  //       function (err) {
+  //         if (err) {
+  //           console.error('Error creating recipe:', err.message);
+  //           res.status(500).json({ error: 'Internal Server Error' });
+  //           return;
+  //         }
+
+  //         res.status(201).json({ success: true, message: 'Recipe created successfully.' });
+  //       }
+  //     );
+  //   }
+  // });
+
+
 
 // router.post('/createRecipe', (req, res) => {
 //   const recipeData = req.body;

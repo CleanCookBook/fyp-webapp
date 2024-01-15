@@ -102,6 +102,7 @@ const CreateRecipefirst = () => {
   
     const formData = new FormData();
     formData.append("recipeName", recipeData.recipeName);
+    formData.append("recipeImage", selectedImage);
     formData.append("recipeDescription", recipeData.recipeDescription);
     formData.append("cookingTimeValue", recipeData.cookingTime);
     formData.append("recipeIngredients", recipeData.recipeIngredients);
