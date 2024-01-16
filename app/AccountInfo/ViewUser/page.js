@@ -105,6 +105,7 @@ const SysAdminViewUser = () => {
                   <th className="border p-2">Last Name</th>
                   <th className="border p-2">Gender</th>
                   <th className="border p-2">Date of Birth</th>
+                  <th className="border p-2">Paid</th>
                   <th className="border p-2">Actions</th>
                 </tr>
               </thead>
@@ -119,6 +120,7 @@ const SysAdminViewUser = () => {
                     <td className="border p-2 text-center">{user.LName}</td>
                     <td className="border p-2 text-center">{user.gender}</td>
                     <td className="border p-2 text-center">{user.dob}</td>
+                    <td className="border p-2 text-center">{user.Paid}</td>
                     <td className="border p-2">
                       <div className="flex justify-center">
                         {/* Edit/Delete buttons */}

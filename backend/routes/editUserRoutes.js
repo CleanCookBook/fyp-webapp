@@ -113,7 +113,7 @@ router.post("/update-profile", async (req, res) => {
   try {
     // Update User table with the new details
     await db.run(
-      "UPDATE User SET Username = ?, FName = ?, LName = ?, dob = ?, gender = ?, email = ? WHERE UserID = ?", 
+      "UPDATE User SET Username = ?, FName = ?, LName = ?, dob = ?, gender = ?, email = ?, Paid = ? WHERE UserID = ?", 
       [
         updatedDetails.username,
         updatedDetails.FName,
@@ -121,6 +121,7 @@ router.post("/update-profile", async (req, res) => {
         updatedDetails.dob,
         updatedDetails.gender,
         updatedDetails.email,
+        updatedDetails.Paid,
         updatedDetails.UserID,
       ]
     );
