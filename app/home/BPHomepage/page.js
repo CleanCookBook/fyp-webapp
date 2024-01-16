@@ -2,8 +2,41 @@
 import BPNavBar from "@/components/BPNavBar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const BPHomepage = () => {
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    // Perform a quick check for authentication
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/check-auth", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          // If authenticated, redirect to the homepage
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error('Error during authentication check:', error.message);
+      }
+    };
+
+    checkAuthentication();
+  }, [router]);
+
+  if (!isAuthenticated) {
+    // If not authenticated, the user will be redirected during authentication check
+    return null;
+  }
+
+
+
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">
       <BPNavBar className="fixed top-0 left-0 right-0" />

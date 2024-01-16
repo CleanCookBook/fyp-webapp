@@ -8,6 +8,7 @@ const recipeRoutes = require('./routes/recipeRoutes');
 const aboutmeRoutes = require('./routes/aboutmeRoutes');
 const editUserRoutes = require('./routes/editUserRoutes')
 const reviewRoutes = require('./routes/reviewRoutes');
+const isAuthenticated = require('./authMiddleware'); 
 const cors = require("cors");
 const db = require("./db"); // Import the database module
 const session = require('express-session');
@@ -16,14 +17,6 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const crypto = require('crypto');
 const secretKey = crypto.randomBytes(32).toString('hex');
-
-const isAuthenticated = (req, res, next) => {
-  if (req.session && req.session.userId) {
-    return next();
-  } else {
-    res.status(401).json({ error: 'Not authenticated' });
-  }
-};
 
 app.use(
   cors({
@@ -61,6 +54,7 @@ app.use('/api/edit', editUserRoutes);
 app.get('/home', isAuthenticated, (req, res) => {
   res.json({ message: 'Welcome to the home page!' });
 });
+
 
 
 // Handle requests to the root path
