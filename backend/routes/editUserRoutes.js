@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const multer = require("multer");
+
+
+const storage = multer.memoryStorage(); // Use memory storage for handling in-memory file processing
+const upload = multer({ storage: storage });
 
 
 router.delete("/:userID", async (req, res) => {
@@ -221,6 +226,96 @@ router.post('/update-AboutMe/:userId', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+router.get("/partner/change/:userID", async (req, res) => {
+  const userID = req.params.userID;
+
+  // Fetch partner details from the NutritionistSignUp table based on the userID
+  const query = "SELECT * FROM NutritionistSignUp WHERE UserID = ?";
+
+  db.get(query, [userID], (err, partner) => {
+    if (err) {
+      console.error("Error fetching partner details:", err.message);
+      res.status(500).json({ success: false, error: "Internal Server Error" });
+      return;
+    }
+
+    if (partner) {
+      res.json({ success: true, partner });
+    } else {
+      res.status(404).json({ success: false, message: "Partner not found" });
+    }
+  });
+});
+
+router.put("/partner/upload/:userID", upload.fields([
+  { name: 'licenseImage', maxCount: 1 },
+  { name: 'userPhoto', maxCount: 1 },
+  { name: 'experienceFile', maxCount: 1 },
+  { name: 'testimonyFile', maxCount: 1 }
+]), (req, res) => {
+  const userID = req.params.userID;
+  console.log("Received files:", req.files);
+
+  // Access the uploaded files using req.files
+  const licenseImage = req.files['licenseImage'] ? req.files['licenseImage'][0] : null;
+  const userPhoto = req.files['userPhoto'] ? req.files['userPhoto'][0] : null;
+  const experienceFile = req.files['experienceFile'] ? req.files['experienceFile'][0] : null;
+  const testimonyFile = req.files['testimonyFile'] ? req.files['testimonyFile'][0] : null;
+  const linkedinUrl = req.body.linkedInUrl;
+
+
+  // Start building the SQL query
+  let sql = "UPDATE NutritionistSignUp SET ";
+
+  const updateFields = [];
+
+  // Check each field and add it to the updateFields array if it exists in the request
+  if (linkedinUrl) updateFields.push(`LinkedInURL = ?`);
+  if (licenseImage) updateFields.push(`LicenseImage = ?`);
+  if (userPhoto) updateFields.push(`UserPhoto = ?`);
+  if (experienceFile) updateFields.push(`ExperienceFile = ?`);
+  if (testimonyFile) updateFields.push(`TestimonyFile = ?`);
+
+  if (updateFields.length === 0) {
+    return res.status(400).json({ success: false, error: 'No fields to update' });
+  }
+
+  sql += updateFields.join(", ");
+
+  // Complete the SQL query
+  sql += ` WHERE UserID = ?`;
+
+  // Create an array of values to be used in the query
+  const values = [];
+  if (linkedinUrl) values.push(linkedinUrl);
+  if (licenseImage) values.push(licenseImage.buffer);
+  if (userPhoto) values.push(userPhoto.buffer);
+  if (experienceFile) values.push(experienceFile.buffer);
+  if (testimonyFile) values.push(testimonyFile.buffer);
+  values.push(userID);
+
+  console.log("SQL Query:", sql);
+  console.log("Values:", values);
+
+  // Execute the SQL query
+  db.run(sql, values, function (err) {
+    if (err) {
+      console.error(err.message);
+      return res.status(500).json({ success: false, error: 'Failed to update fields', details: err.message });
+    }
+
+    // Check the number of rows affected to determine if the update was successful
+    if (this.changes > 0) {
+      return res.status(200).json({ success: true, message: 'Fields updated successfully' });
+    } else {
+      return res.status(404).json({ success: false, error: 'User not found or no fields updated' });
+    }
+  });
+});
+
+
+module.exports = router;
+
   
   
-  module.exports = router;
