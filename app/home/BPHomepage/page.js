@@ -46,14 +46,17 @@ const BPHomepage = () => {
           {/* Buttons container */}
           <div className="flex space-x-4 py-10">
             {/* Buttons */}
-            <Link href="/CreateRecipefirst">
+            <Link href="/ViewRecipe">
               <button className="bg-white hover:bg-gray-200 text-[#0A2A67] font-bold py-8 px-8 rounded-lg text-2xl">
                 Create/View Recipe
               </button>
             </Link>
-            <button className="bg-white hover:bg-gray-200 text-[#0A2A67] font-bold py-8 px-8 rounded-lg text-2xl">
-              Create/View Announcement
-            </button>
+            <Link href="/BPAnnouncement">
+              <button className="bg-white hover:bg-gray-200 text-[#0A2A67] font-bold py-8 px-8 rounded-lg text-2xl">
+                Create/View Announcement
+              </button>
+            </Link>
+            
             <button className="bg-white hover:bg-gray-200 text-[#0A2A67] font-bold py-8 px-8 rounded-lg text-2xl">
               Chat with Us
             </button>

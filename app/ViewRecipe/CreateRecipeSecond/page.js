@@ -136,7 +136,7 @@ const CreateRecipesecond = () => {
         </div>
         <div className="w-full mt-auto flex justify-between px-4 py-4">
           <div>
-            <Link href="/CreateRecipefirst">
+            <Link href="/ViewRecipe/CreateRecipefirst">
               <button className="w-[259px] h-10 bg-blue-950 hover:bg-[#154083] text-white font-bold text-lg rounded-[10px] shadow ml-16">
                 Back
               </button>

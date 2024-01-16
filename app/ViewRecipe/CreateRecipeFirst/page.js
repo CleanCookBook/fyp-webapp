@@ -127,7 +127,7 @@ const CreateRecipefirst = () => {
 
       if (response.ok) {
         console.log("Recipe created successfully!");
-        router.push("/CreateRecipefirst/CreateRecipesecond");
+        router.push("/ViewRecipe/CreateRecipeSecond");
       } else {
         try {
           const errorData = await response.json();
@@ -178,7 +178,7 @@ const CreateRecipefirst = () => {
               {!selectedImage && (
                 <>
                   {!adjustingSize && (
-                    <label htmlFor="RecipeImgUpload" className="cursor-pointer">
+                    <label htmlFor="recipeImage" className="cursor-pointer">
                       <span className="mr-2 text-gray-500">Choose Image</span>
                       <input
                         type="file"
