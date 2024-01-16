@@ -81,7 +81,7 @@ const EditSysAccount = () => {
                 const data = await response.json();
                 if (data.success) {
                     console.log("Profile updated successfully");
-                    router.push('/AccountInfo/ViewUser');
+                    router.push("/home/SysAdminHome");
                     // You might want to perform additional actions after a successful update
                 } else {
                     console.error("Failed to update profile");

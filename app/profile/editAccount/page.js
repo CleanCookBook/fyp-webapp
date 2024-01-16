@@ -42,7 +42,6 @@ const EditAccount = () => {
         setEmail(fieldValue);
       }
     }
-   // ...
 
    
 
