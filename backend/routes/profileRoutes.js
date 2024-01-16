@@ -17,7 +17,7 @@ router.get('/', isAuthenticated, (req, res) => {
 
   // Query your database to retrieve user profile data
   const profileQuery = `
-    SELECT Username, dob, gender, email, FName, LName
+    SELECT Username, dob, gender, email, FName, LName, Paid
     FROM User
     WHERE UserID = ?
   `;

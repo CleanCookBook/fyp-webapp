@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import ImageModel from "@/components/ImageModel";
 import SysAdminNavBar from "@/components/SysAdminNavBar";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function SysAdminViewPartnerInfo() {
@@ -10,6 +11,7 @@ function SysAdminViewPartnerInfo() {
   const [usersPerPage] = useState(5);
   const [partnersInfo, setPartnersInfo] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchPartnerInfo = async () => {
@@ -28,6 +30,7 @@ function SysAdminViewPartnerInfo() {
   const handleEdit = (userId) => {
     // Edit logic
     console.log(`Edit user with ID: ${userId}`);
+    router.push(`/AccountInfo/EditBPInfo?UserID=${userId}`);
   };
 
 
@@ -119,7 +122,7 @@ function SysAdminViewPartnerInfo() {
                     <td className="border p-2">
                       <div className="flex justify-center">
                         <button
-                          onClick={() => handleEdit(user.id)}
+                          onClick={() => handleEdit(user.UserID)}
                           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
                         >
                           Edit

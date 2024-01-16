@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -161,6 +162,13 @@ const isNil4 = selectedDietMethods.includes("Nil");
   return (
     <html className="h-screen bg-[#F9D548] text-[#0A2A67]">
       <body className="h-screen bg-[#F9D548] text-[#0A2A67]">
+      <div className="flex flex-col bg-[#F9D548] text-[#0A2A67] justify-center items-center">
+      <Link href="/signUp">
+        <button class="text-2xl font-black font-semibold cursor-pointer hover:opacity-[0.5] absolute top-10 left-10">
+          {"< Back"}
+        </button>
+      </Link>
+    </div>
         <div className="lg:w-4/5 lg:pr-8 p-8 flex flex-col items-center">
           <h2 className="text-6xl font-black py-5">
             Help us get to know you better!

@@ -2,12 +2,14 @@
 import Footer from "@/components/Footer";
 import SysAdminNavBar from "@/components/SysAdminNavBar";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const SysAdminViewUserInfo = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(10);
   const [usersInfo, setUsersInfo] = useState([]);
+  const router = useRouter();
   // Mock user data for demonstration
 
   useEffect(() => {
@@ -28,6 +30,7 @@ const SysAdminViewUserInfo = () => {
   const handleEdit = (userId) => {
     // Edit logic
     console.log(`Edit user with ID: ${userId}`);
+    router.push(`/AccountInfo/editInfo?UserID=${userId}`);
   };
 
   const handleDelete = (userId) => {

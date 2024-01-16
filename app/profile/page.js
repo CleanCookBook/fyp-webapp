@@ -16,6 +16,7 @@ const Accountpage = () => {
     email: "",
     FName: "",
     LName: "",
+    sub: ""
   });
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -51,6 +52,7 @@ const Accountpage = () => {
           email: userProfile.email,
           FName: userProfile.FName,
           LName: userProfile.LName,
+          sub: userProfile.Paid
         });
       } else if (response.status === 401) {
         console.error("Unauthorized access");
@@ -137,6 +139,12 @@ const Accountpage = () => {
               E-mail :
             </p>
             <p className="text-xl text-black">{user.email}</p>
+          </div>
+          <div className="flex flex-row mt-9 gap-4">
+            <p className="flex flex-row text-xl text-black font-semibold">
+              Subscription :
+            </p>
+            <p className="text-xl text-black">{user.sub}</p>
           </div>
           <div className="flex flex-row mt-20 gap-4">
             <Link href="/profile/editAccount">

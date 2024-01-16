@@ -11,6 +11,42 @@ const CreateRecipesecond = () => {
   const [nutritionalFacts, setNutritionalFacts] = useState("");
   const [funFacts, setFunFacts] = useState("");
   const [tips, setTips] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+ 
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/check-auth", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+        } else {
+          router.push('/loginPage');
+        }
+      } catch (error) {
+        console.error('Error during authentication check:', error.message);
+      } finally {
+        // Set loading to false when authentication check is complete
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthentication();
+  }, [router]);
+  if (isLoading) {
+    // Optional: render a loading spinner or message
+    return <p>Loading...</p>;
+  }
+  if (!isAuthenticated) {
+    // Redirect to the login page if not authenticated
+    router.push('/loginPage');
+    // No need to return anything here
+  }
 
   const handleRecipeSteps = (e) => {
     setRecipeSteps(e.target.value);
@@ -69,6 +105,7 @@ const CreateRecipesecond = () => {
   };
 
   return (
+    
     <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">
       <BPNavBar className="fixed top-0 left-0 right-0" />
         <div className="mt-10 ml-8">
