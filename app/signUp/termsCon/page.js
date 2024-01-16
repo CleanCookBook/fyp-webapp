@@ -78,7 +78,7 @@ return (
   <div className="flex flex-col h-screen justify-center items-center bg-[#F9D548] text-[#0A2A67]">
     
     <div className="flex flex-col bg-[#F9D548] text-[#0A2A67] justify-center items-center">
-      <Link href="/quizPage">
+      <Link href="/signUp/quizPage">
         <button class="text-2xl font-black font-semibold cursor-pointer hover:opacity-[0.5] absolute top-10 left-10">
           {"< Back"}
         </button>
