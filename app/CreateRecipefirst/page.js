@@ -182,7 +182,7 @@ const CreateRecipefirst = () => {
                       <span className="mr-2 text-gray-500">Choose Image</span>
                       <input
                         type="file"
-                        id="RecipeImgUpload"
+                        id="recipeImage"
                         accept="image/*"
                         className="hidden"
                         onChange={handleFileInputChange}
