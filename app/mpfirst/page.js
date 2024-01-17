@@ -4,9 +4,10 @@ import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 
 const mpfirst = () => {
+    const userRole ='user';
     return (
         <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">
-            <Navbar />
+             <Navbar userRole={userRole} />
             <div className="flex flex-col justify-center items-center mt-20">
             <div className="grid grid-cols-3 gap-20 place-items-center">
                 <Link href="/NewsFeed">

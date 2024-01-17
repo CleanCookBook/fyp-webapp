@@ -18,6 +18,7 @@ const Review = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [commentsPerPage] = useState(5);
   const [comment, setComment] = useState("");
+  const userRole ="user";
   const [userId, setUserId] = useState(""); 
 
   const router = useRouter();
@@ -179,7 +180,7 @@ const Review = () => {
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       {/* Navbar */}
-      <Navbar />
+      <Navbar userRole={userRole} />
       <div className="mt-10 ml-8">
         <h1 className="text-7xl font-extrabold text-blue-950">
           {recipeName || "Recipe Title"}

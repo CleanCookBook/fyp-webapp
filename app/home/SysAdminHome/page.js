@@ -1,12 +1,13 @@
 "use client";
 import Footer from "@/components/Footer";
-import SysAdminNavBar from "@/components/SysAdminNavBar";
+import Navbar from "@/components/Navbar";
 import Link from "next/link";
 
 const SysAdminHome = () => {
+  const userRole = 'system admin';  
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">
-      <SysAdminNavBar className="fixed top-0 left-0 right-0" />
+      <Navbar userRole={userRole} className="fixed top-0 left-0 right-0" />
       <div className="flex flex-col items-center flex-1">
         <h2 className="text-6xl font-black mt-20">What Shall We Do Today?</h2>
         <div className="flex space-x-4 py-10">

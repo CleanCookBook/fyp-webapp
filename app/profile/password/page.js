@@ -1,14 +1,15 @@
 "use client";
-import Link from 'next/link';
-import Image from "next/image";
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
-import { useState } from "react";
+import Image from "next/image";
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from "react";
 import { FaTimes } from 'react-icons/fa';
 
 const VerifyPasswordForm = () => {
     const [oldPassword, setOldPassword] = useState('');
+    const userRole = 'user';  
     const [errorMessage, setErrorMessage] = useState('');
     const [isOldPasswordHidden, setIsOldPasswordHidden] = useState(true);
 
@@ -50,7 +51,7 @@ const submitPass = async (e) => {
 
 return (
 <div className="flex flex-col h-full bg-[#F9D548]">
-<Navbar />
+<Navbar userRole={userRole} />
     <div className=" lg:w-4/5 lg:pr-8 p-8 flex flex-col h-screen bg-[#F9D548] text-[#0A2A67] justify-start items-start  ml-20">
 
     <form onSubmit={submitPass}>

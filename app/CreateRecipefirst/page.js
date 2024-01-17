@@ -1,11 +1,12 @@
 "use client";
-import BPNavBar from "@/components/BPNavBar";
 import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const CreateRecipefirst = () => {
   const router = useRouter();
+  const userRole = 'bp'; 
   const [recipeName, setRecipeName] = useState("");
   const [recipeDescription, setRecipeDescription] = useState("");
   const [recipeIngredients, setRecipeIngredients] = useState("");
@@ -146,7 +147,7 @@ const CreateRecipefirst = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">
-      <BPNavBar className="fixed top-0 left-0 right-0" />
+      <Navbar userRole={userRole} className="fixed top-0 left-0 right-0" />
       <div className="mt-10 ml-8">
         <h2 className="text-5xl font-black pb-8">Create Your Recipe </h2>
       </div>

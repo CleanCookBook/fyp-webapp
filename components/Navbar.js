@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
-const Navbar = () => {
+const Navbar = ({ userRole }) => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [notifications, setNotifications] = useState([
     { id: 1, text: "Notification 1", isChecked: false },
@@ -12,19 +12,19 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/logout', {
-        method: 'GET',
-        credentials: 'include',
+      const response = await fetch("http://localhost:3001/api/logout", {
+        method: "GET",
+        credentials: "include",
       });
-  
+
       if (response.ok) {
         // Redirect the user to the login page or perform other actions as needed
-        window.location.href = '/loginPage';
+        window.location.href = "/loginPage";
       } else {
-        console.error('Logout failed:', response.statusText);
+        console.error("Logout failed:", response.statusText);
       }
     } catch (error) {
-      console.error('Error during logout:', error.message);
+      console.error("Error during logout:", error.message);
     }
   };
 
@@ -59,6 +59,19 @@ const Navbar = () => {
     setNotifications(updatedNotifications);
   };
 
+  const getLogoLink = (userRole) => {
+    switch (userRole) {
+      case 'user':
+        return '/home';
+      case 'bp':
+        return '/home/BPHomepage'; // Update this to the desired link for 'bp'
+      case 'system admin':
+        return '/home/SysAdminHome'; // Update this to the desired link for 'sysadmin'
+      default:
+        return '/home'; // Default link for unknown roles
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -84,7 +97,7 @@ const Navbar = () => {
       <div className="text-white flex w-1/2 justify-start font-black text-2xl px-10">
         {/* Circular Logo Image */}
         <div className="overflow-hidden w-16 h-16 flex-shrink-0">
-          <Link href="/home">
+        <Link href={getLogoLink(userRole)}>
             <Image
               src="/logo.jpg" // Update the path based on your actual file structure
               alt="Logo"
@@ -149,12 +162,18 @@ const Navbar = () => {
                 </div>
               )}
             </div>
-            <Link href="/NewsFeed">
-            <button className="px-4 hover:opacity-[0.5]">NewsFeed</button>
-            </Link>
-            <Link href="/mpfirst">
-            <button className="px-4 hover:opacity-[0.5]">Meal Plans</button>
-            </Link>
+            {userRole === "user" && (
+              <>
+                <Link href="/NewsFeed">
+                  <button className="px-4 hover:opacity-[0.5]">NewsFeed</button>
+                </Link>
+                <Link href="/mpfirst">
+                  <button className="px-4 hover:opacity-[0.5]">
+                    Meal Plans
+                  </button>
+                </Link>
+              </>
+            )}
             <div
               className="relative inline-block text-left"
               ref={accountDropdownRef}
@@ -168,18 +187,26 @@ const Navbar = () => {
               {isAccountOpen && (
                 <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                   <div className="py-1">
-                    <a
-                      href="/profile"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      Profile
-                    </a>
-                    <a
-                      href="/AboutMe"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      About Me
-                    </a>
+                    {userRole !== "system admin" && (
+                      <>
+                        <a
+                          href="/profile"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          Profile
+                        </a>
+                      </>
+                    )}
+                    {userRole === "user" && (
+                      <>
+                        <a
+                          href="/AboutMe"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          About Me
+                        </a>
+                      </>
+                    )}
                     <a
                       onClick={handleLogout}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"

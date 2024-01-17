@@ -9,7 +9,10 @@ import { useEffect, useState } from "react";
 const Homepage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const userRole = 'user';  
   const router = useRouter();
+
+ 
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -21,6 +24,7 @@ const Homepage = () => {
 
         if (response.ok) {
           setIsAuthenticated(true);
+          
         } else {
           router.push('/loginPage');
         }
@@ -103,7 +107,7 @@ const Homepage = () => {
 
   return (
     <div className="flex flex-col h-screen bg-[#F9D548]">
-      <Navbar />
+        <Navbar userRole={userRole} />
       <div className="flex flex-col h-screen bg-[#F9D548] text-[#0A2A67] justify-center items-center">
         <h1 className="text-7xl font-black py-5">What's Cooking Today?</h1>
         <div className="w-[748px] bg-white rounded-[20px] flex items-center text-sm p-2 pl-9 text-stone-300">

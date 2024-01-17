@@ -22,6 +22,8 @@ const Pagination = ({ totalPages, currentPage, setCurrentPage }) => {
     );
   };
 
+ 
+
   return (
     <div className="flex justify-center mt-6 items-center">
       <button
@@ -56,6 +58,8 @@ const Pagination = ({ totalPages, currentPage, setCurrentPage }) => {
     </div>
   );
 };
+
+const userRole = 'user';  
 
 const NewsFeed = () => {
   const newsPerPage = 4;
@@ -99,7 +103,7 @@ const currentNews = (newsItems || []).slice(start, end);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
-      <Navbar />
+      <Navbar userRole={userRole} />
       <div className="flex flex-col items-start justify-center flex-grow px-6">
         <h1 className="text-5xl text-[#0A2A67] font-black mb-8 text-left">
           Catch Up On The Latest News

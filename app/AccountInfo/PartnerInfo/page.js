@@ -1,7 +1,7 @@
 "use client";
 import Footer from "@/components/Footer";
 import ImageModel from "@/components/ImageModel";
-import SysAdminNavBar from "@/components/SysAdminNavBar";
+import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ function SysAdminViewPartnerInfo() {
   const [usersPerPage] = useState(5);
   const [partnersInfo, setPartnersInfo] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
+  const userRole = 'system admin'; 
   const router = useRouter();
 
   useEffect(() => {
@@ -58,7 +59,7 @@ function SysAdminViewPartnerInfo() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">
-      <SysAdminNavBar />
+        <Navbar userRole={userRole} />
       <div className="flex flex-col items-start flex-1">
         <div className="container mx-auto p-4">
           <div className="flex items-center">

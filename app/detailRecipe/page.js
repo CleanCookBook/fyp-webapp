@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 const RecipeDetails = () => {
   const [recipeDetails, setRecipeDetails] = useState(null);
   const router = useRouter();
+  const userRole ="user";
 
   const navigateToReviewPage = () => {
     const recipeName = recipeDetails?.RName;
@@ -69,7 +70,7 @@ const RecipeDetails = () => {
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       {/* Navbar */}
-      <Navbar />
+      <Navbar userRole={userRole} />
 
       {/* Main Content */}
       <div className="p-4 pl-20 bg-[#F9D548]">

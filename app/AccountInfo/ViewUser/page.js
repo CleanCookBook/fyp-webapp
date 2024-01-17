@@ -1,7 +1,7 @@
 "use client";
 import DeleteUser from "@/components/DeleteUser";
 import Footer from "@/components/Footer";
-import SysAdminNavBar from "@/components/SysAdminNavBar";
+import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ const SysAdminViewUser = () => {
   const [selectedUser, setSelectedUser] = useState(null); // Add this line
   const [showConfirmation, setShowConfirmation] = useState(false);
   const router = useRouter();
+  const userRole = 'system admin';  
   
   // Mock user data for demonstration
 
@@ -80,7 +81,7 @@ const SysAdminViewUser = () => {
   const totalPages = Math.ceil(users.length / usersPerPage);
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">
-      <SysAdminNavBar />
+     <Navbar userRole={userRole} />
       <div className="flex flex-col items-start flex-1">
         <div className="container mx-auto p-4">
           <div className="flex items-center">
