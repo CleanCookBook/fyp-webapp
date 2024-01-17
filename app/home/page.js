@@ -61,6 +61,8 @@ const Homepage = () => {
   }
 
   const handleSearch = async () => {
+    setNoResults(false);
+  setEmptyQuery(false);
     if (!isAuthenticated) {
       // Redirect to the login page if not authenticated
       router.push('/loginPage');
