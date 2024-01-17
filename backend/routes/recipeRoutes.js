@@ -179,9 +179,18 @@ router.get('/:recipeName', async (req, res) => {
     }
 
     if (result) {
-      res.json({ description: result.description, image: result.image, ratings: result.ratings, 
-        ingredients:result.ingredients, instruction:result.instruction, info:result.info, 
-        calorie:result.calorie,tips_tricks:result.tips_tricks, cTime:result.cTime });
+      const imageBase64 = result.image.toString('base64');
+      res.json({ 
+        description: result.description, 
+        image: `data:image/jpeg;base64,${imageBase64}`, // Adjust the MIME type accordingly
+        ratings: result.ratings, 
+        ingredients: result.ingredients, 
+        instruction: result.instruction, 
+        info: result.info, 
+        calorie: result.calorie,
+        tips_tricks: result.tips_tricks,
+        cTime: result.cTime
+      });
     } else {
       res.status(404).json({ error: 'Recipe not found' });
     }
