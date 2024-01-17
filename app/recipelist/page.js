@@ -1,13 +1,14 @@
 // RecipeList.js
 "use client";
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import Navbar from '@/components/Navbar';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const RecipeList = () => {
   const searchParams = useSearchParams();
+  const userRole = 'user'; 
   const searchInput = searchParams.get('searchInput');
   const searchResults = JSON.parse(searchParams.get('searchResults'));
 
@@ -51,7 +52,7 @@ const RecipeList = () => {
 
   return (
     <section className="flex flex-col h-screen bg-[#F9D548]">
-      <Navbar />
+       <Navbar userRole={userRole} />
       <div className="flex flex-col justify-start items-center h-full mt-20">
         <h1 className="pt-10 text-7xl text-[#0A2A67] font-black max-w-[58.5%] w-full">
           {searchInput}

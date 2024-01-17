@@ -1,12 +1,13 @@
 "use client"
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import BPNavBar from "@/components/BPNavBar";
 import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const CreateRecipesecond = () => {
   const router = useRouter();
+  const userRole = 'bp'; 
   const [recipeSteps, setRecipeSteps] = useState("");
   const [nutritionalFacts, setNutritionalFacts] = useState("");
   const [funFacts, setFunFacts] = useState("");
@@ -107,7 +108,7 @@ const CreateRecipesecond = () => {
   return (
     
     <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">
-      <BPNavBar className="fixed top-0 left-0 right-0" />
+      <Navbar userRole={userRole} className="fixed top-0 left-0 right-0" />
         <div className="mt-10 ml-8">
           <h2 className="text-5xl font-black pb-8">
             Create Your Recipe{" "}
@@ -173,7 +174,7 @@ const CreateRecipesecond = () => {
         </div>
         <div className="w-full mt-auto flex justify-between px-4 py-4">
           <div>
-            <Link href="/CreateRecipefirst">
+            <Link href="/ViewRecipe/CreateRecipefirst">
               <button className="w-[259px] h-10 bg-blue-950 hover:bg-[#154083] text-white font-bold text-lg rounded-[10px] shadow ml-16">
                 Back
               </button>

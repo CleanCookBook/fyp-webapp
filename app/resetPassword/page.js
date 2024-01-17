@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 
 const ResetPasswordForm = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const userRole = 'user'; 
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -129,7 +130,7 @@ const submitForm = async (e) => {
 
 return (
 <div className="flex flex-col h-full bg-[#F9D548]">
-    <Navbar />
+    <Navbar userRole={userRole} />
     <div className=" lg:w-4/5 lg:pr-8 p-8 flex flex-col h-screen bg-[#F9D548] text-[#0A2A67] justify-start items-start  ml-20">
     <div className="w-full max-w-md flex flex-row mt-7">
         <Image

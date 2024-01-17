@@ -1,12 +1,13 @@
 "use client";
 import Footer from "@/components/Footer";
-import SysAdminNavBar from "@/components/SysAdminNavBar";
+import Navbar from "@/components/Navbar";
 import { useEffect, useState } from "react";
 
 const SysAdminReviewApp = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(5);
   const [partnersInfo, setPartnersInfo] = useState([]);
+  const userRole = 'system admin'; 
   const [selectedImage, setSelectedImage] = useState(null);
   // Mock user data for demonstration
 
@@ -119,7 +120,7 @@ const SysAdminReviewApp = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">
-      <SysAdminNavBar />
+      <Navbar userRole={userRole} />
       <div className="flex flex-col items-start flex-1">
         <div className="container mx-auto p-4">
           <h2 className="text-6xl font-black">Review Application</h2>

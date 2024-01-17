@@ -10,6 +10,7 @@ import Select from 'react-select';
 const EditAboutMe = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDietaryPreferences, setSelectedDietaryPreferences] = useState([]);
+    const userRole = 'user';
     const [selectedAllergies, setSelectedAllergies] = useState([]);
     const [selectedDietMethods, setSelectedDietMethods] = useState([]);
     const [selectedHealthGoals, setSelectedHealthGoals] = useState([]);
@@ -186,7 +187,7 @@ useEffect(() => {
 
 return (
 <div className="flex flex-col h-full bg-[#F9D548]">
-    <Navbar />
+<Navbar userRole={userRole} />
     <div className="lg:w-4/5 lg:pr-8 p-8 flex flex-col h-full bg-[#F9D548] text-[#0A2A67] justify-start items-start ml-20">
     <div className="w-full max-w-md flex flex-row mt-7">
         <Image

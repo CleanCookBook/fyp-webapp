@@ -10,6 +10,7 @@ const EditInfo = () => {
   const searchParams = useSearchParams();
   const userID = searchParams.get("UserID");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const userRole = 'system admin';
   const [selectedDietaryPreferences, setSelectedDietaryPreferences] = useState(
     []
   );
@@ -210,7 +211,7 @@ const EditInfo = () => {
 
   return (
     <div className="flex flex-col h-full bg-[#F9D548]">
-      <Navbar />
+      <Navbar userRole={userRole} />
       <div className="lg:w-4/5 lg:pr-8 p-8 flex flex-col h-full bg-[#F9D548] text-[#0A2A67] justify-start items-start ml-20">
         <form action="/update-account" method="POST" onSubmit={submitForm}>
           <div>
