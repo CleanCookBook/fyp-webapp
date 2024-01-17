@@ -10,11 +10,44 @@ import StarRating from "@/components/StarRating";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 
 const RecipeDetails = () => {
   const [recipeDetails, setRecipeDetails] = useState(null);
+  const [isFavorite, setIsFavorite] = useState(false);
   const router = useRouter();
   const userRole ="user";
+
+  const toggleFavorite = async () => {
+    // Assuming you have a user ID from authentication
+    const userId = '123'; // Replace with actual user ID
+
+    // Update the backend to mark/unmark the recipe as a favorite for the user
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/user/${userId}/favorite`,
+        {
+          method: 'POST', // or 'DELETE' if removing from favorites
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            recipeName: recipeDetails?.RName,
+            isFavorite: !isFavorite,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        // Update the local state
+        setIsFavorite(!isFavorite);
+      } else {
+        console.error('Error updating favorite status:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error updating favorite status:', error.message);
+    }
+  };
 
   const navigateToReviewPage = () => {
     const recipeName = recipeDetails?.RName;
@@ -75,7 +108,16 @@ const RecipeDetails = () => {
       {/* Main Content */}
       <div className="p-4 pl-20 bg-[#F9D548]">
         <div className="text-6xl font-extrabold text-blue-950">
-          {recipeDetails?.RName}
+          {recipeDetails?.RName} 
+          <button onClick={toggleFavorite}>
+            {isFavorite ? 
+              <FaBookmark 
+                className="text-red-500 text-4xl ml-5" 
+              /> : 
+              <FaRegBookmark 
+                className="text-4xl ml-5"
+              />}
+          </button>
         </div>
 
         <div className="flex p-4 pl-20 bg-[#F9D548]">
