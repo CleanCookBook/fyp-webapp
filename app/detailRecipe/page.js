@@ -7,7 +7,6 @@ import Instructions from "@/components/Instructions";
 import Navbar from "@/components/Navbar";
 import NutritionalFact from "@/components/NutritionalFact";
 import StarRating from "@/components/StarRating";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
@@ -123,9 +122,9 @@ const RecipeDetails = () => {
         <div className="flex p-4 pl-20 bg-[#F9D548]">
           {/* Division 1 - 1/3 width */}
           <div className="w-1/3">
-            <Image
-              src={recipeDetails?.image || "/placeholder-image.jpg"}
-              alt={recipeDetails?.RName || "Recipe Image"}
+            <img
+                src={recipeDetails?.image || "/placeholder-image.jpg"} // Use your placeholder image or another fallback
+                alt={recipeDetails?.RName || "Recipe Image"}
               width={500}
               height={500}
               className="w-full max-w-screen-xl mx-auto rounded-2xl shadow-2xl shadow-black"
