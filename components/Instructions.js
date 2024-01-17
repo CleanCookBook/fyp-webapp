@@ -21,14 +21,15 @@ const Instructions = ({ instruction }) => {
             </React.Fragment>
           );
         } else {
-          return (
-            <React.Fragment key={index}>
+          const steps = paragraph.split('\n');
+          return steps.map((step, stepIndex) => (
+            <React.Fragment key={`${index}-${stepIndex}`}>
               <p className="text-[#1D5198]">
-                {paragraph.trim()} {/* Trim leading/trailing whitespaces */}
+                {step.trim()} {/* Trim leading/trailing whitespaces */}
                 <br />
               </p>
             </React.Fragment>
-          );
+          ));
         }
       })}
     </div>
