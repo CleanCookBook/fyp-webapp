@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 
 const AboutMe = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const userRole = 'user';
   const [userData, setUserData] = useState({
     FName: "",
     LName: "",
@@ -161,7 +162,7 @@ const AboutMe = () => {
 
   return (
     <div className="flex flex-col h-full bg-[#F9D548]">
-      <Navbar />
+      <Navbar userRole={userRole} />
       <div className="lg:w-4/5 lg:pr-8 p-8 flex flex-col h-full bg-[#F9D548] text-[#0A2A67] justify-start items-start ml-20">
         <div className="w-full max-w-md flex flex-row mt-7">
           <Image
