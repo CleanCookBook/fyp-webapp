@@ -15,20 +15,20 @@ const RecipeDetails = () => {
   const [recipeDetails, setRecipeDetails] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const router = useRouter();
-  const userRole ="user";
+  const [userRole, setUserRole] = useState("user");
 
   const toggleFavorite = async () => {
     // Assuming you have a user ID from authentication
-    const userId = '123'; // Replace with actual user ID
+    const userId = "123"; // Replace with actual user ID
 
     // Update the backend to mark/unmark the recipe as a favorite for the user
     try {
       const response = await fetch(
         `http://localhost:3001/api/user/${userId}/favorite`,
         {
-          method: 'POST', // or 'DELETE' if removing from favorites
+          method: "POST", // or 'DELETE' if removing from favorites
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             recipeName: recipeDetails?.RName,
@@ -41,10 +41,10 @@ const RecipeDetails = () => {
         // Update the local state
         setIsFavorite(!isFavorite);
       } else {
-        console.error('Error updating favorite status:', response.statusText);
+        console.error("Error updating favorite status:", response.statusText);
       }
     } catch (error) {
-      console.error('Error updating favorite status:', error.message);
+      console.error("Error updating favorite status:", error.message);
     }
   };
 
@@ -60,6 +60,27 @@ const RecipeDetails = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const recipeName = searchParams.get("recipeName");
+
+    const fetchUserType = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3001/api/user/userType",
+          {
+            method: "POST",
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserRole(data.userType || "user"); // Set the userRole based on the response
+        } else {
+          console.error("Error fetching user type:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching user type:", error.message);
+      }
+    };
 
     const fetchRecipeDetails = async () => {
       try {
@@ -80,7 +101,7 @@ const RecipeDetails = () => {
             image: data.image,
             rating: data.ratings,
             ingredients: ingredientsArray,
-            instruction: instructionArray, // Add the instructions array
+            instruction: instructionArray,
             funFacts: factsArray,
             calorie: data.calorie,
             tips_tricks: data.tips_tricks,
@@ -95,7 +116,8 @@ const RecipeDetails = () => {
     };
 
     if (recipeName) {
-      fetchRecipeDetails();
+      fetchUserType(); // Fetch user type first
+      fetchRecipeDetails(); // Then fetch recipe details
     }
   }, []);
 
@@ -107,15 +129,14 @@ const RecipeDetails = () => {
       {/* Main Content */}
       <div className="p-4 pl-20 bg-[#F9D548]">
         <div className="text-6xl font-extrabold text-blue-950">
-          {recipeDetails?.RName} 
+          {recipeDetails?.RName}
           <button onClick={toggleFavorite}>
-            {isFavorite ? 
-              <FaBookmark 
-                className="text-red-500 text-4xl ml-5" 
-              /> : 
-              <FaRegBookmark 
-                className="text-4xl ml-5"
-              />}
+            {userRole === "user" && // Only show bookmark for "user" role
+              (isFavorite ? (
+                <FaBookmark className="text-red-500 text-4xl ml-5" />
+              ) : (
+                <FaRegBookmark className="text-4xl ml-5" />
+              ))}
           </button>
         </div>
 
@@ -123,8 +144,8 @@ const RecipeDetails = () => {
           {/* Division 1 - 1/3 width */}
           <div className="w-1/3">
             <img
-                src={recipeDetails?.image || "/placeholder-image.jpg"} // Use your placeholder image or another fallback
-                alt={recipeDetails?.RName || "Recipe Image"}
+              src={recipeDetails?.image || "/placeholder-image.jpg"} // Use your placeholder image or another fallback
+              alt={recipeDetails?.RName || "Recipe Image"}
               width={500}
               height={500}
               className="w-full max-w-screen-xl mx-auto rounded-2xl shadow-2xl shadow-black"

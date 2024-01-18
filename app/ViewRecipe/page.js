@@ -176,7 +176,7 @@ const ViewRecipePage = () => {
           {userRecipes.map((recipe) => (
             <a
               key={recipe.UserID}
-              href="#"
+              href={`/detailRecipe?recipeName=${encodeURIComponent(recipe.Rname)}`}
               onClick={() => handleAnnouncementClick(recipe.UserID)}
               className="block cursor-pointer"
             >
