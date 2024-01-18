@@ -216,6 +216,12 @@ const Navbar = ({ userRole }) => {
                     >
                       My Favorite Recipe
                     </a>
+                    <a
+                      href="/detailRecipe/customizedlist"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      My Customised Recipe
+                    </a>
                     </>
                     )}
                     <a
