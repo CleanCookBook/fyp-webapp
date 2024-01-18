@@ -6,88 +6,70 @@ import { useEffect, useState } from "react";
 
 const FavoritePage = () => {
   const userRole = "user";
-  const [favorites, setAnnouncements] = useState([]);
+  const [favorites, setFavorites] = useState([]); // Use setFavorites to update the favorites state
   const [currentPage, setCurrentPage] = useState(1);
-  const [announcementsPerPage] = useState(5);
+  const [favoritesPerPage] = useState(5);
+  const [userFirstName, setUserFirstName] = useState("");
+
+  const fetchUserInfo = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/bookmark/username", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error fetching user information: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setUserFirstName(data.firstName || ""); // Set the user's first name
+    } catch (error) {
+      console.error("Error fetching user information:", error);
+      // Handle error as needed
+    }
+  };
 
   // Function to fetch user's favorite recipes
   const fetchUserFavorites = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/recipe/user-favorites");
+      const response = await fetch("http://localhost:3001/api/bookmark/showFavorites", {
+        method: "GET",
+        credentials: "include",  // Include credentials (cookies) in the request
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error fetching user favorites: ${response.status}`);
+      }
+  
       const data = await response.json();
-      setUserFavorites(data.favorites);
+      
+      // Ensure data.favorites is an array
+      const favoritesArray = Array.isArray(data.favorites) ? data.favorites : [];
+  
+      setFavorites(favoritesArray);
     } catch (error) {
       console.error("Error fetching user favorites:", error);
       // Handle error as needed
     }
   };
 
-  // Example function to add a recipe to favorites
-const addToFavorites = async (recipeName) => {
-  try {
-    await fetch('http://localhost:3001/api/recipe/add-to-favorites', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ recipeName }),
-    });
-
-    // Refresh the list of favorite recipes
-    fetchUserFavorites();
-  } catch (error) {
-    console.error('Error adding to favorites:', error);
-    // Handle error as needed
-  }
-};
-
-// Example function to remove a recipe from favorites
-const removeFromFavorites = async (recipeName) => {
-  try {
-    await fetch('http://localhost:3001/api/recipe/remove-from-favorites', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ recipeName }),
-    });
-
-    // Refresh the list of favorite recipes
-    fetchUserFavorites();
-  } catch (error) {
-    console.error('Error removing from favorites:', error);
-    // Handle error as needed
-  }
-};
-
 useEffect(() => {
-  const fetchAnnouncements = async () => {
-    try {
-      const response = await fetch("http://localhost:3001/api/announce/announcements");
-      const data = await response.json();
-      setAnnouncements(data);
-    } catch (error) {
-      console.error("Error fetching announcements:", error);
-      // Handle error as needed
-    }
-  };
-
   // Fetch user favorites when the component mounts
+  fetchUserInfo();
   fetchUserFavorites();
+}, []); 
 
-  fetchAnnouncements();
-}, []);
-
-const indexOfLastAnnouncement = currentPage * announcementsPerPage;
-const indexOfFirstAnnouncement = indexOfLastAnnouncement - announcementsPerPage;
-const currentAnnouncements = favorites.slice(
-  indexOfFirstAnnouncement,
-  indexOfLastAnnouncement
-);
+const indexOfLastFavorite = currentPage * favoritesPerPage;
+  const indexOfFirstFavorite = indexOfLastFavorite - favoritesPerPage;
+  const currentFavorites = favorites.slice(
+    indexOfFirstFavorite,
+    indexOfLastFavorite
+  );
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const totalPages = Math.ceil(favorites.length / announcementsPerPage);
+  const totalPages = Math.ceil(favorites.length / favoritesPerPage);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
@@ -101,18 +83,18 @@ const currentAnnouncements = favorites.slice(
             &lt;&nbsp;&nbsp;Back
           </Link>
           <h1 className="text-5xl font-extrabold text-[#0A2A67] mb-4 mt-10 ml-8">
-            CleanCookBookmarks
+          {userFirstName}'s Bookmarks
           </h1>
         </div>
         <div className="bg-white rounded-lg p-4 mt-6">
           {favorites.map((favorite) => (
             <a
-              key={favorite.id}
-              href="#"
-              onClick={() => handleAnnouncementClick(favorite.id)}
+              key={favorite.UserID}
+              href={`/detailRecipe?recipeName=${encodeURIComponent(favorite.RName)}`}
+              onClick={() => handleAnnouncementClick(favorite.UserID)}
               className="block cursor-pointer"
             >
-              <p>{favorite.title}</p>
+              <p>{favorite.RName}</p>
               <hr className="my-4" />
             </a>
           ))}
