@@ -68,4 +68,29 @@ router.post('/announcement', upload.fields([{ name: 'announcementImage', maxCoun
   }
 });
 
+router.get('/user-announcements', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.session.userId;
+
+    // Fetch recipes for the authenticated user using a Promise
+    const announcements = await new Promise((resolve, reject) => {
+      const sql = 'SELECT file_name FROM BPAnnouncement WHERE UserID = ?';
+      db.all(sql, [userId], (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+
+    console.log('Fetched announcements:', announcements);
+
+    res.json(announcements);
+  } catch (error) {
+    console.error('Error fetching announcements:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;

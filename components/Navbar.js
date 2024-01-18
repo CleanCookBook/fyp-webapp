@@ -172,6 +172,11 @@ const Navbar = ({ userRole }) => {
                     Meal Plans
                   </button>
                 </Link>
+                <Link href="/Payment">
+                  <button className="px-4 hover:opacity-[0.5]">
+                    Premium
+                  </button>
+                </Link>
               </>
             )}
             <div
@@ -205,14 +210,14 @@ const Navbar = ({ userRole }) => {
                         >
                           About Me
                         </a>
-                      </>
-                    )}
                     <a
                       href="/detailRecipe/favorite"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       My Favorite Recipe
                     </a>
+                    </>
+                    )}
                     <a
                       onClick={handleLogout}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
