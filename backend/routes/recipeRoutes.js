@@ -18,6 +18,32 @@ const isAuthenticated = (req, res, next) => {
 const storage = multer.memoryStorage(); // Use memory storage for handling in-memory file processing
 const upload = multer({ storage: storage });
 
+router.get('/user-recipes', isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.session.userId;
+
+    // Fetch recipes for the authenticated user using a Promise
+    const recipes = await new Promise((resolve, reject) => {
+      const sql = 'SELECT Rname FROM Recipe_Np WHERE UserID = ?';
+      db.all(sql, [userId], (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+
+    console.log('Fetched recipes:', recipes);
+
+    res.json(recipes);
+  } catch (error) {
+    console.error('Error fetching user recipes:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 let temporaryRecipeData = null;
 
 router.post('/createRecipe', upload.fields([
