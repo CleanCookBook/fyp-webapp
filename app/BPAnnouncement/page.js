@@ -6,23 +6,33 @@ import { useEffect, useState } from "react";
 
 const AnnouncementsPage = () => {
   const userRole = "bp";
-  const [announcements, setAnnouncements] = useState([
-    { id: 1, title: "Announcement 1" },
-    { id: 2, title: "Announcement 2" },
-    { id: 3, title: "Announcement 3" },
-    { id: 4, title: "Announcement 4" },
-    { id: 5, title: "Announcement 5" },
-    { id: 6, title: "Announcement 6" },
-    // Add more announcements here...
-  ]);
-
+  const [announcements, setAnnouncements] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [announcementsPerPage] = useState(5);
 
   useEffect(() => {
-    // Fetch announcements from API or database
-    // Update the announcements state with the fetched data
-    // Example: fetchData()
+    const fetchAnnouncements = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3001/api/announce/user-announcements",
+          {
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Announcement Data:", data); // Log the data here
+          setAnnouncements(data);
+        } else {
+          console.error("Invalid data format received:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching user recipes:", error);
+      }
+    };
+  
+    fetchAnnouncements();
   }, []);
 
   const indexOfLastAnnouncement = currentPage * announcementsPerPage;
@@ -53,14 +63,14 @@ const AnnouncementsPage = () => {
           </h1>
         </div>
         <div className="bg-white rounded-lg p-4 mt-6">
-          {currentAnnouncements.map((announcement) => (
-            <a
-              key={announcement.id}
+          {announcements.map((announcement) => (
+            <a 
+              key={announcement.id} 
               href="#"
-              onClick={() => handleAnnouncementClick(announcement.id)}
+              onClick={() => handleAnnouncementClick(announcement.UserID)}
               className="block cursor-pointer"
             >
-              <p>{announcement.title}</p>
+              <p>{announcement.file_name}</p>
               <hr className="my-4" />
             </a>
           ))}
