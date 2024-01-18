@@ -8,14 +8,9 @@ router.post('/favorite', isAuthenticated, async (req, res) => {
   const { recipeName, isFavorite } = req.body;
 
   try {
-    console.log(`Received POST request to /favorite for user ${userId}, recipe ${recipeName}, isFavorite ${isFavorite}`);
-
-    // Update your logic to mark/unmark the recipe as a favorite for the user
-    console.log('Executing update logic...');
 
     // If the user is marking the recipe as a favorite, insert into the Bookmark table
     if (isFavorite) {
-      console.log(`Inserting into Bookmark table for user ${userId}, recipe ${recipeName}...`);
       const insertBookmarkQuery = `
         INSERT INTO Bookmark (UserID, RName)
         VALUES (?, ?)
@@ -167,6 +162,79 @@ router.get('/username', isAuthenticated, async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
+
+  router.get('/:recipeName', isAuthenticated, async (req, res) => {
+    const recipeName = req.params.recipeName;
+  
+    try {
+      // Fetch the existing instruction and ingredients for the specified recipe
+      const getRecipeDetailsQuery = `
+        SELECT instruction, ingredients
+        FROM Recipe_Np
+        WHERE RName = ?
+      `;
+  
+      const recipeDetails = await new Promise((resolve, reject) => {
+        db.get(getRecipeDetailsQuery, [recipeName], (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(row);
+          }
+        });
+      });
+  
+      if (recipeDetails) {
+        // Send the existing instruction and ingredients as the response
+        res.status(200).json({
+          instruction: recipeDetails.instruction,
+          ingredients: recipeDetails.ingredients
+        });
+      } else {
+        res.status(404).json({ error: 'Recipe not found' });
+      }
+    } catch (error) {
+      console.error('Error fetching recipe details:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+  router.post('/updating/:recipeName', isAuthenticated, async (req, res) => {
+    const userId = req.userId;
+    const recipeName = req.params.recipeName;
+    const { recipeIngredients, recipeInstructions } = req.body;
+  
+    console.log('Recipe Name:', recipeName);
+    console.log('Ingredients:', recipeIngredients);
+    console.log('Instruction:', recipeInstructions);
+  
+    try {
+      // Update the bookmark entry in the database
+      const updateBookmarkQuery = `
+        UPDATE Bookmark
+        SET Ingredients = ?, Instruction = ?
+        WHERE RName = ? AND UserID = ?
+      `;
+  
+      await new Promise((resolve, reject) => {
+        db.run(updateBookmarkQuery, [recipeIngredients, recipeInstructions, recipeName, userId], (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
+      });
+  
+      res.status(200).json({ message: 'Bookmark updated successfully' });
+    } catch (error) {
+      console.error('Error updating bookmark:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
   
   module.exports = router;
+  
+
 

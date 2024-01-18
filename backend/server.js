@@ -10,6 +10,7 @@ const aboutmeRoutes = require('./routes/aboutmeRoutes');
 const editUserRoutes = require('./routes/editUserRoutes')
 const reviewRoutes = require('./routes/reviewRoutes');
 const announcementRoutes = require('./routes/announcementRoutes');
+const editRecipeRoutes = require('./routes/editRecipeRoutes');
 const isAuthenticated = require('./authMiddleware'); 
 const cors = require("cors");
 const db = require("./db"); // Import the database module
@@ -54,6 +55,7 @@ app.use('/api/aboutme', aboutmeRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/edit', editUserRoutes);
 app.use('/api/bookmark', bookMarkRoutes);
+app.use('/api/editRecipe', editRecipeRoutes);
 app.use('/api/announce', announcementRoutes);
 app.get('/home', isAuthenticated, (req, res) => {
   res.json({ message: 'Welcome to the home page!' });
