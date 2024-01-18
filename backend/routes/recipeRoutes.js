@@ -223,6 +223,104 @@ router.get('/:recipeName', async (req, res) => {
   });
 });
 
-  
+// POST endpoint to add a recipe to favorites
+router.post('/add-to-favorites', async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    const { recipeName } = req.body;
+
+    // Example SQL query to insert into UserFavorites
+    const insertQuery = 'INSERT INTO UserFavorites (UserID, Rname, isFavorite) VALUES (?, ?, 1)';
+    await db.run(insertQuery, [userId, recipeName]);
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error adding recipe to favorites:', err.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// POST endpoint to remove a recipe from favorites
+router.post('/remove-from-favorites', async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    const { recipeName } = req.body;
+
+    // Example SQL query to update UserFavorites and set isFavorite to 0
+    const updateQuery = 'UPDATE UserFavorites SET isFavorite = 0 WHERE UserID = ? AND Rname = ?';
+    await db.run(updateQuery, [userId, recipeName]);
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error removing recipe from favorites:', err.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// GET endpoint to fetch user's favorite recipes
+router.get('/user-favorites', async (req, res) => {
+  try {
+    const userId = req.session.userId;
+
+    // Example SQL query to select favorite recipes
+    const selectQuery = 'SELECT Rname FROM UserFavorites WHERE UserID = ? AND isFavorite = 1';
+    const rows = await db.all(selectQuery, [userId]);
+
+    res.json({ favorites: rows.map((row) => row.Rname) });
+  } catch (err) {
+    console.error('Error fetching user favorites:', err.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// router.get('/user-favorites', async (req, res) => {
+//   try {
+//     const userId = req.session.userId;
+
+//     const favorites = await new Promise((resolve, reject) => {
+//       const sql = 'SELECT UserID FROM Recipe_Np WHERE UserID = ?';
+//       db.all(sql, [userId], (err, rows) => {
+//         if (err) {
+//           reject(err);
+//         } else {
+//           resolve(rows);
+//         }
+//       });
+//     });
+    
+//     // Example SQL query (you need to adapt it based on your database schema)
+//     const selectQuery = 'SELECT RName FROM UserFavorites WHERE UserID = ? AND isFavorite = 1';
+
+//     const rows = await db.all(selectQuery, [userId]);
+
+//     res.json({ favorites });
+//   } catch (err) {
+//     console.error('Error fetching user favorites:', err.message);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+
+//   try {
+//     const userId = req.session.userId;
+
+//     // Fetch recipes for the authenticated user using a Promise
+//     const recipes = await new Promise((resolve, reject) => {
+//       const sql = 'SELECT Rname FROM Recipe_Np WHERE UserID = ?';
+//       db.all(sql, [userId], (err, rows) => {
+//         if (err) {
+//           reject(err);
+//         } else {
+//           resolve(rows);
+//         }
+//       });
+//     });
+
+//     console.log('Fetched recipes:', recipes);
+
+//     res.json(recipes);
+//   } catch (error) {
+//     console.error('Error fetching user recipes:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
 
 module.exports = router;
