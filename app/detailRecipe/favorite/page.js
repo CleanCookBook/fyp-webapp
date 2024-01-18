@@ -87,17 +87,23 @@ const indexOfLastFavorite = currentPage * favoritesPerPage;
           </h1>
         </div>
         <div className="bg-white rounded-lg p-4 mt-6">
-          {favorites.map((favorite) => (
-            <a
-              key={favorite.UserID}
-              href={`/detailRecipe?recipeName=${encodeURIComponent(favorite.RName)}`}
-              onClick={() => handleAnnouncementClick(favorite.UserID)}
-              className="block cursor-pointer"
-            >
-              <p>{favorite.RName}</p>
-              <hr className="my-4" />
-            </a>
-          ))}
+          {favorites.length === 0 ? (
+            <p className="text-center text-black">
+              You don't have any bookmarks yet.
+            </p>
+          ) : (
+            favorites.map((favorite) => (
+              <a
+                key={favorite.UserID}
+                href={`/detailRecipe?recipeName=${encodeURIComponent(favorite.RName)}`}
+                onClick={() => handleAnnouncementClick(favorite.UserID)}
+                className="block cursor-pointer"
+              >
+                <p>{favorite.RName}</p>
+                <hr className="my-4" />
+              </a>
+            ))
+          )}
         </div>
         <div className="flex justify-center mt-4">
           {/* Pagination */}
