@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const isAuthenticated = require("../authMiddleware");
 const multer = require('multer');
 
 
@@ -29,6 +30,34 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+router.post("/userType", isAuthenticated, async (req, res) => {
+  try {
+    const user = await new Promise((resolve, reject) => {
+      // Use template literals for SQL query
+      db.all(`SELECT UserType FROM User WHERE UserID = ${req.userId}`, (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+
+    // Check if the query returned any rows
+    if (user && user.length > 0) {
+      // Assuming the user type is a property of the first row
+      const userType = user[0].UserType;
+      res.json({ userType });
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching user type:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 router.get("/partner", async (req, res) => {
   try {
