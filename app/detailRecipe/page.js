@@ -16,37 +16,72 @@ const RecipeDetails = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const router = useRouter();
   const [userRole, setUserRole] = useState("user");
+ 
 
   const toggleFavorite = async () => {
-    // Assuming you have a user ID from authentication
-    const userId = "123"; // Replace with actual user ID
-
-    // Update the backend to mark/unmark the recipe as a favorite for the user
     try {
-      const response = await fetch(
-        `http://localhost:3001/api/user/${userId}/favorite`,
-        {
-          method: "POST", // or 'DELETE' if removing from favorites
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            recipeName: recipeDetails?.RName,
-            isFavorite: !isFavorite,
-          }),
-        }
-      );
+        console.log("Toggle Favorite Clicked!");
 
-      if (response.ok) {
-        // Update the local state
-        setIsFavorite(!isFavorite);
-      } else {
-        console.error("Error updating favorite status:", response.statusText);
-      }
+        if (isFavorite) {
+            // If it's already red, remove from favorites
+            const removeFavoriteResponse = await fetch(
+                "http://localhost:3001/api/bookmark/removeFavorite",
+                {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        recipeName: recipeDetails?.RName,
+                    }),
+                }
+            );
+
+            if (removeFavoriteResponse.ok) {
+                // Update the local state only if removal was successful
+                setIsFavorite(false);
+                console.log("Recipe Removed from Favorites!");
+            } else {
+                console.error(
+                    "Error removing recipe from favorites:",
+                    removeFavoriteResponse.statusText
+                );
+            }
+        } else {
+            // If it's not red, insert into favorites (similar to your existing logic)
+            const insertBookmarkResponse = await fetch(
+                "http://localhost:3001/api/bookmark/favorite",
+                {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        recipeName: recipeDetails?.RName,
+                        isFavorite: !isFavorite,
+                    }),
+                }
+            );
+
+            if (!insertBookmarkResponse.ok) {
+                console.error(
+                    "Error inserting bookmark into the database:",
+                    insertBookmarkResponse.statusText
+                );
+            } else {
+                // Update the local state only if the insertion was successful
+                setIsFavorite(true);
+                console.log("Recipe Marked as Favorite!");
+            }
+        }
     } catch (error) {
-      console.error("Error updating favorite status:", error.message);
+        console.error("Error updating favorite status:", error.message);
     }
-  };
+};
+
+  
 
   const navigateToReviewPage = () => {
     const recipeName = recipeDetails?.RName;
@@ -107,6 +142,29 @@ const RecipeDetails = () => {
             tips_tricks: data.tips_tricks,
             cookingTime: data.cTime,
           });
+          const checkFavoriteResponse = await fetch(
+            "http://localhost:3001/api/bookmark/isFavorite",
+            {
+              method: "POST",
+              credentials: "include",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                recipeName,
+              }),
+            }
+          );
+  
+          if (checkFavoriteResponse.ok) {
+            const checkFavoriteData = await checkFavoriteResponse.json();
+            setIsFavorite(checkFavoriteData.isFavorite || false);
+          } else {
+            console.error(
+              "Error checking if the recipe is a favorite:",
+              checkFavoriteResponse.statusText
+            );
+          }
         } else {
           console.error("Error fetching recipe details:", data.error);
         }
@@ -114,13 +172,12 @@ const RecipeDetails = () => {
         console.error("Error fetching recipe details:", error.message);
       }
     };
-
+  
     if (recipeName) {
       fetchUserType(); // Fetch user type first
       fetchRecipeDetails(); // Then fetch recipe details
     }
   }, []);
-
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       {/* Navbar */}
@@ -133,7 +190,7 @@ const RecipeDetails = () => {
           <button onClick={toggleFavorite}>
             {userRole === "user" && // Only show bookmark for "user" role
               (isFavorite ? (
-                <FaBookmark className="text-red-500 text-4xl ml-5" />
+                <FaBookmark className="text-red-500 text-4xl ml-5 hover:blue-950" />
               ) : (
                 <FaRegBookmark className="text-4xl ml-5" />
               ))}

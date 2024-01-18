@@ -5,6 +5,7 @@ const profileRoutes = require('./routes/profileRoutes');
 const newsfeedRoutes = require('./routes/NewsfeedRoutes'); 
 const userRoutes = require('./routes/userRoutes');
 const recipeRoutes = require('./routes/recipeRoutes');
+const bookMarkRoutes = require('./routes/bookMarkRoutes')
 const aboutmeRoutes = require('./routes/aboutmeRoutes');
 const editUserRoutes = require('./routes/editUserRoutes')
 const reviewRoutes = require('./routes/reviewRoutes');
@@ -52,6 +53,7 @@ app.use('/api/recipe', recipeRoutes);
 app.use('/api/aboutme', aboutmeRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/edit', editUserRoutes);
+app.use('/api/bookmark', bookMarkRoutes);
 app.use('/api/announce', announcementRoutes);
 app.get('/home', isAuthenticated, (req, res) => {
   res.json({ message: 'Welcome to the home page!' });
