@@ -31,6 +31,8 @@ router.get("/", async (req, res) => {
   }
 });
 
+
+
 router.post("/userType", isAuthenticated, async (req, res) => {
   try {
     const user = await new Promise((resolve, reject) => {
