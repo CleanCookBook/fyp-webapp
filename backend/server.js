@@ -11,6 +11,8 @@ const editUserRoutes = require('./routes/editUserRoutes')
 const reviewRoutes = require('./routes/reviewRoutes');
 const announcementRoutes = require('./routes/announcementRoutes');
 const editRecipeRoutes = require('./routes/editRecipeRoutes');
+const NewsAPI = require('newsapi');
+const newsapi = new NewsAPI('78c0af376dc64ae28cd50b4e3b0ee2c6');
 const isAuthenticated = require('./authMiddleware'); 
 const cors = require("cors");
 const db = require("./db"); // Import the database module
@@ -48,7 +50,6 @@ const upload = multer({ storage: storage });
 
 app.use('/api', authRoutes(isAuthenticated)); 
 app.use('/api/profile', profileRoutes);
-app.use('/api/news', newsfeedRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/recipe', recipeRoutes);
 app.use('/api/aboutme', aboutmeRoutes);
@@ -62,7 +63,25 @@ app.get('/home', isAuthenticated, (req, res) => {
 });
 
 
+app.get('/api/news', async (req, res) => {
+  try {
+    const response = await newsapi.v2.everything({
+      q: 'healthy recipe',
+      pageSize: 20,
+    });
 
+    if (response.status === 'ok') {
+      const articles = response.articles;
+      res.json(articles);
+    } else {
+      console.error('Error fetching news:', response.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  } catch (error) {
+    console.error('Error fetching news data:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 // Handle requests to the root path
 app.get("/", (req, res) => {
   res.send("Hello, this is your server!");
