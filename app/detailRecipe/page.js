@@ -294,12 +294,13 @@ const RecipeDetails = () => {
             </h2>
           </div>
           <NutritionalFact calorie={recipeDetails?.calorie} />
-        </div>
-        <div className="fixed bottom-0 right-0 mb-8 mr-8">
+          <div className=" w-20 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-auto mt-auto mr-4 mb-4">
       {showEditButton && (
         <button onClick={() => handleEditClick()}>Edit</button>
       )}
     </div>
+        </div>
+      
       </div>
       <Footer />
     </div>
