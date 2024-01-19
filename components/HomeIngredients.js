@@ -1,9 +1,9 @@
 // Ingredients.js
 import React from 'react';
 
-const Ingredients = ({ ingredients }) => {
-  const ingredientsArray = Array.isArray(ingredients) && ingredients.length > 0 ? ingredients[0].split('\n') : [];
-  const midpoint = Math.ceil(ingredientsArray.length / 2);
+const HomeIngredients = ({ ingredients }) => {
+  const totalIngredients = ingredients ? ingredients.length : 0;
+  const half = Math.ceil(totalIngredients / 2);
 
   return (
     <div name="content" className="flex">
@@ -11,7 +11,7 @@ const Ingredients = ({ ingredients }) => {
       <div className="w-1/2 p-4 pl-20">
         {ingredients && (
           <p className="text-[#1D5198]">
-            {ingredientsArray.slice(0, midpoint).map((ingredient, index) => (
+            {ingredients.slice(0, half).map((ingredient, index) => (
               <React.Fragment key={index}>
                 {ingredient.trim()} {/* Trim leading/trailing whitespaces */}
                 <br />
@@ -25,7 +25,7 @@ const Ingredients = ({ ingredients }) => {
       <div className="w-1/2 p-4">
         {ingredients && (
           <p className="text-[#1D5198]">
-            {ingredientsArray.slice(midpoint).map((ingredient, index) => (
+            {ingredients.slice(half).map((ingredient, index) => (
               <React.Fragment key={index}>
                 {ingredient.trim()} {/* Trim leading/trailing whitespaces */}
                 <br />
@@ -38,4 +38,4 @@ const Ingredients = ({ ingredients }) => {
   );
 };
 
-export default Ingredients;
+export default HomeIngredients;

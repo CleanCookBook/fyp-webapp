@@ -2,7 +2,7 @@ import React from 'react';
 
 const NutritionalFact = ({ calorie }) => {
   // Split the calorie string into an array
-  const calorieArray = calorie ? calorie.split('\n') : [];
+  const calorieArray = calorie ? calorie.split(',') : [];
 
   return (
     <React.Fragment>
