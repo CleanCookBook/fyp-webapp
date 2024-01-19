@@ -11,6 +11,12 @@ const Confirmation = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [userType, setUserType] = useState("user");
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const userTypeFromQuery = params.get("userType");
+    setUserType(userTypeFromQuery === "nutritionist" ? "nutritionist" : "user");
+  }, []);
+
   const handleCheckChange = (event) => {
     setIsChecked(event.target.checked);
     if (!event.target.checked) {

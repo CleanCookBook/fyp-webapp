@@ -60,7 +60,7 @@ const BusinessPartnerSignup = () => {
 
       if (response.ok) {
         console.log("Received Files!");
-        router.push('/AccountInfo/createAccount/confirmation');
+        router.push('/AccountInfo/createAccount/confirmation?userType=nutritionist');
       } else {
         try {
           const errorData = await response.json();
