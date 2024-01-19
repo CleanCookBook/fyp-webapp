@@ -2,7 +2,7 @@
 import ChefNote from "@/components/ChefNote";
 import Footer from "@/components/Footer";
 import FunFact from "@/components/FunFact";
-import Ingredients from "@/components/Ingredients";
+import HomeIngredients from "@/components/HomeIngredients";
 import Instructions from "@/components/Instructions";
 import Navbar from "@/components/Navbar";
 import NutritionalFact from "@/components/NutritionalFact";
@@ -17,6 +17,7 @@ const RecipeDetails = () => {
   const router = useRouter();
   const [userRole, setUserRole] = useState("user");
   const [showEditButton, setShowEditButton] = useState(false);
+  
   const handleEditClick = () => {
     const recipeName = recipeDetails?.RName;
     if (recipeName) {
@@ -216,7 +217,7 @@ const RecipeDetails = () => {
               alt={recipeDetails?.RName || "Recipe Image"}
               width={500}
               height={500}
-              className="w-full max-w-screen-xl mx-auto rounded-2xl shadow-2xl shadow-black"
+              className="w-full max-w-screen-xl mx-auto rounded-2xl shadow-2xl shadow-black -ml-10"
             />
           </div>
 
@@ -254,10 +255,14 @@ const RecipeDetails = () => {
       <div className="flex">
         {/* First Column - 1/3 width */}
         <div className="w-2/5 p-4">
-          <div name="title" className="p-4 pl-20">
-            <h2 className="text-3xl text-[#1D5198] font-bold">Ingredients</h2>
+          <div name="HomeIngredients">
+            <div name="title" className="p-4 pl-20">
+              <h2 className="text-3xl text-[#1D5198] font-bold">Ingredients</h2>
+            </div>
+            <HomeIngredients ingredients={recipeDetails?.ingredients} />
           </div>
-          <Ingredients ingredients={recipeDetails?.ingredients} />
+          
+          
 
           <div className="border-t border-gray-500 my-4 pl-20"></div>
           <div name="Instruction">
@@ -294,11 +299,11 @@ const RecipeDetails = () => {
             </h2>
           </div>
           <NutritionalFact calorie={recipeDetails?.calorie} />
-          <div className=" w-20 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-auto mt-auto mr-4 mb-4">
-      {showEditButton && (
-        <button onClick={() => handleEditClick()}>Edit</button>
-      )}
-    </div>
+          <div className="w-28 bg-blue-900 hover:bg-[#1c57b1] text-xl text-white font-bold py-2 px-9 rounded ml-auto mt-10 mr-4 mb-4">
+            {showEditButton && (
+              <button onClick={() => handleEditClick()}>Edit</button>
+            )}
+          </div>
         </div>
       
       </div>
