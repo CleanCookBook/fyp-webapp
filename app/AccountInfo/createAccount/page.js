@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
 
 const createAccount = () => {
   const userRole = 'system admin';  
@@ -16,6 +17,7 @@ const createAccount = () => {
   const [gender, setGender] = useState("");
   const [dob, setDOB] = useState("");
   const [userType, setUserType] = useState("");
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [isUsernameTaken, setIsUsernameTaken] = useState(false);
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
@@ -250,16 +252,27 @@ const createAccount = () => {
               </div>
               <div className="w-[896px] h-10 pl-2.5 py-2.5 bg-white rounded-[10px] justify-start items-start gap-2.5 inline-flex">
                 <input
-                  type="password"
+                  type={isPasswordHidden ? "password" : "text"}
                   placeholder="Enter User's Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="text-neutral-400 text-medium font-medium border-none outline-none w-full"
                 />
+                <button
+                  onClick={() => setIsPasswordHidden(!isPasswordHidden)}
+                  className="flex items-center cursor-pointer mr-1.5 mt-0.5"
+                >
+                  <Image
+                    src={isPasswordHidden ? "/hide.png" : "/show.png"}
+                    alt="Toggle password visibility"
+                    width={20}
+                    height={20}
+                  />
+                </button>
               </div>
               {!isPasswordValid && (
-                <p className="text-red-500 font-bold text-medium ml-2.5 mt-1">
+                <p className="text-red-500 font-bold text-medium ml-2.5 mt-1 w-full">
                   Password must contain at least 6 characters, 1 uppercase letter, and 1 symbol.
                 </p>
               )}
