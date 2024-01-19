@@ -13,6 +13,7 @@ const BusinessPartnerSignup = () => {
   const [experienceFileName, setExperienceFileName] = useState("Choose File");
   const [testimonyFileName, setTestimonyFileName] = useState("Choose File");
   const router = useRouter();
+  
 
   const handleInputChange = (e) => {
     setLinkedinUrl(e.target.value); // Update the state with the input value
@@ -20,10 +21,27 @@ const BusinessPartnerSignup = () => {
 
   const handleFileChange = (e, setState, setFileName) => {
     const file = e.target.files[0];
+  
+    // Check if a file is selected
+    if (!file) {
+      setState(null);
+      setFileName("Choose File");
+      return;
+    }
+  
+    // Check if the file type is PDF
+    if (file.type !== "application/pdf") {
+      alert("Please upload a PDF file.");
+      setState(null);
+      setFileName("Choose File");
+  
+      // Reset the file input value
+      e.target.value = "";
+      return;
+    }
+  
     setState(file); // Update the respective state with the selected file
-
-    // Update the UI to show the selected file name
-    setFileName(file ? file.name : "No file chosen");
+    setFileName(file.name); // Update the UI to show the selected file name
   };
 
   const handleSubmit = async (e) => {
@@ -116,7 +134,7 @@ const BusinessPartnerSignup = () => {
                 <input
                   type="file"
                   id="licenseUpload"
-                  accept="image/*"
+                  accept="application/pdf"
                   className="hidden"
                   onChange={(e) =>
                     handleFileChange(e, setLicenseImage, setLicenseFileName)
