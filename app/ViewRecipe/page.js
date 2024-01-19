@@ -16,17 +16,6 @@ const ViewRecipePage = () => {
     setIsModalOpen(true);
   };
 
-  {
-    /*const [announcements, setAnnouncements] = useState([
-    { id: 1, title: "Announcement 1" },
-    { id: 2, title: "Announcement 2" },
-    { id: 3, title: "Announcement 3" },
-    { id: 4, title: "Announcement 4" },
-    { id: 5, title: "Announcement 5" },
-    { id: 6, title: "Announcement 6" },
-    // Add more announcements here...
-  ]);*/
-  }
 
   const [currentPage, setCurrentPage] = useState(1);
   const [announcementsPerPage] = useState(5);
