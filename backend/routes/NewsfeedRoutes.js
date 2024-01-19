@@ -1,24 +1,26 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db");
+const NewsAPI = require('newsapi');
+const newsapi = new NewsAPI('78c0af376dc64ae28cd50b4e3b0ee2c6');
 
-router.get("/", async (req, res) => {
-  // Fetch all news items from the database
-  const query = 'SELECT title, source, link FROM NewsFeed';
+router.get('/api/news', async (req, res) => {
+  try {
+    const response = await newsapi.v2.everything({
+      q: 'healthy recipe',
+      pageSize: 20,
+    });
 
-  db.all(query, [], (err, newsItems) => {
-    if (err) {
-      console.error('Error fetching news items:', err.message);
-      res.status(500).json({ error: 'Internal Server Error' });
-      return;
-    }
-
-    if (newsItems.length > 0) {
-      res.json(newsItems);
+    if (response.status === 'ok') {
+      const articles = response.articles;
+      res.json(articles);
     } else {
-      res.status(404).json({ error: 'No news items found' });
+      console.error('Error fetching news:', response.message);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
-  });
+  } catch (error) {
+    console.error('Error fetching news data:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 module.exports = router;
