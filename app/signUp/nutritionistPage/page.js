@@ -170,7 +170,7 @@ const BusinessPartnerSignup = () => {
                 <input
                   type="file"
                   id="userPhotoUpload"
-                  accept="image/*"
+                  accept="application/pdf"
                   className="hidden"
                   onChange={(e) =>
                     handleFileChange(e, setUserPhoto, setUserPhotoFileName)
@@ -211,7 +211,7 @@ const BusinessPartnerSignup = () => {
                 <input
                   type="file"
                   id="experienceUpload"
-                  accept=".pdf,.doc,.docx"
+                  accept="application/pdf"
                   className="hidden"
                   onChange={(e) =>
                     handleFileChange(
@@ -252,7 +252,7 @@ const BusinessPartnerSignup = () => {
                 <input
                   type="file"
                   id="testimonyUpload"
-                  accept=".pdf,.doc,.docx"
+                  accept="application/pdf"
                   className="hidden"
                   onChange={(e) =>
                     handleFileChange(e, setTestimonyFile, setTestimonyFileName)
