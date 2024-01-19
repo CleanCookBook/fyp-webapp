@@ -16,72 +16,77 @@ const RecipeDetails = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const router = useRouter();
   const [userRole, setUserRole] = useState("user");
- 
+  const [showEditButton, setShowEditButton] = useState(false);
+  const handleEditClick = () => {
+    const recipeName = recipeDetails?.RName;
+    if (recipeName) {
+      const editFavoriteUrl = `/detailRecipe/favorite/editFavorite?recipeName=${encodeURIComponent(recipeName)}`;
+      router.push(editFavoriteUrl);
+    }
+  };
 
   const toggleFavorite = async () => {
     try {
-        console.log("Toggle Favorite Clicked!");
+      console.log("Toggle Favorite Clicked!");
 
-        if (isFavorite) {
-            // If it's already red, remove from favorites
-            const removeFavoriteResponse = await fetch(
-                "http://localhost:3001/api/bookmark/removeFavorite",
-                {
-                    method: "POST",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        recipeName: recipeDetails?.RName,
-                    }),
-                }
-            );
+      if (isFavorite) {
+        // If it's already red, remove from favorites
+        const removeFavoriteResponse = await fetch(
+          "http://localhost:3001/api/bookmark/removeFavorite",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              recipeName: recipeDetails?.RName,
+            }),
+          }
+        );
 
-            if (removeFavoriteResponse.ok) {
-                // Update the local state only if removal was successful
-                setIsFavorite(false);
-                console.log("Recipe Removed from Favorites!");
-            } else {
-                console.error(
-                    "Error removing recipe from favorites:",
-                    removeFavoriteResponse.statusText
-                );
-            }
+        if (removeFavoriteResponse.ok) {
+          // Update the local state only if removal was successful
+          setIsFavorite(false);
+          console.log("Recipe Removed from Favorites!");
         } else {
-            // If it's not red, insert into favorites (similar to your existing logic)
-            const insertBookmarkResponse = await fetch(
-                "http://localhost:3001/api/bookmark/favorite",
-                {
-                    method: "POST",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        recipeName: recipeDetails?.RName,
-                        isFavorite: !isFavorite,
-                    }),
-                }
-            );
-
-            if (!insertBookmarkResponse.ok) {
-                console.error(
-                    "Error inserting bookmark into the database:",
-                    insertBookmarkResponse.statusText
-                );
-            } else {
-                // Update the local state only if the insertion was successful
-                setIsFavorite(true);
-                console.log("Recipe Marked as Favorite!");
-            }
+          console.error(
+            "Error removing recipe from favorites:",
+            removeFavoriteResponse.statusText
+          );
         }
-    } catch (error) {
-        console.error("Error updating favorite status:", error.message);
-    }
-};
+      } else {
+        // If it's not red, insert into favorites (similar to your existing logic)
+        const insertBookmarkResponse = await fetch(
+          "http://localhost:3001/api/bookmark/favorite",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              recipeName: recipeDetails?.RName,
+              isFavorite: !isFavorite,
+            }),
+          }
+        );
 
-  
+        if (!insertBookmarkResponse.ok) {
+          console.error(
+            "Error inserting bookmark into the database:",
+            insertBookmarkResponse.statusText
+          );
+        } else {
+          // Update the local state only if the insertion was successful
+          setIsFavorite(true);
+          console.log("Recipe Marked as Favorite!");
+        }
+      }
+    } catch (error) {
+      console.error("Error updating favorite status:", error.message);
+    }
+  };
 
   const navigateToReviewPage = () => {
     const recipeName = recipeDetails?.RName;
@@ -155,7 +160,7 @@ const RecipeDetails = () => {
               }),
             }
           );
-  
+
           if (checkFavoriteResponse.ok) {
             const checkFavoriteData = await checkFavoriteResponse.json();
             setIsFavorite(checkFavoriteData.isFavorite || false);
@@ -165,6 +170,12 @@ const RecipeDetails = () => {
               checkFavoriteResponse.statusText
             );
           }
+
+          const referrer = document.referrer;
+          const isFromBookmarkSite = referrer.includes("favorite");
+
+          // Show the "Edit" button if the user is from the bookmark site
+          setShowEditButton(isFromBookmarkSite);
         } else {
           console.error("Error fetching recipe details:", data.error);
         }
@@ -172,7 +183,7 @@ const RecipeDetails = () => {
         console.error("Error fetching recipe details:", error.message);
       }
     };
-  
+
     if (recipeName) {
       fetchUserType(); // Fetch user type first
       fetchRecipeDetails(); // Then fetch recipe details
@@ -284,6 +295,11 @@ const RecipeDetails = () => {
           </div>
           <NutritionalFact calorie={recipeDetails?.calorie} />
         </div>
+        <div className="fixed bottom-0 right-0 mb-8 mr-8">
+      {showEditButton && (
+        <button onClick={() => handleEditClick()}>Edit</button>
+      )}
+    </div>
       </div>
       <Footer />
     </div>
