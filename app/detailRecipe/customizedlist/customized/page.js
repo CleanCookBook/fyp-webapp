@@ -152,17 +152,7 @@ const customized = () => {
           <div name="title" className="p-4 pl-20">
             <h2 className="text-3xl text-[#1D5198] font-bold">Ingredients</h2>
           </div>
-          <div className="w-1/2 p-4 pl-20">
-  {ingredients && ingredients.length > 0 && (
-    <Ingredients ingredients={ingredients.slice(0, half)} />
-  )}
-</div>
-
-<div className="w-1/2 p-4">
-  {ingredients && ingredients.length > 0 && (
-    <Ingredients ingredients={ingredients.slice(half)} />
-  )}
-</div>
+          <Ingredients ingredients={ingredients} />
 
           <div className="border-t border-gray-500 my-4 pl-20"></div>
           <div name="Instruction">

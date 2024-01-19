@@ -1,7 +1,7 @@
 "use client";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const editFavorite = () => {
@@ -9,8 +9,9 @@ const editFavorite = () => {
     const userRole = 'bp'; 
     const [recipeInstruction, setRecipeInstruction] = useState("");
     const [recipeIngredients, setRecipeIngredients] = useState("");
+    const searchParams = useSearchParams();
     const recipeName = searchParams.get("recipeName");
-  
+
     const fetchRecipeDetails = async (recipeName) => {
       try {
         const response = await fetch(
