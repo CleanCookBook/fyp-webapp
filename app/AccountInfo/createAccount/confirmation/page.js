@@ -95,7 +95,7 @@ return (
           <img
             src="/chef.gif"  // Replace with the correct path to your GIF file
             alt="Your alt text"
-            className="flex justify-center items-center ml-50"
+            className="flex justify-center items-center ml-50 -mt-4"
           />
           <input
             type="checkbox"
