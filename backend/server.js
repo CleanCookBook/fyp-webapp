@@ -83,8 +83,9 @@ app.get("/api/filter", async (req, res) => {
     }
 
     if (allergy_tags && allergy_tags.length > 0) {
-      conditions.push(`allergy_tags IN (${allergy_tags.map(() => '?').join(', ')})`);
-      params.push(...allergy_tags);
+      // Use AND to check that all allergies are present in the array
+      conditions.push(`(${allergy_tags.map(() => 'allergy_tags LIKE ?').join(' AND ')})`);
+      params.push(...allergy_tags.map(tag => `%${tag}%`));
     }
 
     if (cTime) {
@@ -93,8 +94,12 @@ app.get("/api/filter", async (req, res) => {
     }
 
     if (calorie) {
-      conditions.push('(calorie IS NULL OR calorie <= ?)');
-      params.push(calorie);
+      // Extracting numeric value from the 'calories' string
+      const targetCalories = parseInt(calorie);
+
+      // Using LIKE to match the numeric value in the 'calorie' column
+      conditions.push('(calorie LIKE ? OR calorie IS NULL)');
+      params.push(`%${targetCalories} kcal%`);
     }
 
     const conditionsString = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
@@ -104,7 +109,7 @@ app.get("/api/filter", async (req, res) => {
     console.log("Executing SQL query:", sql);
     console.log("Query parameters:", params);
 
-    db.get(sql, params, (err, row) => {
+    db.all(sql, params, (err, rows) => {
       if (err) {
         console.error('Database query error:', err.message);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -112,14 +117,15 @@ app.get("/api/filter", async (req, res) => {
       }
 
       // Assuming you want to send the result back to the client
-      res.json({ result: row });
-      console.log(row); // Log the result to the console
+      res.json({ result: rows });
+      console.log(rows); // Log the result to the console
     });
   } catch (error) {
     console.error('Error parsing JSON:', error.message);
     res.status(400).json({ error: 'Bad Request' });
   }
 });
+
 
 
 

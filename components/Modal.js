@@ -33,7 +33,7 @@ const Modal = ({ onClose }) => {
       }
   
       const data = await response.json();
-      console.log('Received data:', data); // Log the received dataa
+      console.log('Received data:', data); // Log the received data
   
       setRecipes(data);
     } catch (error) {
