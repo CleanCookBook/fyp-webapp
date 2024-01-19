@@ -29,5 +29,6 @@ jobs:
           echo "Deploying to localhost..."
           # Add your deployment steps here
           # For example, start your local server
-          npm run dev
+          npm run dev &
+          node backend/server &
       
