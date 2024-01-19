@@ -67,143 +67,70 @@ app.get("/", (req, res) => {
 });
 
 app.get('/api/filter', async (req, res) => {
-  // console.log("testing4");
+  console.log("testing");
 
-  // try {
-    // let dp_tags = req.query.dietaryPreferences.split(',');
-    let dp_tags = JSON.parse(req.query.dietaryPreferences);console.log('tes',dp_tags);
-    let allergy_tags = req.query.allergies.split(',');
+  try {
+    let dp_tags = JSON.parse(req.query.dietaryPreferences);
+    let allergy_tags = JSON.parse(req.query.allergies);
     let cTime = req.query.cookingTime;
     let calorie = req.query.calories;
-    let params = "Halal";
 
+    const sql = 'SELECT Rname FROM Recipe_Np WHERE dp_tags IN (?) AND allergy_tags IN (?) AND (cTime = "" OR cTime <= ?) AND (calorie = "" OR calorie <= ?)';
+    const params = [dp_tags, allergy_tags, cTime, calorie];
 
-    console.log("req.query:", req.query);
-    const sql = "SELECT * FROM Recipe_Np WHERE dp_tags LIKE '%"+params+"'";
-  //   // const sql = 'SELECT * FROM Recipe_Np WHERE dp_tags LIKE ? AND allergy_tags LIKE ? AND cTime <= ? AND calorie <= ?';
-  //   // const params = [
-  //   //   `%${dp_tags.join(',')}%`,
-  //   //   `%${allergy_tags.join(',')}%`,
-  //   //   cTime,
-  //   //   calorie
-  //   // ];
-
-  //   console.log("testing3");
     console.log('Executing SQL query:', sql);
-  //   console.log('Query parameters:', params);
+    console.log('Query parameters:', params);
 
-  //   // Function to execute a SQL query and return a promise
-  //   function executeQuery(sql, params) {
-  //     return new Promise((resolve, reject) => {
-  //       db.all(sql, params, (err, results) => {
-  //         if (err) {
-  //           reject(err);
-  //         } else {
-  //           // Extract only the desired columns for each result
-  //           const extractedResults = results.map(result => ({
-  //             Rname: result.Rname,
-  //           }));
-  //           resolve(extractedResults);
-  //         }
-  //       });
-  //     });
-  //   }
+    // console.log('Dietary Preferences:', dp_tags);
+    // console.log('Allergies:', allergy_tags);
+    // console.log('Cooking Time:', cTime);
+    // console.log('Calories:', calorie);
 
-  //   // Function to retrieve all recipes
-  //   async function getRecipes() {
-  //     const sql = 'SELECT * FROM Recipe_Np';
+    const results = await new Promise((resolve, reject) => {
+      db.all(sql, params, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          const extractedResults = results.map(result => ({
+            Rname: result.Rname,
+          }));
+          resolve(extractedResults);
+        }
+      });
+    });
 
-  //     try {
-  //       const results = await executeQuery(sql, []);
+    console.log('Query results:', results);
 
-  //       return results;
-  //     } catch (error) {
-  //       throw new Error('Error fetching recipes: ' + error);
-  //     }
-  //   }
-
-  //   try {
-  //     // Call the getRecipes function to retrieve all recipes
-  //     const recipes = await getRecipes();
-  
-  //     res.json(recipes);
-  //   } catch (error) {
-  //     console.error('Error fetching recipes:', error);
-  //     res.status(500).json({ error: 'Internal Server Error' });
-  //   }
-
-  //   const results = await executeQuery(sql, params);
-
-  //   console.log('Query results:', results);
-
-  //   if (results.length > 0) {
-  //     // Recipes with the specified Rname exist
-  //     res.json(results);
-  //   } else {
-  //     // No recipes found with the specified Rname
-  //     res.json({ error: 'Recipe not found' });
-  //   }
-  // } catch (error) {
-  //   console.error('Error fetching search results:', error);
-  //   res.status(500).json({ error: 'Internal Server Error' });
-  // }
+    if (results.length > 0) {
+      // Recipes with the specified Rname exist
+      res.json(results);
+    } else {
+      // No recipes found with the specified Rname
+      res.json({ error: 'Recipe not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching recipes:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
-// // Create a new recipe
-// app.post('/api/createRecipe', async (req, res) => {
-//   console.log(req.body);
-//   console.log('Received createRecipe request:', req.body);
+// Move the executeQuery function outside the route handling function
+function executeQuery(sql, params) {
+  return new Promise((resolve, reject) => {
+    db.all(sql, params, (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        const extractedResults = results.map(result => ({
+          Rname: result.Rname,
+        }));
+        resolve(extractedResults);
+      }
+    });
+  });
+}
 
-//   try {
-//     const {
-//       recipeName,
-//       imageUrl,
-//       recipeDescription,
-//       cookingTime,
-//       recipeIngredients
-//     } = req.body;
 
-//     // Insert data into the database
-//     const insertQuery = `
-//       INSERT INTO Recipe_Np (Rname, image, description, cTime, ingredients)
-//       VALUES (?, ?, ?, ?, ?)
-//     `;
-
-//     db.run(
-//       insertQuery,
-//       [recipeName, imageUrl, recipeDescription, cookingTime, recipeIngredients],
-//       function (err) {
-//         if (err) {
-//           console.error('Error creating recipe:', err.message);
-//           res.status(500).json({ error: 'Internal Server Error' });
-//         } else {
-//           res.status(201).json({ success: true, message: 'Recipe created successfully.' });
-//         }
-//       }
-//     );
-//   } catch (error) {
-//     console.error('Error creating recipe:', error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
-  
-  // Your filter parameters
-  // let params = [req.query.dietaryPreferences, req.query.allergies, req.query.cookingTime, req.query.calories];
-  // console.log(req.query.dietaryPreferences);
-  // console.log(params.dietaryPreferences);
-
-  // // Your SQL query
-  // let sql = 'SELECT * FROM Recipe_Np WHERE 1=1';
-  // //let sql = `SELECT * FROM Recipe_Np WHERE dp_tags = "Halal"`;
-  // //let sql = `SELECT * FROM Recipe_Np WHERE dp_tags = ? AND allergy_tags = ? AND cTime <= ? AND calorie <= ?`;
-  // console.log(sql);
-  
-  // db.all(sql, params, (err, rows) => {
-  //   if (err) {
-  //     throw err;
-  //   }
-  //   res.json(rows);
-  // });
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
