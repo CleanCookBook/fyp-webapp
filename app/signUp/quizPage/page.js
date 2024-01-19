@@ -109,10 +109,10 @@ const handleDietMethod = (checkboxName) => {
   });
 };
 
-const isKeto = selectedDietMethods.includes("Ketogenic diet");
-const isVegetarian= selectedDietMethods.includes("Vegetarian diet");
+const isKeto = selectedDietMethods.includes("Ketogenic Diet");
+const isVegetarian= selectedDietMethods.includes("Vegetarian Diet");
 const isIntermittent = selectedDietMethods.includes("Intermittent Fasting");
-const isMediterranean = selectedDietMethods.includes("Mediterranean diet");
+const isMediterranean = selectedDietMethods.includes("Mediterranean Diet");
 const isNil4 = selectedDietMethods.includes("Nil");
 
 
@@ -411,7 +411,7 @@ const isNil4 = selectedDietMethods.includes("Nil");
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  onChange={() => handleHealthGoal("Diet Nutrition")}
+                  onChange={() => handleHealthGoal("Improve my diet and nutrition")}
                   checked={isDietNutrition}
                   className="form-checkbox"
                 />
@@ -421,7 +421,7 @@ const isNil4 = selectedDietMethods.includes("Nil");
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  onChange={() => handleHealthGoal("Overall Health")}
+                  onChange={() => handleHealthGoal("Improve my overall health")}
                   checked={isOverallHealth}
                   className="form-checkbox"
                 />
@@ -431,7 +431,7 @@ const isNil4 = selectedDietMethods.includes("Nil");
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  onChange={() => handleHealthGoal("Calorie Needs")}
+                  onChange={() => handleHealthGoal("Adequate Nutrients Within Calorie Needs")}
                   checked={isCalorieNeeds}
                   className="form-checkbox"
                 />
@@ -458,7 +458,7 @@ const isNil4 = selectedDietMethods.includes("Nil");
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  onChange={() => handleDietMethod("Keto")}
+                  onChange={() => handleDietMethod("Ketogenic Diet")}
                   checked={isKeto}
                   className="form-checkbox"
                 />
@@ -468,7 +468,7 @@ const isNil4 = selectedDietMethods.includes("Nil");
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  onChange={() => handleDietMethod("Vegetarian")}
+                  onChange={() => handleDietMethod("Vegetarian Diet")}
                   checked={isVegetarian}
                   className="form-checkbox"
                 />
@@ -482,13 +482,13 @@ const isNil4 = selectedDietMethods.includes("Nil");
                   checked={isIntermittent}
                   className="form-checkbox"
                 />
-                <span className="text-sm">Intermittent fasting</span>
+                <span className="text-sm">Intermittent Fasting</span>
               </label>
 
               <label class="flex items-center space-x-2">
               <input
                   type="checkbox"
-                  onChange={() => handleDietMethod("Mediterranean")}
+                  onChange={() => handleDietMethod("Mediterranean Diet")}
                   checked={isMediterranean}
                   className="form-checkbox"
                 />

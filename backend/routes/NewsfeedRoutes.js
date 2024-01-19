@@ -3,7 +3,7 @@ const router = express.Router();
 const NewsAPI = require('newsapi');
 const newsapi = new NewsAPI('78c0af376dc64ae28cd50b4e3b0ee2c6');
 
-router.get('/api/news', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const response = await newsapi.v2.everything({
       q: 'healthy recipe',
