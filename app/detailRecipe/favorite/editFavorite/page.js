@@ -4,7 +4,6 @@ import Footer from "@/components/Footer";
 import FunFact from "@/components/FunFact";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
-import NutritionalFact from "@/components/NutritionalFact";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
