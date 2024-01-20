@@ -97,6 +97,10 @@ router.post('/createRecipeSecond', (req, res) => {
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
+  const formattedNutritionalFacts = parseAndFormatNutritionalFacts(recipeData.nutritionalFacts);
+  const formattedTips = parseAndFormatTips(recipeData.tips);
+
+
   const values = [
     FirstRecipeData.recipeName,
     recipeData.recipeSteps,      // instruction
@@ -107,15 +111,17 @@ router.post('/createRecipeSecond', (req, res) => {
     FirstRecipeData.recipeDescription,
     "",                          // allergy_tags (empty for now, update based on your needs)
     "",                          // dp_tags (empty for now, update based on your needs)
-    recipeData.tips,             // tips_tricks (empty for now, update based on your needs)
+    formattedTips,             // tips_tricks (empty for now, update based on your needs)
     recipeData.funFacts,         // info (empty for now, update based on your needs)
     FirstRecipeData.cookingTimeValue,
-    recipeData.nutritionalFacts,
+    formattedNutritionalFacts,
     FirstRecipeData.userId,                           // calorie (you need to update this based on your needs)
   ];
 
   console.log("SQL Statement:", sql);
   console.log("Values:", values);
+
+  
 
   db.run(sql, values, function (err) {
     if (err) {
@@ -127,6 +133,37 @@ router.post('/createRecipeSecond', (req, res) => {
     }
   });
 });
+
+const parseAndFormatNutritionalFacts = (inputText) => {
+  const nutritionalFactsArray = inputText.split('\n');
+
+  const formattedNutritionalFactsObj = {};
+
+  nutritionalFactsArray.forEach((fact) => {
+    const match = fact.match(/([^=]+)\s*=\s*([^,]+)/);
+
+    if (match && match.length === 3) {
+      const key = match[1].trim();
+      const value = match[2].trim();
+
+      formattedNutritionalFactsObj[key] = value;
+    }
+  });
+
+  return Object.entries(formattedNutritionalFactsObj)
+    .map(([key, value]) => `${key} = ${value}`)
+    .join(', ');
+};
+
+const parseAndFormatTips = (inputText) => {
+  const tipsArray = inputText.split('\n');
+
+  // Remove leading and trailing whitespaces from each tip and concatenate with '|'
+  const formattedTips = tipsArray.map(tip => tip.trim()).join(' | ');
+
+  return formattedTips;
+};
+
 
   
 
