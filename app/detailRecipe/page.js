@@ -17,6 +17,7 @@ const RecipeDetails = () => {
   const router = useRouter();
   const [userRole, setUserRole] = useState("user");
   const [showEditButton, setShowEditButton] = useState(false);
+  const [notification, setNotification] = useState(null);
   
   const handleEditClick = () => {
     const recipeName = recipeDetails?.RName;
@@ -25,6 +26,16 @@ const RecipeDetails = () => {
       router.push(editFavoriteUrl);
     }
   };
+
+  const showNotification = (message) => {
+    setNotification(message);
+
+    // Automatically hide the notification after a certain duration (e.g., 3 seconds)
+    setTimeout(() => {
+      setNotification(null);
+    }, 3000);
+  };
+
 
   const toggleFavorite = async () => {
     try {
@@ -50,6 +61,7 @@ const RecipeDetails = () => {
           // Update the local state only if removal was successful
           setIsFavorite(false);
           console.log("Recipe Removed from Favorites!");
+          showNotification("Removed from your Bookmarks");
         } else {
           console.error(
             "Error removing recipe from favorites:",
@@ -82,6 +94,7 @@ const RecipeDetails = () => {
           // Update the local state only if the insertion was successful
           setIsFavorite(true);
           console.log("Recipe Marked as Favorite!");
+          showNotification("Added to your Bookmarks");
         }
       }
     } catch (error) {
@@ -199,7 +212,7 @@ const RecipeDetails = () => {
       <div className="p-4 pl-20 bg-[#F9D548]">
         <div className="text-6xl font-extrabold text-blue-950">
           {recipeDetails?.RName}
-          <button onClick={toggleFavorite}>
+          <button onClick={() => {toggleFavorite()}}>
             {userRole === "user" && // Only show bookmark for "user" role
               (isFavorite ? (
                 <FaBookmark className="text-red-500 text-4xl ml-5 hover:blue-950" />
@@ -305,7 +318,15 @@ const RecipeDetails = () => {
             )}
           </div>
         </div>
-      
+
+        {/* Notification */}
+        {notification && (
+        <div className="fixed bottom-10 left-0 right-0 flex items-center justify-center">
+          <div className="bg-blue-900 text-white font-bold h-10 px-4 py-2 rounded">
+            {notification}
+          </div>
+        </div>
+        )}
       </div>
       <Footer />
     </div>
