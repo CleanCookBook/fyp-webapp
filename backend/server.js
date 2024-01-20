@@ -83,8 +83,9 @@ app.get("/api/filter", async (req, res) => {
     }
 
     if (allergy_tags && allergy_tags.length > 0) {
-      conditions.push(`allergy_tags IN (${allergy_tags.map(() => '?').join(', ')})`);
-      params.push(...allergy_tags);
+      const allergyConditions = allergy_tags.map(() => 'allergy_tags LIKE ?').join(' OR ');
+      conditions.push(`(${allergyConditions} OR allergy_tags IS NULL)`);
+      params.push(...allergy_tags.map(allergy => `%${allergy}%`));
     }
 
     if (cTime) {
@@ -93,8 +94,12 @@ app.get("/api/filter", async (req, res) => {
     }
 
     if (calorie) {
-      conditions.push('(calorie IS NULL OR calorie <= ?)');
-      params.push(calorie);
+      // Extracting numeric value from the 'calories' string
+      const targetCalories = parseInt(calorie);
+
+      // Using LIKE to match the numeric value in the 'calories' column
+      conditions.push('(calorie LIKE ? OR calorie IS NULL)');
+      params.push(`%${targetCalories} kcal%`);
     }
 
     const conditionsString = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
