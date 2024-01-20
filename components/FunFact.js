@@ -1,4 +1,3 @@
-
 const FunFact = ({ facts }) => {
   // Ensure that facts is an array
   const factsArray = facts || [];

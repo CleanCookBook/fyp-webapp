@@ -13,11 +13,11 @@ const CreateRecipesecond = () => {
   const [tips, setTips] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const defaultNutritionalFacts = `Calories: 
-Protein: 
-Fat: 
-Carbohydrates: 
-Fiber: `;
+  const defaultNutritionalFacts = `Calories= Kcal
+Protein= 
+Fat= 
+Carbohydrates= 
+Fiber= `;
   const [nutritionalFacts, setNutritionalFacts] = useState(
     defaultNutritionalFacts
   );
