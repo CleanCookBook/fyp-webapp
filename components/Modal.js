@@ -25,7 +25,7 @@ const Modal = ({ onClose }) => {
         calories: calories,
       });
   
-      const url = `http://localhost:3001/api/filter?${params}`;
+      const url = `http://localhost:3001/api/filter/filter?${params}`;
   
       const response = await fetch(url);
       if (!response.ok) {
@@ -33,7 +33,7 @@ const Modal = ({ onClose }) => {
       }
   
       const data = await response.json();
-      console.log('Received data:', data); // Log the received dataa
+      console.log('Received data:', data); // Log the received data
   
       setRecipes(data);
     } catch (error) {

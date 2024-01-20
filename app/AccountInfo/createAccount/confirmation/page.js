@@ -95,7 +95,7 @@ return (
           <img
             src="/chef.gif"  // Replace with the correct path to your GIF file
             alt="Your alt text"
-            className="flex justify-center items-center ml-50"
+            className="flex justify-center items-center ml-50 -mt-4"
           />
           <input
             type="checkbox"
@@ -115,16 +115,15 @@ return (
             <p className="flex flex-col mr-6 -mt-20">*Please check this box if you want to proceed.</p>
           </span>
         </div>
-        
         <div className="flex justify-center items-center mt-3">
-        {isChecked && (
-          <button
-            onClick={userType === "nutritionist" ? createNutritionistAccount : createUserAccount}
-            className="w-[259px] h-[35px] bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] drop-shadow-xl">
-            Create Account {userType === "nutritionist" ? "(N)" : "(U)"}
-          </button>
-        )}
-      </div>
+          {isChecked && (
+            <button
+              onClick={userType === "nutritionist" ? createNutritionistAccount : createUserAccount}
+              className="w-[259px] h-[35px] bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] drop-shadow-xl mt-4">
+              Create Account {userType === "nutritionist" ? "(N)" : "(U)"}
+            </button>
+          )}
+        </div>
 
       </div>
     

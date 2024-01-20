@@ -149,16 +149,16 @@ const customized = () => {
       <div className="flex">
         {/* First Column - 1/3 width */}
         <div className="w-2/5 p-4">
-          <div name="title" className="p-4 pl-20">
-            <h2 className="text-3xl text-[#1D5198] font-bold">Ingredients</h2>
+          <div name="Ingredients">
+            <div name="title" className="p-4 pl-20">
+              <h2 className="text-3xl text-[#1D5198] font-bold">Ingredients</h2>
+            </div>
+            <Ingredients ingredients={ingredients} />
           </div>
-          <Ingredients ingredients={ingredients} />
-
           <div className="border-t border-gray-500 my-4 pl-20"></div>
           <div name="Instruction">
             <div name="header" className="p-4 pl-20">
               <h2 className="text-3xl text-[#1D5198] font-bold">Instruction</h2>
-
               <div className="text-l text-[#1D5198] font-bold mt-4">
                 Cooking time: Around {recipeDetails?.cookingTime} minutes{" "}
               </div>
