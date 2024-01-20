@@ -285,10 +285,9 @@ return (
           <div className="border-t border-gray-500 my-4 pl-20"></div>
             <div name="title" className="p-4 pl-20">
               <h2 className="text-3xl text-[#1D5198] font-bold">
-                Nutritional Facts
+              Nutritional Facts (Not available as it is edited!)
               </h2>
             </div>
-          <NutritionalFact calorie={recipeDetails?.calorie} />
         </div>
 
         <div className="flex justify-end items-end py-6">
