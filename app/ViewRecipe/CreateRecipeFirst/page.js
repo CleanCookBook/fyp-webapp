@@ -297,7 +297,7 @@ const CreateRecipefirst = () => {
                 -
               </button>
               <input
-                type="text"
+                type="number"  // Change the input type to "number"
                 className="text-center text-black text-lg font-medium border-none outline-none w-20 h-10 pl-2.5 py-2.5 bg-white mb-4 mx-2 -ml-1"
                 value={cookingTime.value}
                 onChange={(e) =>
