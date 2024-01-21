@@ -1,11 +1,39 @@
 "use client";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { useEffect, useState } from "react";
 
 const About = () => {
+  const [userRole, setUserRole] = useState("user");
+ 
+  useEffect(() => {
+    const fetchUserType = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3001/api/user/userType",
+          {
+            method: "POST",
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserRole(data.userType || "user"); // Set the userRole based on the response
+        } else {
+          console.error("Error fetching user type:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching user type:", error.message);
+      }
+    };
+
+    // Fetch user type when the component mounts
+    fetchUserType();
+  }, []);
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
-      <Navbar />
+       <Navbar userRole={userRole} />
       {/* Create header and body text */}
       <div className="flex flex-col items-center justify-center flex-grow">
         <div className="text-center max-w-6xl mx-auto px-6">
