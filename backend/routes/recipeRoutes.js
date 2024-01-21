@@ -59,7 +59,7 @@ router.post('/createRecipe', upload.fields([
     const uploadedImage = req.files['recipeImage'][0];
 
     // Access other form fields
-    const { recipeName, recipeDescription, cookingTimeValue, recipeIngredients } = req.body;
+    const { recipeName, recipeDescription, cookingTimeValue, recipeIngredients,selectedDpTags,selectedAllergyTags } = req.body;
 
     // Store the data temporarily
     temporaryRecipeData = {
@@ -67,6 +67,8 @@ router.post('/createRecipe', upload.fields([
       recipeDescription,
       cookingTimeValue,
       recipeIngredients,
+      selectedDpTags,
+      selectedAllergyTags,
       uploadedImage,
       userId,
     };
@@ -100,6 +102,18 @@ router.post('/createRecipeSecond', (req, res) => {
   const formattedNutritionalFacts = parseAndFormatNutritionalFacts(recipeData.nutritionalFacts);
   const formattedTips = parseAndFormatTips(recipeData.tips);
 
+  const formatTags = (tags) => {
+    if (Array.isArray(tags)) {
+      return tags.join(',');
+    } else if (typeof tags === 'string') {
+      // If tags is a string, return it as is
+      return tags;
+    } else {
+      // If tags is neither an array nor a string, return an empty string or handle it as needed
+      return '';
+    }
+  };
+
 
   const values = [
     FirstRecipeData.recipeName,
@@ -109,8 +123,8 @@ router.post('/createRecipeSecond', (req, res) => {
     FirstRecipeData.recipeIngredients,// ingredients
     FirstRecipeData.uploadedImage.buffer,         // image
     FirstRecipeData.recipeDescription,
-    "",                          // allergy_tags (empty for now, update based on your needs)
-    "",                          // dp_tags (empty for now, update based on your needs)
+    formatTags(FirstRecipeData.selectedAllergyTags), // allergy_tags
+    formatTags(FirstRecipeData.selectedDpTags),                          // dp_tags (empty for now, update based on your needs)
     formattedTips,             // tips_tricks (empty for now, update based on your needs)
     recipeData.funFacts,         // info (empty for now, update based on your needs)
     FirstRecipeData.cookingTimeValue,

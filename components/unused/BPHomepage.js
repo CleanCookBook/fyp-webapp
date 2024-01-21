@@ -1,6 +1,5 @@
-import React from "react";
-import BPNavBar from "./BPNavBar";
 import Footer from "./Footer";
+import BPNavBar from "./unused/BPNavBar";
 
 const BPHomepage = () => {
   return (

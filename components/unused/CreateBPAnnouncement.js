@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import BPNavBar from "./BPNavBar";
+import { useState } from "react";
 import Footer from "./Footer";
+import BPNavBar from "./unused/BPNavBar";
 
 const CreateBPAnnouncement = () => {
   const [announcementName, setAnnouncementName] = useState("");

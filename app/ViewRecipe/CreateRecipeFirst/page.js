@@ -6,15 +6,25 @@ import { useState } from "react";
 
 const CreateRecipefirst = () => {
   const router = useRouter();
-  const userRole = 'bp'; 
+  const userRole = "bp";
   const [recipeName, setRecipeName] = useState("");
   const [recipeDescription, setRecipeDescription] = useState("");
   const [recipeIngredients, setRecipeIngredients] = useState("");
   const [cookingTime, setCookingTime] = useState({ value: 0, unit: "minutes" });
   const [selectedImage, setSelectedImage] = useState(null);
   const [adjustingSize, setAdjustingSize] = useState(false);
+  const [selectedDpTags, setSelectedDpTags] = useState([]);
+  const [selectedAllergyTags, setSelectedAllergyTags] = useState([]);
+  const availableDpTags = [
+    "Dairy-free",
+    "Vegan",
+    "Gluten-free",
+    "Halal",
+    "Nil",
+  ];
+  const availableAllergyTags = ["Seafood", "Dairy", "Nuts", "Eggs", "Nil"];
+
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
-  
 
   const handleInputChange = (e) => {
     setRecipeName(e.target.value);
@@ -85,6 +95,21 @@ const CreateRecipefirst = () => {
   const handleIngredientChange = (e) => {
     setRecipeIngredients(e.target.value);
   };
+  const handleDpTagChange = (tag) => {
+    if (selectedDpTags.includes(tag)) {
+      setSelectedDpTags((prevTags) => prevTags.filter((t) => t !== tag));
+    } else {
+      setSelectedDpTags((prevTags) => [...prevTags, tag]);
+    }
+  };
+
+  const handleAllergyTagChange = (tag) => {
+    if (selectedAllergyTags.includes(tag)) {
+      setSelectedAllergyTags((prevTags) => prevTags.filter((t) => t !== tag));
+    } else {
+      setSelectedAllergyTags((prevTags) => [...prevTags, tag]);
+    }
+  };
 
   const handleFileInputChange = (e) => {
     handleFileChange(e);
@@ -100,6 +125,8 @@ const CreateRecipefirst = () => {
       recipeDescription,
       cookingTime: cookingTime.value,
       recipeIngredients,
+      selectedDpTags,
+      selectedAllergyTags,
     };
 
     const formData = new FormData();
@@ -108,7 +135,8 @@ const CreateRecipefirst = () => {
     formData.append("recipeDescription", recipeData.recipeDescription);
     formData.append("cookingTimeValue", recipeData.cookingTime);
     formData.append("recipeIngredients", recipeData.recipeIngredients);
-
+    formData.append("selectedDpTags", selectedDpTags.join(","));
+    formData.append("selectedAllergyTags", selectedAllergyTags.join(","));
     // Check if selectedImage exists before appending
     if (selectedImage) {
       formData.append("recipeImage", selectedImage);
@@ -170,6 +198,21 @@ const CreateRecipefirst = () => {
               placeholder="Enter your Recipe Name"
               required
             />
+            <label className="text-blue-950 text-lg font-medium mb-2 mt-4 self-start">
+              Select Allergy Tags:
+            </label>
+            {availableAllergyTags.map((tag) => (
+              <div key={tag} className="flex items-center mb-2">
+                <input
+                  type="checkbox"
+                  id={`allergyTag-${tag}`}
+                  checked={selectedAllergyTags.includes(tag)}
+                  onChange={() => handleAllergyTagChange(tag)}
+                  className="mr-2"
+                />
+                <label htmlFor={`allergyTag-${tag}`}>{tag}</label>
+              </div>
+            ))}
             <label className="text-blue-950 text-lg font-medium mb-2 mt-4 self-start">
               Enter Recipe Image
               <span className="px-4">:</span>
@@ -254,7 +297,7 @@ const CreateRecipefirst = () => {
                 -
               </button>
               <input
-                type="text"
+                type="number"  // Change the input type to "number"
                 className="text-center text-black text-lg font-medium border-none outline-none w-20 h-10 pl-2.5 py-2.5 bg-white mb-4 mx-2 -ml-1"
                 value={cookingTime.value}
                 onChange={(e) =>
@@ -293,18 +336,31 @@ const CreateRecipefirst = () => {
                 className="w-full h-full text-neutral-400 font-medium border-none outline-none resize-none bg-white rounded-[10px] pl-4 pr-4 py-2"
               />
             </div>
+            <label className="text-blue-950 text-lg font-medium mb-2 mt-4 self-start">
+              Select Dietary Preferance Tags:
+            </label>
+            {availableDpTags.map((tag) => (
+              <div key={tag} className="flex items-center mb-2">
+                <input
+                  type="checkbox"
+                  id={`dpTag-${tag}`}
+                  checked={selectedDpTags.includes(tag)}
+                  onChange={() => handleDpTagChange(tag)}
+                  className="mr-2"
+                />
+                <label htmlFor={`dpTag-${tag}`}>{tag}</label>
+              </div>
+            ))}
           </form>
         </div>
       </div>
-      <div className="w-full mt-auto">
-        <div className="fixed bottom-32 right-16 px-4 py-4">
+      <div className="w-full flex justify-end mt-auto">
           <button
             onClick={handleNext}
-            className="w-[259px] h-10 bg-blue-950 hover:bg-[#154083] text-white font-bold text-lg rounded-[10px] shadow self-end"
+            className="w-28 bg-blue-900 hover:bg-[#1c57b1] text-xl text-white font-bold py-2 px-9 rounded  ml-5  mb-4"
           >
             Next
           </button>
-        </div>
       </div>
       <div className="mt-auto">
         <Footer />
