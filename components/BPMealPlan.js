@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import BPNavBar from "./BPNavBar";
+import { useEffect, useState } from "react";
 import Footer from "./Footer";
+import BPNavBar from "./unused/BPNavBar";
 
 const BPMealPlan = () => {
   const [mealPlans, setMealPlans] = useState([

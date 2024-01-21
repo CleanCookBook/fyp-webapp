@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+
 
 const BusinessPartnerSignup = () => {
   const [linkedinUrl, setLinkedinUrl] = useState(""); // State to hold the LinkedIn URL
@@ -11,10 +12,31 @@ const BusinessPartnerSignup = () => {
     setLinkedinUrl(e.target.value); // Update the state with the input value
   };
 
-  const handleFileChange = (e, setState) => {
+  const handleFileChange = (e, setState, setFileName) => {
     const file = e.target.files[0];
+  
+    // Check if a file is selected
+    if (!file) {
+      setState(null);
+      setFileName("Choose File");
+      return;
+    }
+  
+    // Check if the file type is PDF
+    if (file.type !== "application/pdf") {
+      alert("Please upload a PDF file.");
+      setState(null);
+      setFileName("Choose File");
+  
+      // Reset the file input value
+      e.target.value = "";
+      return;
+    }
+  
     setState(file); // Update the respective state with the selected file
+    setFileName(file.name); // Update the UI to show the selected file name
   };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -67,7 +89,7 @@ const BusinessPartnerSignup = () => {
                 <input
                   type="file"
                   id="licenseUpload"
-                  accept="image/*"
+                  accept="application/pdf"
                   className="hidden"
                   onChange={(e) => handleFileChange(e, setLicenseImage)}
                 />
@@ -99,7 +121,7 @@ const BusinessPartnerSignup = () => {
                 <input
                   type="file"
                   id="userPhotoUpload"
-                  accept="image/*"
+                  accept="application/pdf"
                   className="hidden"
                   onChange={(e) => handleFileChange(e, setUserPhoto)}
                 />
@@ -169,7 +191,7 @@ const BusinessPartnerSignup = () => {
                 <input
                   type="file"
                   id="testimonyUpload"
-                  accept=".pdf,.doc,.docx"
+                  accept="application/pdf"
                   className="hidden"
                   onChange={(e) => handleFileChange(e, setTestimonyFile)}
                 />
