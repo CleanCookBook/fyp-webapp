@@ -4,7 +4,7 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const RecipeList = () => {
   const searchParams = useSearchParams();
@@ -20,16 +20,10 @@ const RecipeList = () => {
 
   const totalPages = Math.ceil(resultsArray.length / recipesPerPage);
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [resultsArray]);
-
-  const goToNextPage = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
-  const goToPrevPage = () => currentPage > 1 && setCurrentPage(currentPage - 1);
-
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
   const currentRecipes = resultsArray.slice(indexOfFirstRecipe, indexOfLastRecipe);
+  
 
   const [sortOrder, setSortOrder] = useState('asc');
 
@@ -44,11 +38,28 @@ const RecipeList = () => {
   );
 
   const displayedRecipes = sortedResultsArray.slice(indexOfFirstRecipe, indexOfLastRecipe);
+  const goToNextPage = () => {
+    setCurrentPage((prevPage) => {
+      const nextPage = prevPage + 1;
+      console.log('Going to next page. New Page:', nextPage);
+      return nextPage;
+    });
+  };
+  
+  const goToPrevPage = () => {
+    setCurrentPage((prevPage) => {
+      console.log('Going to previous page. New Page:', prevPage - 1);
+      return Math.max(prevPage - 1, 1); // Ensure the page doesn't go below 1
+    });
+  };
+  
 
   const toggleSortDropdown = () => {
     const sortDropdown = document.getElementById('sortDropdown');
     sortDropdown.classList.toggle('hidden');
   };
+  
+  
 
   return (
     <section className="flex flex-col h-screen bg-[#F9D548]">
