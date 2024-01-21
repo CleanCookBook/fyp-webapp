@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import FunFact from "@/components/FunFact";
 import HomeIngredients from "@/components/HomeIngredients";
 import Instructions from "@/components/Instructions";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
 import NutritionalFact from "@/components/NutritionalFact";
 import StarRating from "@/components/StarRating";
@@ -18,6 +19,7 @@ const RecipeDetails = () => {
   const [userRole, setUserRole] = useState("user");
   const [showEditButton, setShowEditButton] = useState(false);
   const [notification, setNotification] = useState(null);
+  const [loading, setLoading] = useState(true)
   
   const handleEditClick = () => {
     const recipeName = recipeDetails?.RName;
@@ -39,6 +41,7 @@ const RecipeDetails = () => {
 
   const toggleFavorite = async () => {
     try {
+      setLoading(true); 
       console.log("Toggle Favorite Clicked!");
 
       if (isFavorite) {
@@ -98,6 +101,7 @@ const RecipeDetails = () => {
         }
       }
     } catch (error) {
+      setLoading(false);
       console.error("Error updating favorite status:", error.message);
     }
   };
@@ -128,11 +132,13 @@ const RecipeDetails = () => {
         if (response.ok) {
           const data = await response.json();
           setUserRole(data.userType || "user"); // Set the userRole based on the response
+          
         } else {
           console.error("Error fetching user type:", response.statusText);
         }
       } catch (error) {
         console.error("Error fetching user type:", error.message);
+        
       }
     };
 
@@ -144,6 +150,7 @@ const RecipeDetails = () => {
         const data = await response.json();
 
         if (response.ok) {
+          setLoading(false);
           // Split the ingredients and instructions strings into arrays
           const ingredientsArray = data.ingredients.split("\r\n");
           const instructionArray = data.instruction.split("\r\n");
@@ -194,6 +201,7 @@ const RecipeDetails = () => {
           console.error("Error fetching recipe details:", data.error);
         }
       } catch (error) {
+        setLoading(false);
         console.error("Error fetching recipe details:", error.message);
       }
     };
@@ -203,6 +211,11 @@ const RecipeDetails = () => {
       fetchRecipeDetails(); // Then fetch recipe details
     }
   }, []);
+
+  if (loading) {
+    // Step 2: Display loading indicator while loading
+    return <LoadingSpinner  />;
+  }
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       {/* Navbar */}
