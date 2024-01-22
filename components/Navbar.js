@@ -172,6 +172,11 @@ const Navbar = ({ userRole }) => {
                     Meal Plans
                   </button>
                 </Link>
+                <Link href="/BPAnnouncement">
+                  <button className="px-4 hover:opacity-[0.5]">
+                    Announcement
+                  </button>
+                </Link>
                 <Link href="/Payment">
                   <button className="px-4 hover:opacity-[0.5]">
                     Premium
@@ -220,6 +225,7 @@ const Navbar = ({ userRole }) => {
                         >
                           About Me
                         </a>
+                        
                     <a
                       href="/detailRecipe/favorite"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
