@@ -144,13 +144,13 @@ const RecipeDetails = () => {
 
     const fetchRecipeDetails = async () => {
       try {
+        setLoading(true);
         const response = await fetch(
           `http://localhost:3001/api/recipe/${recipeName}`
         );
         const data = await response.json();
 
-        if (response.ok) {
-          setLoading(false);
+        if (response.ok) {;
           // Split the ingredients and instructions strings into arrays
           const ingredientsArray = data.ingredients.split("\r\n");
           const instructionArray = data.instruction.split("\r\n");
@@ -201,9 +201,11 @@ const RecipeDetails = () => {
           console.error("Error fetching recipe details:", data.error);
         }
       } catch (error) {
-        setLoading(false);
         console.error("Error fetching recipe details:", error.message);
+      } finally {
+        setLoading(false); // Set loading to false regardless of success or error
       }
+
     };
 
     if (recipeName) {
@@ -234,6 +236,8 @@ const RecipeDetails = () => {
               ))}
           </button>
         </div>
+
+        
 
         <div className="flex p-4 pl-20 bg-[#F9D548]">
           {/* Division 1 - 1/3 width */}
