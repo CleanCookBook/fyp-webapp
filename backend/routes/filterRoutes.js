@@ -17,13 +17,14 @@ router.get("/", async (req, res) => {
     const params = [];
 
     if (dp_tags && dp_tags.length > 0) {
-      conditions.push(`dp_tags IN (${dp_tags.map(() => '?').join(', ')})`);
-      params.push(...dp_tags);
+      // Use AND to check that all tags are present in the 'dp_tags' field
+      conditions.push(`(${dp_tags.map(() => 'dp_tags LIKE ?').join(' AND ')})`);
+      params.push(...dp_tags.map(tag => `%${tag}%`));
     }
 
     if (allergy_tags && allergy_tags.length > 0) {
-      // Use AND to check that all allergies are present in the array
-      conditions.push(`(${allergy_tags.map(() => 'allergy_tags LIKE ?').join(' AND ')})`);
+      // Use AND to exclude recipes that contain any of the specified allergies
+      conditions.push(`(${allergy_tags.map(() => 'allergy_tags NOT LIKE ?').join(' AND ')})`);
       params.push(...allergy_tags.map(tag => `%${tag}%`));
     }
 
