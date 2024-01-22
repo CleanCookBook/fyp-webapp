@@ -7,34 +7,24 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const FilteredRecipePage = () => {
-  const searchParams = useSearchParams();
-
-  // Access the query parameters
-  const dietaryPreferences = JSON.parse(decodeURIComponent(searchParams.get('dietaryPreferences')));
-  const allergies = JSON.parse(decodeURIComponent(searchParams.get('allergies')));
-  const cookingTime = decodeURIComponent(searchParams.get('cookingTime'));
-  const calories = decodeURIComponent(searchParams.get('calories'));
-  const recipesParam = decodeURIComponent(searchParams.get('recipes'));
-  const recipes = recipesParam ? JSON.parse(recipesParam) : [];
   
   const userRole = 'user';
-  const searchInput = searchParams.get('searchInput');
+  const searchParams = useSearchParams();
+  const recipesParam = searchParams.get('recipes'); // Use 'recipes' instead of 'Rname'
+  const recipesObject = JSON.parse(recipesParam) || {};
+  const resultsArray = recipesObject.result || [];
 
-  const searchResultsParam = searchParams.get('searchResults');
-  const searchResults = searchResultsParam ? JSON.parse(searchResultsParam) : [];
-
-  // Log to check the structure and content of searchResults
-  console.log('searchResults:', searchResults);
+  console.log('resultsArray:', resultsArray);
+     
 
   // Ensure searchResults is an array
-  const resultsArray = Array.isArray(searchResults) ? searchResults : [searchResults];
+  //const resultsArray = Array.isArray(searchResults) ? searchResults : [searchResults];
 
   console.log('resultsArray:', resultsArray);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const recipesPerPage = 5; // Number of recipes per page
-
-  const totalPages = Math.ceil(resultsArray.length / recipesPerPage);
+const recipesPerPage = 5; // Number of recipes per page
+const totalPages = Math.ceil(resultsArray.length / recipesPerPage);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -82,9 +72,6 @@ const FilteredRecipePage = () => {
     <section className="flex flex-col h-screen bg-[#F9D548]">
       <Navbar userRole={userRole} />
       <div className="flex flex-col justify-start items-center h-full mt-20">
-        <h1 className="pt-10 text-7xl text-[#0A2A67] font-black max-w-[58.5%] w-full">
-          {searchInput}
-        </h1>
         <div className="flex items-end -mt-14 justify-end">
           <div className="relative left-[32.3rem] top-[0.5rem]">
             <button

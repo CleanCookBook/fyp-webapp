@@ -1,35 +1,16 @@
-import React, { useState } from 'react';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 // Modal.js
 const Modal = ({ onClose }) => {
-  const router = useRouter();
+
   const [dietaryPreferences, setDietaryPreferences] = useState([]);
   const [allergies, setAllergies] = useState([]);
   const [cookingTime, setCookingTime] = useState('');
   const [calories, setCalories] = useState('');
   const [recipes, setRecipes] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
+  const router = useRouter();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = await filterData(dietaryPreferences, allergies, cookingTime, calories);
-    setRecipes(data);
-
-    // Build the query parameters
-    const queryParams = {
-      dietaryPreferences: encodeURIComponent(JSON.stringify(dietaryPreferences)),
-      allergies: encodeURIComponent(JSON.stringify(allergies)),
-      cookingTime: encodeURIComponent(cookingTime),
-      calories: encodeURIComponent(calories),
-      recipes: encodeURIComponent(JSON.stringify(data)),
-    };
-    const queryString = new URLSearchParams(queryParams).toString();
-    router.push(`/recipelist/recipeFilterlist?${queryString}`);
-    console.log("Submit clicked");
-  };
 
   const filterData = async () => {
     try {
@@ -40,31 +21,26 @@ const Modal = ({ onClose }) => {
         calories: calories,
       });
   
-      const url = `http://localhost:3001/api/filter/filter?${params}`;
+      const url = `http://localhost:3001/api/filter?${params}`;
   
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error('Error fetching recipe details');
+        throw new Error(`Error fetching recipe details. HTTP status: ${response.status}`);
       }
   
       const data = await response.json();
       console.log('Received data:', data); // Log the received data
   
-      return (data);
+      setRecipes(data);
+  
+      const dataQueryString = `recipes=${encodeURIComponent(JSON.stringify(data))}`;
+
+  
+      router.push(`/recipelist/recipeFilterlist?${dataQueryString}`);
     } catch (error) {
-      console.error('Error fetching recipe details:', error.message);
+      console.error('Error in filterData:', error);
     }
   };
-
-    //   if (!response.ok) {
-    //     console.error("Error fetching recipe details:", await response.text());
-    //   } else {
-    //     const data = await response.json();
-    //     return data;
-    //   }
-    // } catch (error) {
-    //   console.error("Error fetching recipe details:", error.message);
-    // }
 
   const handleCheckboxChange = (setter) => (e) => {
     // alert(e.target.value);
@@ -96,41 +72,11 @@ const Modal = ({ onClose }) => {
     // Add any additional logic as needed
     console.log("Clear clicked");
   };
-
-  const handleSearch = async () => {
-    setNoResults(false);
-    setEmptyQuery(false);
-    if (!isAuthenticated) {
-      // Redirect to the login page if not authenticated
-      router.push('/loginPage');
-      // No need to return anything here
-    }
-    if (searchQuery.trim() === '') {
-      // Display a message for the user to type something
-      setEmptyQuery(true);
-      return;
-    }
-
-
-    // Fetch data from the API endpoint
-    const encodedQuery = encodeURIComponent(searchQuery);
-    const response = await fetch(`http://localhost:3001/api/recipe/search?query=${encodedQuery}`);
-    const data = await response.json();
-  
-    console.log('API Response:', data); // Add this line
-  
-    // Update state with search results
-    setSearchResults(data);
-  
-    // Check for empty results (empty array or empty object)
-    if (!Array.isArray(data) || data.length === 0) {
-      setNoResults(true);
-    } else {
-      // Recipe found, navigate to RecipeList page
-      const queryString = new URLSearchParams({ searchInput: searchQuery,searchResults: JSON.stringify(data)});
-      const newPathname = '/recipelist?' + queryString;
-      router.push(newPathname);// Change '/recipelist' to your actual RecipeList page path
-    }
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = await filterData(dietaryPreferences, allergies, cookingTime, calories);
+    setRecipes(data);
+    console.log("Submit clicked");
   };
 
   return (
@@ -307,7 +253,6 @@ const Modal = ({ onClose }) => {
             </button>
             <button
               type="submit"
-              onClick={handleSearch}
               className="font-bold bg-blue-900 hover:bg-[#1c57b1] text-white px-4 py-2 rounded"
             >
               Submit
