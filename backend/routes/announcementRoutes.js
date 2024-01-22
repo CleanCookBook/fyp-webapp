@@ -93,4 +93,62 @@ router.get('/user-announcements', isAuthenticated, async (req, res) => {
   }
 });
 
+router.get('/all-announcements', async (req, res) => {
+  try {
+    const announcements = await new Promise((resolve, reject) => {
+      const sql = 'SELECT file_name FROM BPAnnouncement';
+      db.all(sql, (err, rows) => {
+        if (err) {
+          reject(err);
+          console.log("No announcement")
+        } else {
+          resolve(rows);
+          console.log("Retrieved announcement")
+        }
+      });
+    });
+
+    console.log('Fetched all announcements:', announcements);
+
+    res.json(announcements);
+  } catch (error) {
+    console.error('Error fetching announcements:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+router.get("/getAnnouncementFile/:filename", isAuthenticated, async (req, res) => {
+  try {
+
+    const filename = req.params.filename;
+    console.log("Filename:", filename);
+
+    const query = "SELECT announcementFile,UserID FROM BPAnnouncement WHERE file_name = ?";
+
+    db.get(query, [filename], (err, result) => {
+      if (err) {
+        console.log("Error fetching details:", err.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+        return;
+      }
+
+      if (result) {
+        const imageBase64 = result.announcementFile.toString('base64');
+        res.json({
+          announcementFile: `data:image/jpeg;base64,${imageBase64}`,
+        });
+        console.log("Sent the image to frontend");
+      } else {
+        res.status(404).json({ error: 'Announcement file not found' });
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching announcement file:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+
 module.exports = router;
