@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 const Homepage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setIsLoading] = useState(true);
   const [isSearching, setIsSearching] = useState(false);
   const userRole = 'user';  
   const router = useRouter();
@@ -100,9 +100,13 @@ const Homepage = () => {
     // Set the isSearching state to false when search is complete
     setIsSearching(false);
   };
-  if (isLoading) {
-    // Render the LoadingSpinner component while loading
-    return <LoadingSpinner />;
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   // Can click enter key without click the search button
@@ -155,7 +159,6 @@ const Homepage = () => {
               />
             </button>
         </div>
-        {isLoading && <LoadingSpinner />}
         {noResults && <p className="text-red-500 mt-2">No such recipe</p>}
         {emptyQuery && <p className="text-red-500 mt-2">Please type something!</p>}
       </div>

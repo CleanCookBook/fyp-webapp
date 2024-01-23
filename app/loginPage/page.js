@@ -64,8 +64,11 @@ const Login = () => {
   };
 
   if (loading) {
-    // Step 2: Display loading indicator while loading
-    return <LoadingSpinner />;
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   return (
