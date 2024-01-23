@@ -2,6 +2,7 @@
 import Footer from "@/components/Footer";
 import Modal from "@/components/Modal"; // Adjust the path based on your file structure
 import Navbar from "@/components/Navbar";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -9,10 +10,9 @@ import { useEffect, useState } from "react";
 const Homepage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSearching, setIsSearching] = useState(false);
   const userRole = 'user';  
   const router = useRouter();
-
- 
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -74,6 +74,8 @@ const Homepage = () => {
       return;
     }
 
+    // Set the isSearching state to true when starting the search
+    setIsSearching(true);
 
     // Fetch data from the API endpoint
     const encodedQuery = encodeURIComponent(searchQuery);
@@ -94,10 +96,13 @@ const Homepage = () => {
       const newPathname = '/recipelist?' + queryString;
       router.push(newPathname);// Change '/recipelist' to your actual RecipeList page path
     }
+
+    // Set the isSearching state to false when search is complete
+    setIsSearching(false);
   };
   if (isLoading) {
-    // Optional: render a loading spinner or message
-    return <p>Loading...</p>;
+    // Render the LoadingSpinner component while loading
+    return <LoadingSpinner />;
   }
 
   // Can click enter key without click the search button
@@ -150,6 +155,7 @@ const Homepage = () => {
               />
             </button>
         </div>
+        {isLoading && <LoadingSpinner />}
         {noResults && <p className="text-red-500 mt-2">No such recipe</p>}
         {emptyQuery && <p className="text-red-500 mt-2">Please type something!</p>}
       </div>

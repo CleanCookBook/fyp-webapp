@@ -1,6 +1,7 @@
 "use client";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -9,11 +10,14 @@ const BPHomepage = () => {
   const router = useRouter();
   const userRole = 'bp';  
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     // Perform a quick check for authentication
     const checkAuthentication = async () => {
       try {
+        setLoading(true);
+
         const response = await fetch("http://localhost:3001/api/check-auth", {
           method: "GET",
           credentials: "include",
@@ -25,6 +29,8 @@ const BPHomepage = () => {
         }
       } catch (error) {
         console.error('Error during authentication check:', error.message);
+      } finally {
+        setLoading(false); // Set isLoading to false after the request is completed
       }
     };
 
@@ -36,7 +42,10 @@ const BPHomepage = () => {
     return null;
   }
 
-
+  if (loading) {
+    // Step 2: Display loading indicator while loading
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">
