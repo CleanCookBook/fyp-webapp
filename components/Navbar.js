@@ -227,7 +227,7 @@ const Navbar = ({ userRole }) => {
                   {userRole === "system admin" && (
                   <>
                   <a
-                      href="/viewUserFeedback"
+                      href="/CreateUserFeedback"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       Feedback
