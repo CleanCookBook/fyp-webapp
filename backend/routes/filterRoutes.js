@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
 
     if (dp_tags && dp_tags.length > 0) {
       // Use AND to check that all tags are present in the 'dp_tags' field
-      conditions.push(`(${dp_tags.map(() => 'dp_tags LIKE ?').join(' AND ')})`);
+      conditions.push(`(${dp_tags.map(() => 'dp_tags LIKE ?').join(' OR ')})`);
       params.push(...dp_tags.map(tag => `%${tag}%`));
     }
 
