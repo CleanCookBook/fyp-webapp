@@ -1,6 +1,6 @@
 const LoadingSpinner = () => {
   return (
-    <div className="flex items-center justify-center h-screen bg-[#F9D548]">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
       <img 
         src="/loading.gif" 
         alt="Loading" 
@@ -12,7 +12,6 @@ const LoadingSpinner = () => {
           width: '100px', // Adjust the size of the loading spinner
           height: '100px',
           borderRadius: '50%',
-          zIndex: 2, // Set a lower z-index to place it behind other elements
         }}
       />
     </div>
