@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const CreateUserFeedback = () => {
+  const userRole = 'user';
   const router = useRouter();
   const [userId, setUserId] = useState("");
   const [feedbackType, setFeedbackType] = useState("");
@@ -32,7 +33,7 @@ const CreateUserFeedback = () => {
 
       if (response.ok) {
         console.log("Feedback submitted successfully");
-        router.push("/home/SysAdminHome");
+        router.push("/home");
       } else {
         console.error("Error submitting feedback");
       }
@@ -43,7 +44,7 @@ const CreateUserFeedback = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">
-      <Navbar />
+      <Navbar userRole={userRole} />
       <div className="flex-1 flex justify-center mt-20">
         <div className="max-w-xl">
           <h2 className="text-5xl font-black pb-8 text-center">
@@ -86,7 +87,7 @@ const CreateUserFeedback = () => {
                 placeholder="Enter your comments..."
               ></textarea>
             </div>
-            <Link href="/home/SysAdminHome">
+            <Link href="/home">
               <button
                 type="submit"
                 className="w-2/5 bg-blue-950 hover:bg-[#154083] text-white text-lg font-bold rounded-full py-2 px-4 ml-11"
