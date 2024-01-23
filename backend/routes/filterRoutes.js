@@ -38,7 +38,7 @@ router.get("/", async (req, res) => {
       const targetCalories = parseInt(calorie);
 
       // Using LIKE to match the numeric value in the 'calorie' column
-      conditions.push('(calorie LIKE ? OR calorie IS NULL)');
+      conditions.push('(calorie <= ? OR calorie IS NULL)');
       params.push(`%${targetCalories} kcal%`);
     }
 
