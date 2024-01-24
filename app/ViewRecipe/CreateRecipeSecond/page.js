@@ -1,6 +1,7 @@
 "use client";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -12,7 +13,7 @@ const CreateRecipesecond = () => {
   const [funFacts, setFunFacts] = useState("");
   const [tips, setTips] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setIsLoading] = useState(true);
   const defaultNutritionalFacts = `Calories= Kcal
 Protein= 
 Fat= 
@@ -45,10 +46,15 @@ Fiber= `;
 
     checkAuthentication();
   }, [router]);
-  if (isLoading) {
-    // Optional: render a loading spinner or message
-    return <p>Loading...</p>;
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
   }
+
   if (!isAuthenticated) {
     // Redirect to the login page if not authenticated
     router.push("/loginPage");
