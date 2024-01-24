@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 
-router.get("/filter", async (req, res) => {
+router.get("/", async (req, res) => {
   console.log("testing");
 
   try {
@@ -17,13 +17,14 @@ router.get("/filter", async (req, res) => {
     const params = [];
 
     if (dp_tags && dp_tags.length > 0) {
-      conditions.push(`dp_tags IN (${dp_tags.map(() => '?').join(', ')})`);
-      params.push(...dp_tags);
+      // Use AND to check that all tags are present in the 'dp_tags' field
+      conditions.push(`(${dp_tags.map(() => 'dp_tags LIKE ?').join(' OR ')})`);
+      params.push(...dp_tags.map(tag => `%${tag}%`));
     }
 
     if (allergy_tags && allergy_tags.length > 0) {
-      // Use AND to check that all allergies are present in the array
-      conditions.push(`(${allergy_tags.map(() => 'allergy_tags LIKE ?').join(' AND ')})`);
+      // Use AND to exclude recipes that contain any of the specified allergies
+      conditions.push(`(${allergy_tags.map(() => 'allergy_tags NOT LIKE ?').join(' AND ')})`);
       params.push(...allergy_tags.map(tag => `%${tag}%`));
     }
 
@@ -35,10 +36,10 @@ router.get("/filter", async (req, res) => {
     if (calorie) {
       // Extracting numeric value from the 'calories' string
       const targetCalories = parseInt(calorie);
-
-      // Using LIKE to match the numeric value in the 'calorie' column
-      conditions.push('(calorie LIKE ? OR calorie IS NULL)');
-      params.push(`%${targetCalories} kcal%`);
+    
+      // Using a comparison operator to filter the 'calorie' column
+      conditions.push('(CAST(SUBSTR(Calorie, INSTR(Calorie, "=") + 1, INSTR(Calorie, "kcal") - INSTR(Calorie, "=") - 1) AS INTEGER) <= ? OR Calorie IS NULL)');
+      params.push(targetCalories);
     }
 
     const conditionsString = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";

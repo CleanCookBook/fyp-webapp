@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { useEffect, useRef, useState } from "react";
 
 const Navbar = ({ userRole }) => {
@@ -10,7 +11,11 @@ const Navbar = ({ userRole }) => {
     // Add more notifications as needed
   ]);
 
+  const [loading, setLoading] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
+
   const handleLogout = async () => {
+    setLoading(true);
     try {
       const response = await fetch("http://localhost:3001/api/logout", {
         method: "GET",
@@ -25,6 +30,8 @@ const Navbar = ({ userRole }) => {
       }
     } catch (error) {
       console.error("Error during logout:", error.message);
+    } finally {
+      setLoading(false); // Set loading back to false when logout operation completes
     }
   };
 
@@ -72,6 +79,12 @@ const Navbar = ({ userRole }) => {
     }
   };
 
+  // Handle link click
+  const handleLinkClick = () => {
+    setLoading(true); // Set loading to true when a link is clicked
+    setShowLoader(true); // Show the loader overlay
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -92,6 +105,15 @@ const Navbar = ({ userRole }) => {
     };
   }, []);
 
+  if (showLoader) {
+    // Display loading spinner overlay
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   return (
     <nav className="flex w-full bg-blue-950 h-[80px] items-center">
       <div className="text-white flex w-1/2 justify-start font-black text-2xl px-10">
@@ -111,7 +133,12 @@ const Navbar = ({ userRole }) => {
         <ul>
           <li className="text-white font-bold flex justify-end">
             <Link href="/aboutUs">
-              <button className="px-4 hover:opacity-[0.5]">About Us</button>
+              <button 
+                className="px-4 hover:opacity-[0.5]"
+                onClick={handleLinkClick}
+              >
+                About Us
+              </button>
             </Link>
             <div
               className="relative inline-block text-left"
@@ -165,20 +192,20 @@ const Navbar = ({ userRole }) => {
             {userRole === "user" && (
               <>
                 <Link href="/NewsFeed">
-                  <button className="px-4 hover:opacity-[0.5]">NewsFeed</button>
+                  <button className="px-4 hover:opacity-[0.5]" onClick={handleLinkClick}>NewsFeed</button>
                 </Link>
                 <Link href="/mpfirst">
-                  <button className="px-4 hover:opacity-[0.5]">
+                  <button className="px-4 hover:opacity-[0.5]" onClick={handleLinkClick}>
                     Meal Plans
                   </button>
                 </Link>
                 <Link href="/BPAnnouncement">
-                  <button className="px-4 hover:opacity-[0.5]">
+                  <button className="px-4 hover:opacity-[0.5]" onClick={handleLinkClick}>
                     Announcement
                   </button>
                 </Link>
                 <Link href="/Payment">
-                  <button className="px-4 hover:opacity-[0.5]">
+                  <button className="px-4 hover:opacity-[0.5]" onClick={handleLinkClick}>
                     Premium
                   </button>
                 </Link>
@@ -200,7 +227,7 @@ const Navbar = ({ userRole }) => {
                   {userRole === "system admin" && (
                   <>
                   <a
-                      href="/viewUserFeedback"
+                      href="/CreateUserFeedback"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       Feedback
@@ -237,6 +264,12 @@ const Navbar = ({ userRole }) => {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       My Customised Recipe
+                    </a>
+                    <a
+                      href="/CreateUserFeedback"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Feedback
                     </a>
                     </>
                     )}

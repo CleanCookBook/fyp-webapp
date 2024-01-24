@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 // Modal.js
 const Modal = ({ onClose }) => {
@@ -8,13 +9,8 @@ const Modal = ({ onClose }) => {
   const [cookingTime, setCookingTime] = useState('');
   const [calories, setCalories] = useState('');
   const [recipes, setRecipes] = useState([]);
+  const router = useRouter();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = await filterData(dietaryPreferences, allergies, cookingTime, calories);
-    setRecipes(data);
-    console.log("Submit clicked");
-  };
 
   const filterData = async () => {
     try {
@@ -25,31 +21,26 @@ const Modal = ({ onClose }) => {
         calories: calories,
       });
   
-      const url = `http://localhost:3001/api/filter/filter?${params}`;
+      const url = `http://localhost:3001/api/filter?${params}`;
   
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error('Error fetching recipe details');
+        throw new Error(`Error fetching recipe details. HTTP status: ${response.status}`);
       }
   
       const data = await response.json();
       console.log('Received data:', data); // Log the received data
   
       setRecipes(data);
+  
+      const dataQueryString = `recipes=${encodeURIComponent(JSON.stringify(data))}`;
+
+  
+      router.push(`/recipelist/recipeFilterlist?${dataQueryString}`);
     } catch (error) {
-      console.error('Error fetching recipe details:', error.message);
+      console.error('Error in filterData:', error);
     }
   };
-
-    //   if (!response.ok) {
-    //     console.error("Error fetching recipe details:", await response.text());
-    //   } else {
-    //     const data = await response.json();
-    //     return data;
-    //   }
-    // } catch (error) {
-    //   console.error("Error fetching recipe details:", error.message);
-    // }
 
   const handleCheckboxChange = (setter) => (e) => {
     // alert(e.target.value);
@@ -80,6 +71,12 @@ const Modal = ({ onClose }) => {
 
     // Add any additional logic as needed
     console.log("Clear clicked");
+  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = await filterData(dietaryPreferences, allergies, cookingTime, calories);
+    setRecipes(data);
+    console.log("Submit clicked");
   };
 
   return (
