@@ -109,7 +109,16 @@ const FilteredRecipePage = () => {
     <section className="flex flex-col h-screen bg-[#F9D548]">
       <Navbar userRole={userRole} />
       <div className="flex flex-col justify-start items-center h-full mt-10">
-      <h1 className="pt-10 text-7xl text-[#0A2A67] font-black max-w-[58.5%] w-full">{title}</h1>
+        <div className="flex items-center mb-4">
+          <Link
+            href="/home"
+            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[39px] -ml-[660px]"
+          >
+            &lt;&nbsp;&nbsp;Back
+          </Link>
+          <h1 className="text-7xl font-extrabold text-[#0A2A67] mb-2 mt-4 ml-[550px]">{title}</h1>
+        </div>
+        
         <div className="flex items-end justify-end">
           <div className="relative right-[30rem] top-[0.5rem]">
             <div className="filter-box">
@@ -153,7 +162,7 @@ const FilteredRecipePage = () => {
         </div>
         <div className="mt-8 w-[70%] bg-white max-w-[1114px]">
           {resultsArray.length === 0 ? (
-            <div className="mt-8 flex flex-col items-center -mt-[20px]">
+            <div className="mt-8 flex flex-col items-center -mt-[30px]">
               <img 
                 src="/noRecipe.png" 
                 alt="Error" 
