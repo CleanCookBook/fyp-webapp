@@ -1,7 +1,7 @@
 "use client";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -69,6 +69,11 @@ const BPHomepage = () => {
             <button className="bg-white hover:bg-gray-200 text-[#0A2A67] font-bold py-8 px-8 rounded-lg text-2xl">
               Chat with Us
             </button>
+            <Link href="/MealPlan">
+            <button className="bg-white hover:bg-gray-200 text-[#0A2A67] font-bold py-8 px-8 rounded-lg text-2xl">
+            Create/View MealPlan
+            </button>
+            </Link>
           </div>
         </div>
       </div>

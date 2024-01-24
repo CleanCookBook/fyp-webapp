@@ -1,8 +1,12 @@
 const express = require("express");
+const http = require("http");  // Add this line
+const socketIO = require("socket.io");  // Add this line 
 const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
+const mealPlanRoutes = require("./routes/mealPlanRoutes");
 const newsfeedRoutes = require("./routes/NewsfeedRoutes");
+const chatRoutes = require("./routes/chatRoutes");
 const userRoutes = require("./routes/userRoutes");
 const recipeRoutes = require("./routes/recipeRoutes");
 const filterRoutes = require("./routes/filterRoutes");
@@ -18,10 +22,17 @@ const cors = require("cors");
 const db = require("./db"); // Import the database module
 const session = require("express-session");
 const multer = require("multer");
+
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 const crypto = require("crypto");
 const secretKey = crypto.randomBytes(32).toString("hex");
+const server = http.createServer(app);
+const io = socketIO(server, {
+  serveClient: true,
+  // Other options...
+});
 
 app.use(
   cors({
@@ -46,6 +57,8 @@ app.use(bodyParser.json());
 // Configure Multer for handling file uploads
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+app.use('/socket.io', express.static('node_modules/socket.io/client-dist'));
+
 
 app.use("/api", authRoutes(isAuthenticated));
 app.use("/api/profile", profileRoutes);
@@ -59,9 +72,19 @@ app.use("/api/feedback", feedbackRoutes);
 app.use("/api/edit", editUserRoutes);
 app.use("/api/bookmark", bookMarkRoutes);
 app.use("/api/editRecipe", editRecipeRoutes);
+app.use("/api/chat", chatRoutes(io));
+app.use("/api/mealPlan", mealPlanRoutes);
+
 app.use("/api/announce", announcementRoutes);
 app.get("/home", isAuthenticated, (req, res) => {
   res.json({ message: "Welcome to the home page!" });
+});
+
+chatRoutes.io = io;
+server.on('upgrade', (request, socket, head) => {
+  wsServer.handleUpgrade(request, socket, head, (socket) => {
+    wsServer.emit('connection', socket, request);
+  });
 });
 
 // Handle requests to the root path

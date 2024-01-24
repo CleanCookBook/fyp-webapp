@@ -1,6 +1,6 @@
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Image from "next/image";
 import Link from "next/link";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import { useEffect, useRef, useState } from "react";
 
 const Navbar = ({ userRole }) => {
@@ -70,7 +70,7 @@ const Navbar = ({ userRole }) => {
     switch (userRole) {
       case 'user':
         return '/home';
-      case 'bp':
+      case 'nutritionist':
         return '/home/BPHomepage'; // Update this to the desired link for 'bp'
       case 'system admin':
         return '/home/SysAdminHome'; // Update this to the desired link for 'sysadmin'
@@ -202,6 +202,11 @@ const Navbar = ({ userRole }) => {
                 <Link href="/BPAnnouncement">
                   <button className="px-4 hover:opacity-[0.5]" onClick={handleLinkClick}>
                     Announcement
+                  </button>
+                </Link>
+                <Link href="/LiveChat">
+                  <button className="px-4 hover:opacity-[0.5]" onClick={handleLinkClick}>
+                    Live Chat
                   </button>
                 </Link>
                 <Link href="/Payment">

@@ -6,7 +6,7 @@ import { useState } from "react";
 
 const CreateBPAnnouncement = () => {
   const router = useRouter();
-  const userRole ="bp";
+  const [userRole, setUserRole] = useState("nutritionist");
   const [userId, setUserId] = useState("");
   const [announcementImageURL, setAnnouncementImageURL] = useState("");
   const [announcementName, setAnnouncementName] = useState("");
