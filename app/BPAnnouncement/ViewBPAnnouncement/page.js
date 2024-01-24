@@ -8,10 +8,35 @@ import { useEffect, useState } from "react";
 const ViewBPAnnouncement = () => {
   const searchParams = useSearchParams(window.location.search);
   const name = searchParams.get("name");
-  const userRole = "BP";
+  const [userRole, setUserRole] = useState("nutritionist");
   const [imageData, setImageData] = useState(null);
 
+  
+
   useEffect(() => {
+    const fetchUserType = async () => {
+        try {
+          const response = await fetch(
+            "http://localhost:3001/api/user/userType",
+            {
+              method: "POST",
+              credentials: "include",
+            }
+          );
+  
+          if (response.ok) {
+            const data = await response.json();
+            setUserRole(data.userType || "user"); // Set the userRole based on the response
+          } else {
+            console.error("Error fetching user type:", response.statusText);
+          }
+        } catch (error) {
+          console.error("Error fetching user type:", error.message);
+        }
+      };
+  
+      // Fetch user type when the component mounts
+      fetchUserType();
     const fetchAnnouncementFile = async () => {
       try {
         const response = await fetch(

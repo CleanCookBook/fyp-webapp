@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
 
     if (dp_tags && dp_tags.length > 0) {
       // Use AND to check that all tags are present in the 'dp_tags' field
-      conditions.push(`(${dp_tags.map(() => 'dp_tags LIKE ?').join(' AND ')})`);
+      conditions.push(`(${dp_tags.map(() => 'dp_tags LIKE ?').join(' OR ')})`);
       params.push(...dp_tags.map(tag => `%${tag}%`));
     }
 
@@ -36,10 +36,10 @@ router.get("/", async (req, res) => {
     if (calorie) {
       // Extracting numeric value from the 'calories' string
       const targetCalories = parseInt(calorie);
-
-      // Using LIKE to match the numeric value in the 'calorie' column
-      conditions.push('(calorie LIKE ? OR calorie IS NULL)');
-      params.push(`%${targetCalories} kcal%`);
+    
+      // Using a comparison operator to filter the 'calorie' column
+      conditions.push('(CAST(SUBSTR(Calorie, INSTR(Calorie, "=") + 1, INSTR(Calorie, "kcal") - INSTR(Calorie, "=") - 1) AS INTEGER) <= ? OR Calorie IS NULL)');
+      params.push(targetCalories);
     }
 
     const conditionsString = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";

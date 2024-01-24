@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -11,9 +12,12 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
     try {
+      setLoading(true);
+
       const response = await fetch("http://localhost:3001/api/login", {
         method: "POST",
         headers: {
@@ -49,7 +53,7 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Error during login:", error.message);
-    }
+    } 
   };
 
   // Can now login by either pressing the Enter key or clicking the login button
@@ -58,6 +62,14 @@ const Login = () => {
       handleLogin();
     }
   };
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-screen justify-center items-center bg-[#F9D548] text-[#0A2A67]">

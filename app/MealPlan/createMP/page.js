@@ -1,14 +1,59 @@
 "use client";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const BPCreateMealPlan = () => {
   const [mealPlanName, setMealPlanName] = useState("");
   const [mealPlanImg, setMealPlanImg] = useState(null);
   const [mealPlanDescription, setMealPlanDescription] = useState("");
+  const [selectedDpTags, setSelectedDpTags] = useState([]);
+  const [selectedAllergyTags, setSelectedAllergyTags] = useState([]);
+  const [recipeOptions, setRecipeOptions] = useState([]);
+  const handleDpTagChange = (tag) => {
+    if (selectedDpTags.includes(tag)) {
+      setSelectedDpTags((prevTags) => prevTags.filter((t) => t !== tag));
+    } else {
+      setSelectedDpTags((prevTags) => [...prevTags, tag]);
+    }
+  };
 
-  const recipeOptions = ["Recipe1", "Recipe2", "Recipe3", "Recipe4", "Recipe5"]; // Replace with actual recipe names
+  const handleAllergyTagChange = (tag) => {
+    if (selectedAllergyTags.includes(tag)) {
+      setSelectedAllergyTags((prevTags) => prevTags.filter((t) => t !== tag));
+    } else {
+      setSelectedAllergyTags((prevTags) => [...prevTags, tag]);
+    }
+  };
+
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      try {
+        // Fetch recipes from the API endpoint
+        const response = await axios.get("http://localhost:3001/api/mealPlan", {
+          withCredentials: true,
+          credentials: "include", // Include credentials for authentication
+        });
+
+        // Update the recipeOptions state with the fetched data
+        setRecipeOptions(response.data.recipeOptions);
+      } catch (error) {
+        console.error("Error fetching recipes:", error);
+        // Handle error appropriately (e.g., show an error message)
+      }
+    };
+
+    // Call the fetchRecipes function when the component mounts
+    fetchRecipes();
+  }, []);// Replace with actual recipe names
+  const availableDpTags = [
+    "Dairy-free",
+    "Vegan",
+    "Gluten-free",
+    "Halal",
+    "Nil",
+  ];
+  const availableAllergyTags = ["Seafood", "Dairy", "Nuts", "Eggs", "Nil"];
 
   const [recipes, setRecipes] = useState({
     Monday: { recipe1: "", recipe2: "", recipe3: "" },
@@ -109,6 +154,37 @@ const BPCreateMealPlan = () => {
             onChange={(e) => setMealPlanDescription(e.target.value)}
             placeholder="Enter Meal Plan Description"
           />
+          <label className="text-blue-950 text-lg font-medium mb-2 mt-4 self-start">
+            Select Dietary Preferance Tags:
+          </label>
+          {availableDpTags.map((tag) => (
+            <div key={tag} className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                id={`dpTag-${tag}`}
+                checked={selectedDpTags.includes(tag)}
+                onChange={() => handleDpTagChange(tag)}
+                className="mr-2"
+              />
+              <label htmlFor={`dpTag-${tag}`}>{tag}</label>
+            </div>
+          ))}
+
+          <label className="text-blue-950 text-lg font-medium mb-2 mt-4 self-start">
+            Select Allergy Tags:
+          </label>
+          {availableAllergyTags.map((tag) => (
+            <div key={tag} className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                id={`allergyTag-${tag}`}
+                checked={selectedAllergyTags.includes(tag)}
+                onChange={() => handleAllergyTagChange(tag)}
+                className="mr-2"
+              />
+              <label htmlFor={`allergyTag-${tag}`}>{tag}</label>
+            </div>
+          ))}
 
           {/* Loop through days and render dropdowns for recipe selection */}
           <div className="grid grid-cols-2 gap-8">

@@ -81,17 +81,16 @@ const AnnouncementsPage = () => {
       <Navbar userRole={userRole}/>
       <div className="container mx-auto p-4 flex-1">
         <div className="flex items-center mb-4">
-        {userRole === "Nutritionist" && (
-          <Link 
-            href="/home/BPHomepage" 
-            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[45px] -ml-36"
-          >
-            &lt;&nbsp;&nbsp;Back
-          </Link>
-        )}
+          {userRole === "nutritionist" && (
+            <Link 
+              href="/home/BPHomepage" 
+              className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[45px] -ml-36"
+            >
+              &lt;&nbsp;&nbsp;Back
+            </Link>
+          )}
           <h1 className="text-5xl font-extrabold text-[#0A2A67] mb-4 mt-10 ml-8">
-          {userRole === "nutritionist" ? "Your Announcements" : "All Announcements"}
-          
+            {userRole === "nutritionist" ? "Your Announcements" : "All Announcements"}
           </h1>
         </div>
         <div className="bg-white rounded-lg p-4 mt-6">
