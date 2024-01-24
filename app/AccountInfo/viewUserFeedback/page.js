@@ -65,14 +65,6 @@ const ViewUserFeedback = () => {
                     <td className="border p-2 text-center">{feedback.Feedback}</td>
                     <td className="border p-2 text-center">{feedback.FeedbackType}</td>
                   </tr>
-                  // <div
-                  //   key={feedback.id}
-                  //   onClick={() => handleUserFeedbackClick(feedback.id)}
-                  //   className="cursor-pointer"
-                  // >
-                  //   <p>{feedback.title}</p>
-                  //   <hr className="my-4" />
-                  // </div>
                 ))}
               </tbody>
             </table>
