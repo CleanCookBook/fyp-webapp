@@ -18,50 +18,18 @@ const FilteredRecipePage = () => {
   console.log('resultsArray:', resultsArray);
      
   // Extract the tags from the URL
-  const tags = searchParams.get('tags');
-  const title = tags ? `Filtered Recipes for Tags: ${tags}` : 'All Recipes';
+  //const recipesParam = searchParams.get('recipes');
+  //const title = recipesParam ? `Filtered Recipes for Tags: ${recipesParam}` : 'All Recipes';
 
-  const handleCheckboxChange = (setter) => (e) => {
-    if (e.target.checked) {
-      setter((prev) => [...prev, e.target.value]);
-    } else {
-      setter((prev) => prev.filter((tag) => tag !== e.target.value));
-    }
-    setSelectedTags((prev) => [...new Set([...prev, e.target.value])]);
-  };
+  // Extract the tags from the URL
+  const filtersParam = searchParams.get('filters');
+  const filtersArray = JSON.parse(filtersParam) || [];
+  const filterTags = filtersArray.map(filter => `'${filter}'`).join(', ');
 
-  const handleRemoveTag = (tag) => {
-    setSelectedFilters((prev) => prev.filter((t) => t !== tag));
-  };
+  const title = filtersParam ? `Filtered Recipes for Tags: { "result": ${JSON.stringify(resultsArray)} }` : 'All Recipes';
+  const queryParams = filtersParam ? `Query parameters: [ ${filterTags} ]` : '';
 
-  // Filter results based on selected tags (replace with your actual filtering logic)
-  const filteredResultsArray = resultsArray.filter((recipe) =>
-    selectedFilters.every((tag) => recipe.tags.includes(tag))
-  );
-
-  const addFilter = (filter) => {
-    setSelectedFilters((prevFilters) => [...prevFilters, filter]);
-
-    // Build the query parameter with the selected filters
-    const filtersQueryParam = selectedFilters.map((filter) => `%${filter}%`).join(',');
-
-    // Update the URL with the selected filters
-    const currentUrl = window.location.href.split('?')[0];
-    window.history.replaceState(null, '', `${currentUrl}?filters=${filtersQueryParam}`);
-  };
-
-  useEffect(() => {
-    // Get the filters from the query parameters and update state
-    const filtersParam = searchParams.get('filters');
-    const filtersArray = filtersParam ? filtersParam.split(',').map((filter) => filter.replace(/%/g, '')) : [];
-    setSelectedFilters(filtersArray);
-  }, [searchParams]);
-
-
-  // Ensure searchResults is an array
-  //const resultsArray = Array.isArray(searchResults) ? searchResults : [searchResults];
-
-  console.log('resultsArray:', resultsArray);
+  console.log('FilteredresultsArray:', queryParams);
 
   const [currentPage, setCurrentPage] = useState(1);
   const recipesPerPage = 5; // Number of recipes per page
@@ -122,14 +90,12 @@ const FilteredRecipePage = () => {
         <div className="flex items-end justify-end">
           <div className="relative right-[30rem] top-[0.5rem]">
             <div className="filter-box">
-            <div className="filter-box">
-              {selectedFilters.map((filter, index) => (
+              {Object.entries(selectedFilters).map(([filterType, filterValue], index) => (
                 <div key={index} className="filter-tag">
-                  {filter} <button onClick={() => removeFilter(filter)}>x</button>
+                  {`${filterType}: ${filterValue}`} 
+                  <button onClick={() => removeFilter(filterType)}>x</button>
                 </div>
-                ))}
-            </div>
-
+              ))}
             </div>
           </div>
           {resultsArray.length > 0 && (
