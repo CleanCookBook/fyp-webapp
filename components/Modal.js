@@ -152,6 +152,8 @@ const Modal = ({ onClose }) => {
                 <option value="20">20 mins</option>
                 <option value="30">30 mins</option>
                 <option value="60">1 hr</option>
+                <option value="120">2 hrs</option>
+                <option value="180">3 hrs</option>
               </select>
               {/* Separator line */}
               <div className="border-b my-2 border-blue-900"></div>

@@ -1,15 +1,20 @@
 "use client";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const BPCreateMealPlan = () => {
   const [mealPlanName, setMealPlanName] = useState("");
-  const [mealPlanImg, setMealPlanImg] = useState(null);
   const [mealPlanDescription, setMealPlanDescription] = useState("");
+  const [adjustingSize, setAdjustingSize] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [selectedDpTags, setSelectedDpTags] = useState([]);
   const [selectedAllergyTags, setSelectedAllergyTags] = useState([]);
   const [recipeOptions, setRecipeOptions] = useState([]);
+  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
+  const router = useRouter();
+
   const handleDpTagChange = (tag) => {
     if (selectedDpTags.includes(tag)) {
       setSelectedDpTags((prevTags) => prevTags.filter((t) => t !== tag));
@@ -29,23 +34,30 @@ const BPCreateMealPlan = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        // Fetch recipes from the API endpoint
-        const response = await axios.get("http://localhost:3001/api/mealPlan", {
-          withCredentials: true,
-          credentials: "include", // Include credentials for authentication
+        // Fetch recipes from the API endpoint using the fetch function
+        const response = await fetch("http://localhost:3001/api/mealPlan", {
+          method: "GET",
+          credentials: "include",
         });
 
-        // Update the recipeOptions state with the fetched data
-        setRecipeOptions(response.data.recipeOptions);
+        if (response.ok) {
+          // If the response is successful, parse the JSON data
+          const data = await response.json();
+          // Update the recipeOptions state with the fetched data
+          setRecipeOptions(data.recipeOptions);
+        } else {
+          console.error("Error fetching recipes:", response.statusText);
+          // Handle error appropriately (e.g., show an error message)
+        }
       } catch (error) {
-        console.error("Error fetching recipes:", error);
+        console.error("Error fetching recipes:", error.message);
         // Handle error appropriately (e.g., show an error message)
       }
     };
 
     // Call the fetchRecipes function when the component mounts
     fetchRecipes();
-  }, []);// Replace with actual recipe names
+  }, []); // Empty ce with actual recipe names
   const availableDpTags = [
     "Dairy-free",
     "Vegan",
@@ -65,13 +77,32 @@ const BPCreateMealPlan = () => {
     Sunday: { recipe1: "", recipe2: "", recipe3: "" },
   });
 
-  const handleInputChange = (e) => {
-    setMealPlanName(e.target.value);
+  const handleFileChange = (e) => {
+    const files = e.target.files;
+    const image = files[0];
+    const imageUrl = URL.createObjectURL(image);
+
+    const img = new Image();
+    img.src = imageUrl;
+    img.onload = () => {
+      setImageSize({ width: img.width, height: img.height });
+    };
+
+    setSelectedImage(image);
+    setAdjustingSize(true);
+  };
+  const handleFileInputChange = (e) => {
+    handleFileChange(e);
   };
 
-  const handleFileChange = (e, setState) => {
-    const file = e.target.files[0];
-    setState(file);
+  const handleChangePicture = () => {
+    setSelectedImage(null);
+    setImageSize({ width: 0, height: 0 });
+    setAdjustingSize(false);
+    const fileInput = document.getElementById("RecipeImgUpload");
+    if (fileInput) {
+      fileInput.click();
+    }
   };
 
   const handleRecipeChange = (day, field, value) => {
@@ -84,12 +115,79 @@ const BPCreateMealPlan = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitted Meal Plan Name:", mealPlanName);
-    console.log("Submitted Meal Plan Image:", mealPlanImg);
-    console.log("Submitted Meal Plan Description:", mealPlanDescription);
-    console.log("Submitted Recipes:", recipes);
+    if (
+      !mealPlanName ||
+      !selectedImage ||
+      !mealPlanDescription ||
+      selectedDpTags.length === 0 ||
+      selectedAllergyTags.length === 0 ||
+      Object.values(recipes).some(
+        (day) =>
+          Object.values(day).some((recipe) => !recipe) // Check if any recipe field is empty
+      )
+    ) {
+      console.error("Please fill in all required fields");
+      alert("Please upload all required files.");
+      // You can also display an error message to the user or highlight the empty fields
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("mealPlanName", mealPlanName);
+      formData.append("mealPlanDescription", mealPlanDescription);
+      formData.append("selectedDpTags", JSON.stringify(selectedDpTags));
+      formData.append(
+        "selectedAllergyTags",
+        JSON.stringify(selectedAllergyTags)
+      );
+      const recipesValues = Object.keys(recipes).flatMap((day) =>
+        Array.from({ length: 3 }, (_, i) => {
+          const recipeNumber = i + 1;
+          return recipes[day][`recipe${recipeNumber}`];
+        })
+      );
+
+      // Separate recipes into Recipe 1s, Recipe 2s, and Recipe 3s arrays
+      const recipeArray1 = recipesValues.filter((_, index) => index % 3 === 0);
+      const recipeArray2 = recipesValues.filter((_, index) => index % 3 === 1);
+      const recipeArray3 = recipesValues.filter((_, index) => index % 3 === 2);
+
+      // Append the three arrays to formData
+      formData.append("recipeArray1", JSON.stringify(recipeArray1));
+      formData.append("recipeArray2", JSON.stringify(recipeArray2));
+      formData.append("recipeArray3", JSON.stringify(recipeArray3));
+      formData.append("MP_Image", selectedImage);
+
+      console.log("Meal Plan Name:", mealPlanName);
+      console.log("Recipe Array 1:", recipeArray1);
+      console.log("Recipe Array 2:", recipeArray2);
+      console.log("Recipe Array 3:", recipeArray3);
+
+      // Make a POST request to the backend API endpoint
+      const response = await fetch(
+        "http://localhost:3001/api/mealPlan/upload",
+        {
+          method: "POST",
+          credentials: "include",
+          body: formData, // No need to set Content-Type explicitly for FormData
+        }
+      );
+
+      if (response.ok) {
+        console.log("Meal plan created successfully!");
+        router.push("/MealPlan")
+        // Handle success (e.g., redirect to another page)
+      } else {
+        console.error("Error creating meal plan:", response.statusText);
+        // Handle error appropriately (e.g., show an error message)
+      }
+    } catch (error) {
+      console.error("Error creating meal plan:", error.message);
+      // Handle error appropriately (e.g., show an error message)
+    }
   };
 
   return (
@@ -111,38 +209,65 @@ const BPCreateMealPlan = () => {
             id="mealPlanName"
             className="text-neutral-400 text-base font-medium border-none outline-none w-1/2 h-12 pl-2.5 py-2.5 bg-white rounded-[10px] mb-4"
             required
-            onChange={handleInputChange}
+            value={mealPlanName} // Add this line to bind the input value to the state
+            onChange={(e) => setMealPlanName(e.target.value)}
             placeholder="Enter Meal Plan Name"
           />
 
           <label className="text-blue-950 text-base font-medium mb-2 self-start">
             Upload Meal Plan Image:
           </label>
-          <div className="flex items-center justify-center w-1/2 h-48 pl-2.5 py-2.5 bg-white rounded-[10px] mb-4">
+          <div className="flex items-center justify-center w-96 h-52 pl-2.5 py-2.5 bg-white rounded-[10px] mb-4">
             {/* Recipe image Upload */}
-            <label htmlFor="mealPlanImgUpload" className="cursor-pointer">
-              <span className="mr-2 text-gray-500">Choose File</span>
-              <input
-                type="file"
-                id="mealPlanImgUpload"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => handleFileChange(e, setMealPlanImg)}
-              />
-            </label>
-            {/* Icon */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-7 w-7 text-gray-500"
-              viewBox="0 0 20 20"
-              fill="currentColor"
+            {!selectedImage && (
+              <>
+                {!adjustingSize && (
+                  <label htmlFor="recipeImage" className="cursor-pointer">
+                    <span className="mr-2 text-gray-500">Choose Image</span>
+                    <input
+                      type="file"
+                      id="recipeImage"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleFileInputChange}
+                    />
+                  </label>
+                )}
+                {/* Icon */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-7 w-7 text-gray-500 -mt-2"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M14 7a2 2 0 00-2-2H8a2 2 0 00-2 2v1H4a2 2 0 00-2 2v7a2 2 0 002 2h12a2 2 0 002-2V10a2 2 0 00-2-2h-2V7zM8 7a1 1 0 011-1h2a1 1 0 011 1v1H8V7zm6 3h-2v1a1 1 0 01-1 1H9a1 1 0 01-1-1v-1H6v5h8v-5zM6 6h8a1 1 0 011 1v1H5V7a1 1 0 011-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </>
+            )}
+            {selectedImage && (
+              <>
+                <img
+                  id="recipeImage"
+                  src={URL.createObjectURL(selectedImage)}
+                  alt="Recipe Image"
+                  className="w-full h-full object-cover -ml-2 rounded-[10px]"
+                />
+                {/* Hide the "Choose File" button and icon */}
+              </>
+            )}
+          </div>
+          <div>
+            {/* Change Picture button */}
+            <button
+              onClick={handleChangePicture}
+              className="flex ml-[400px] -mt-[140px] bg-blue-950 text-white font-bold px-2 py-1 rounded-md"
             >
-              <path
-                fillRule="evenodd"
-                d="M14 7a2 2 0 00-2-2H8a2 2 0 00-2 2v1H4a2 2 0 00-2 2v7a2 2 0 002 2h12a2 2 0 002-2V10a2 2 0 00-2-2h-2V7zM8 7a1 1 0 011-1h2a1 1 0 011 1v1H8V7zm6 3h-2v1a1 1 0 01-1 1H9a1 1 0 01-1-1v-1H6v5h8v-5zM6 6h8a1 1 0 011 1v1H5V7a1 1 0 011-1z"
-                clipRule="evenodd"
-              />
-            </svg>
+              Change Picture
+            </button>
           </div>
 
           <label className="text-blue-950 text-base font-medium mb-2 self-start">
