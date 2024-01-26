@@ -99,7 +99,12 @@ const RecipeList = () => {
           {displayedRecipes.map((recipe, index) => (
             <div key={index} className="flex items-center h-[60px] border-b-2 border-gray-300">
               <Link href={`/detailRecipe?recipeName=${encodeURIComponent(recipe.Rname)}`}>
-                <p className="ml-2 text-black text-xl font-medium">{recipe.Rname}</p>
+                <div className="flex items-center">
+                  <p className="text-black text-xl font-medium ml-2">
+                    {(currentPage - 1) * recipesPerPage + index + 1}.
+                  </p>
+                  <p className="ml-2 text-black text-xl font-medium">{recipe.Rname}</p>
+                </div>
               </Link>
             </div>
           ))}

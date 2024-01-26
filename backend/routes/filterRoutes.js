@@ -29,10 +29,10 @@ router.get("/", async (req, res) => {
     }
 
     if (cTime) {
-      conditions.push('(cTime IS NULL OR cTime <= ?)');
+      conditions.push('(cTime IS NULL OR CAST(cTime AS SIGNED) <= ?)');
       params.push(cTime);
     }
-
+    
     if (calorie) {
       // Extracting numeric value from the 'calories' string
       const targetCalories = parseInt(calorie);
