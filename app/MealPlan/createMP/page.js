@@ -335,9 +335,9 @@ const BPCreateMealPlan = () => {
                           }
                           className="text-neutral-400 text-lg font-medium border-none outline-none w-full h-12 pl-2.5 py-2.5 bg-white rounded-[10px] mb-2"
                         >
-                          {/* <option value="" disabled>
+                          <option value="" disabled>
                             Select Recipe
-                          </option> */}
+                          </option>
                           {recipeOptions.map((recipe) => (
                             <option key={recipe} value={recipe}>
                               {recipe}

@@ -5,24 +5,37 @@ import { useEffect, useState } from "react";
 
 
 const BPMealPlan = () => {
-    const userRole="Bp";
-  const [mealPlans, setMealPlans] = useState([
-    { id: 1, title: "Meal Plan 1" },
-    { id: 2, title: "Meal Plan  2" },
-    { id: 3, title: "Meal Plan  3" },
-    { id: 4, title: "Meal Plan  4" },
-    { id: 5, title: "Meal Plan  5" },
-    { id: 6, title: "Meal Plan  6" },
-  ]);
+    const userRole="nutritionist";
+    const [mealPlans, setMealPlans] = useState([]);
+
 
   const [currentPage, setCurrentPage] = useState(1);
   const [mealPlansPerPage] = useState(5);
 
   useEffect(() => {
-    // Fetch announcements from API or database
-    // Update the announcements state with the fetched data
-    // Example: fetchData()
-  }, []);
+    const fetchMealPlans = async () => {
+      try {
+        // Make a request to your backend API to fetch meal plans based on the logged-in user
+        const response = await fetch("http://localhost:3001/api/mealPlan/name", {
+          method: "GET",
+          credentials: "include", // Include credentials if using cookies for authentication
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setMealPlans(data.mealPlans);
+        } else {
+          console.error("Error fetching meal plans:", response.statusText);
+          // Handle error appropriately
+        }
+      } catch (error) {
+        console.error("Error fetching meal plans:", error.message);
+        // Handle error appropriately
+      }
+    };
+
+    fetchMealPlans();
+  }, []); // Dependency 
 
   const indexOfLastMealPlan = currentPage * mealPlansPerPage;
   const indexOfFirstMealPlan = indexOfLastMealPlan - mealPlansPerPage;
@@ -42,14 +55,14 @@ const BPMealPlan = () => {
           Your Meal Plans
         </h1>
         <div className="bg-white rounded-lg p-4">
-          {currentMealPlans.map((mealPlans) => (
+        {currentMealPlans.map((singleMealPlan,index) => (
             <a
-              key={mealPlans.id}
+              key={index}
               href="#"
-              onClick={() => handelMealPlansClick(mealPlans.id)}
+              onClick={() => handelMealPlansClick(singleMealPlan.ID)}
               className="block cursor-pointer"
             >
-              <p>{mealPlans.title}</p>
+              <p>{singleMealPlan.MPName}</p>
               <hr className="my-4" />
             </a>
           ))}

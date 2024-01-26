@@ -108,5 +108,29 @@ router.post("/upload", isAuthenticated, upload.single("MP_Image"), async (req, r
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+router.get("/name", isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.session.userId;
+
+    const mealPlans = await new Promise((resolve, reject) => {
+      db.all(
+        'SELECT "ID", "MPName" FROM "MealPlan_FP" WHERE "UserID" = ?',
+        [userId],
+        (err, rows) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(rows);
+          }
+        }
+      );
+    });
+
+    res.json({ mealPlans });
+  } catch (error) {
+    console.error("Error fetching meal plans:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 module.exports = router;
