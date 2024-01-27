@@ -2,9 +2,8 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Link from 'next/link';
-import { useEffect, useState } from "react";
-import React from 'react';
 import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
 const mpDescription = () => {
   const userRole = 'user';  
@@ -79,4 +78,3 @@ const mpDescription = () => {
 };
 
 export default mpDescription;
-
