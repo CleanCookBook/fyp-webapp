@@ -1,11 +1,13 @@
 "use client"
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const customizedlist = () => {
   const userRole = "user";
+  const [loading, setIsLoading] = useState(true);
   const [favorites, setFavorites] = useState([]); // Use setFavorites to update the favorites state
   const [currentPage, setCurrentPage] = useState(1);
   const [favoritesPerPage] = useState(5);
@@ -13,6 +15,8 @@ const customizedlist = () => {
 
   const fetchUserInfo = async () => {
     try {
+      setIsLoading(true);
+
       const response = await fetch("http://localhost:3001/api/bookmark/username", {
         method: "GET",
         credentials: "include",
@@ -27,16 +31,20 @@ const customizedlist = () => {
     } catch (error) {
       console.error("Error fetching user information:", error);
       // Handle error as needed
+    } finally {
+      setIsLoading(false); // Set loading to false after the request is completed
     }
   };
 
   // Function to fetch user's favorite recipes
   const fetchUserFavorites = async () => {
     try {
-        const response = await fetch("http://localhost:3001/api/editRecipe/showEdit", {
-          method: "GET",
-          credentials: "include",  // Include credentials (cookies) in the request
-        });
+      setIsLoading(true);
+
+      const response = await fetch("http://localhost:3001/api/editRecipe/showEdit", {
+        method: "GET",
+        credentials: "include",  // Include credentials (cookies) in the request
+      });
   
       if (!response.ok) {
         throw new Error(`Error fetching user favorites: ${response.status}`);
@@ -52,6 +60,8 @@ const customizedlist = () => {
     } catch (error) {
       console.error("Error fetching user favorites:", error);
       // Handle error as needed
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -71,6 +81,14 @@ const indexOfLastFavorite = currentPage * favoritesPerPage;
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const totalPages = Math.ceil(favorites.length / favoritesPerPage);
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
