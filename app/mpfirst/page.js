@@ -41,7 +41,10 @@ const mpfirst = () => {
           {mealPlans.map((mealPlan) => (
             <Link
               key={mealPlan.MPName}
-              href={`/MealPlanDetails/${mealPlan.MPName}`}
+              href={{
+                pathname: '/mpfirst/mpDescription',
+                query: { mealplanName: mealPlan.MPName } // Pass the meal plan name as a query parameter
+              }}
             >
               <div className="relative hover:brightness-75 transition-all">
                 {/* Add meal plan image */}

@@ -4,6 +4,60 @@ const db = require("../db");
 const multer = require("multer");
 const isAuthenticated = require("../authMiddleware");
 
+router.get("/recipe", isAuthenticated, async (req, res) => {
+  try {
+    // Assuming that the user ID is stored in the session
+    const userId = req.session.userId;
+
+    // Fetch recipes based on the user ID using a promise
+    const recipeOptions = await new Promise((resolve, reject) => {
+      db.all(
+        'SELECT "Rname" FROM "Recipe_Np" WHERE "UserID" = ?',
+        [userId],
+        (err, rows) => {
+          if (err) {
+            reject(err);
+          } else {
+            const recipeNames = rows.map((row) => row.Rname);
+            resolve(recipeNames);
+          }
+        }
+      );
+    });
+
+    res.json({ recipeOptions });
+    console.log("Recipe Options:", recipeOptions);
+  } catch (error) {
+    console.error("Error fetching recipes:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/name", isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.session.userId;
+
+    const mealPlans = await new Promise((resolve, reject) => {
+      db.all(
+        'SELECT "ID", "MPName" FROM "MealPlan_FP" WHERE "UserID" = ?',
+        [userId],
+        (err, rows) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(rows);
+          }
+        }
+      );
+    });
+
+    res.json({ mealPlans });
+  } catch (error) {
+    console.error("Error fetching meal plans:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 router.get('/Fp', async (req, res) => {
   try {
     const query = 'SELECT MPName, MP_Image FROM MealPlan_FP';
@@ -35,27 +89,43 @@ router.get('/Fp', async (req, res) => {
 });
 
 
-router.get("/recipe", isAuthenticated, async (req, res) => {
-    try {
-      // Assuming that the user ID is stored in the session
-      const userId = req.session.userId;
-  
-      // Fetch recipes based on the user ID
-      const userRecipes = await db.query(
-        'SELECT "Rname" FROM "Recipe_Np" WHERE "UserID" = $1',
-        [userId]
-      );
-  
-      // Extract recipe names from the result
-      const recipeOptions = userRecipes.rows.map((recipe) => recipe.Rname);
-  
-      res.json({ recipeOptions });
-      console.log("Recipe Options:",recipeOptions)
-    } catch (error) {
-      console.error("Error fetching recipes:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+router.get('/:mealplanName', async (req, res) => {
+  console.log("test");
+  const selectedMealplanName = req.params.mealplanName;
+  const query = 'SELECT MPName, description FROM MealPlan_FP WHERE MPName = ?';
+
+  try {
+    const result = await new Promise((resolve, reject) => {
+      db.get(query, [selectedMealplanName], (err, queryResult) => {
+        if (err) {
+          console.error('Error fetching meal plan details:', err.message);
+          reject(err);
+        } else {
+          console.log('Result:', queryResult);
+          console.log("Meal Plan Name:", selectedMealplanName);
+
+          resolve(queryResult);
+        }
+      });
+    });
+
+    if (result) {
+      return res.json({
+        MPName: result.MPName,
+        description: result.description
+      });
+    } else {
+      return res.status(404).json({ error: 'Meal plan not found' });
     }
-  });
+  } catch (error) {
+    console.error('Unexpected error:', error.message);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
+
 
 const storage = multer.memoryStorage(); // Store image as buffer in memory
 const upload = multer({ storage: storage });
@@ -128,31 +198,6 @@ router.post("/upload", isAuthenticated, upload.single("MP_Image"), async (req, r
     res.status(201).json({ message: "Meal plan created successfully!" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-router.get("/name", isAuthenticated, async (req, res) => {
-  try {
-    const userId = req.session.userId;
-
-    const mealPlans = await new Promise((resolve, reject) => {
-      db.all(
-        'SELECT "ID", "MPName" FROM "MealPlan_FP" WHERE "UserID" = ?',
-        [userId],
-        (err, rows) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(rows);
-          }
-        }
-      );
-    });
-
-    res.json({ mealPlans });
-  } catch (error) {
-    console.error("Error fetching meal plans:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
