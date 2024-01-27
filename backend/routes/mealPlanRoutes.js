@@ -179,8 +179,10 @@ router.get("/name", isAuthenticated, async (req, res) => {
   });
 
   router.get('/:mealplanName', async (req, res) => {
+    console.log("testing1");
     const mealplanName = req.params.mealplanName;
-
+  
+    console.log("testing2");
     const query = 'SELECT * FROM MealPlan_FP WHERE MPname = ?';
   
     db.get(query, [mealplanName], (err, result) => {
@@ -200,7 +202,4 @@ router.get("/name", isAuthenticated, async (req, res) => {
     });
   });
 
-  
-  
-  module.exports = router;
-  
+module.exports = router;
