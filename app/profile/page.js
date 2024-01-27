@@ -2,6 +2,7 @@
 import Footer from "@/components/Footer";
 import Modal from "@/components/Modal";
 import Navbar from "@/components/Navbar";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -19,7 +20,7 @@ const Accountpage = () => {
     LName: "",
     sub: ""
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const openModal = () => {
@@ -75,8 +76,12 @@ const Accountpage = () => {
     fetchProfile();
   }, []);
 
-  if (isLoading) {
-    return <p></p>;
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   // Check if the user is not authenticated, then redirect
