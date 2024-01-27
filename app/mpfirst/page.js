@@ -41,7 +41,7 @@ const mpfirst = () => {
           {mealPlans.map((mealPlan) => (
             <Link
               key={mealPlan.MPName}
-              href={`/MealPlanDetails/${mealPlan.MPName}`}
+              href={`/mpDescription/${mealPlan.MPName}`}
             >
               <div className="relative hover:brightness-75 transition-all">
                 {/* Add meal plan image */}
