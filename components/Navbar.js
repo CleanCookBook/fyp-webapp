@@ -35,6 +35,8 @@ const Navbar = ({ userRole }) => {
     }
   };
 
+  
+
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const notificationDropdownRef = useRef(null);
   const accountDropdownRef = useRef(null);
