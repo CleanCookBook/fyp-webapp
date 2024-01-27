@@ -1,38 +1,61 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
-const fs = require("fs");
 const multer = require("multer");
 const isAuthenticated = require("../authMiddleware");
 
-router.get("/", isAuthenticated, async (req, res) => {
+router.get('/Fp', async (req, res) => {
   try {
-    // Assuming that the user ID is stored in the session
-    const userId = req.session.userId;
+    const query = 'SELECT MPName, MP_Image FROM MealPlan_FP';
 
-    // Fetch recipes based on the user ID using a promise
-    const recipeOptions = await new Promise((resolve, reject) => {
-      db.all(
-        'SELECT "Rname" FROM "Recipe_Np" WHERE "UserID" = ?',
-        [userId],
-        (err, rows) => {
-          if (err) {
-            reject(err);
-          } else {
-            const recipeNames = rows.map((row) => row.Rname);
-            resolve(recipeNames);
-          }
+    const mealPlans = await new Promise((resolve, reject) => {
+      db.all(query, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          // Modify the results to include base64-encoded image data
+          const modifiedResults = results.map((plan) => {
+            const base64Image = plan.MP_Image.toString("base64");
+            return {
+              MPName: plan.MPName,
+              MP_Image: `data:image/jpeg;base64,${base64Image}`,
+            };
+          });
+
+          resolve(modifiedResults);
         }
-      );
+      });
     });
 
-    res.json({ recipeOptions });
-    console.log("Recipe Options:", recipeOptions);
+    res.json({ mealPlans });
   } catch (error) {
-    console.error("Error fetching recipes:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error('Error fetching meal plans:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+router.get("/recipe", isAuthenticated, async (req, res) => {
+    try {
+      // Assuming that the user ID is stored in the session
+      const userId = req.session.userId;
+  
+      // Fetch recipes based on the user ID
+      const userRecipes = await db.query(
+        'SELECT "Rname" FROM "Recipe_Np" WHERE "UserID" = $1',
+        [userId]
+      );
+  
+      // Extract recipe names from the result
+      const recipeOptions = userRecipes.rows.map((recipe) => recipe.Rname);
+  
+      res.json({ recipeOptions });
+      console.log("Recipe Options:",recipeOptions)
+    } catch (error) {
+      console.error("Error fetching recipes:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
 
 const storage = multer.memoryStorage(); // Store image as buffer in memory
 const upload = multer({ storage: storage });
@@ -108,6 +131,7 @@ router.post("/upload", isAuthenticated, upload.single("MP_Image"), async (req, r
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 router.get("/name", isAuthenticated, async (req, res) => {
   try {
     const userId = req.session.userId;
@@ -133,4 +157,50 @@ router.get("/name", isAuthenticated, async (req, res) => {
   }
 });
 
-module.exports = router;
+  router.get('/mealplans', async (req, res) => {
+    try {
+      console.log("testing");
+      const query = 'SELECT MPname FROM MealPlan_FP';
+      db.all(query, (err, results) => {
+        if (err) {
+          console.error('Error fetching meal plans:', err.message);
+          res.status(500).json({ error: 'Internal Server Error', details: err.message });
+          return;
+        }
+        console.log("testing8");
+        const mealPlans = results.map((row) => row.MPname);
+        res.json({ mealPlans });
+      });
+      console.log("testing11");
+    } catch (error) {
+      console.error('Unexpected error:', error.message);
+      res.status(500).json({ error: 'Internal Server Error', details: error.message });
+    }
+  });
+
+  router.get('/:mealplanName', async (req, res) => {
+    const mealplanName = req.params.mealplanName;
+
+    const query = 'SELECT * FROM MealPlan_FP WHERE MPname = ?';
+  
+    db.get(query, [mealplanName], (err, result) => {
+      if (err) {
+        console.error('Error fetching meal plan details:', err.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+        return;
+      }
+  
+      if (result) {
+        res.json({ 
+          description: result.description
+        });
+      } else {
+        res.status(404).json({ error: 'Meal plan not found' });
+      }
+    });
+  });
+
+  
+  
+  module.exports = router;
+  

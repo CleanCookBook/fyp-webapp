@@ -1,9 +1,11 @@
+// Import necessary modules and components
 "use client";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+// Define the functional component
 const mpfirst = () => {
   const userRole = "user";
   const [mealPlans, setMealPlans] = useState([]);
@@ -11,9 +13,7 @@ const mpfirst = () => {
   // Function to fetch meal plan options from the backend
   const fetchMealPlans = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:3001/api/mealPlan/Fp"
-      );
+      const response = await fetch("http://localhost:3001/api/mealPlan/Fp");
       const data = await response.json();
       console.log("Data from the backend:", data);
 
@@ -40,20 +40,21 @@ const mpfirst = () => {
         <div className="grid grid-cols-3 gap-20 place-items-center">
           {mealPlans.map((mealPlan) => (
             <Link
-              key={mealPlan.name}
-              href={`/MealPlanDetails/${mealPlan.name}`}
+              key={mealPlan.MPName}
+              href={`/MealPlanDetails/${mealPlan.MPName}`}
             >
               <div className="relative hover:brightness-75 transition-all">
                 {/* Add meal plan image */}
+                {console.log("Base64 Image Data:", mealPlan.MP_Image)}
                 <img
-                  src={`data:image/jpeg;base64,${mealPlan.image}`}
-                  alt={`${mealPlan.name} diet food`}
+                  src={mealPlan.MP_Image}
+                  alt={`${mealPlan.MPName} diet food`}
                   width={380}
                   height={380}
                   className="object-cover rounded-[20px] shadow-2xl shadow-black filter brightness-75"
                 />
                 <div className="absolute top-0 left-0 right-0 p-4 text-white text-start font-bold text-4xl">
-                  {mealPlan.name.toUpperCase()} {/* Display meal plan name */}
+                  {mealPlan.MPName.toUpperCase()} {/* Display meal plan name */}
                 </div>
               </div>
             </Link>
@@ -68,4 +69,5 @@ const mpfirst = () => {
   );
 };
 
+// Export the component as the default export
 export default mpfirst;
