@@ -1,6 +1,7 @@
 "use client";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -22,7 +23,7 @@ const AboutMe = () => {
     DietMethod: "", // Corrected the variable name
     gender: "", // Add other user data properties
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const openModal = () => {
@@ -159,6 +160,14 @@ const AboutMe = () => {
 };
 
   const { advice, recommendedCalories } = adviceForCalories(userData.BMI, calculateTDEE(userData.Weight, userData.height), userData.gender);
+  
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-full bg-[#F9D548]">
