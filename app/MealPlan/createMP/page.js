@@ -35,7 +35,7 @@ const BPCreateMealPlan = () => {
     const fetchRecipes = async () => {
       try {
         // Fetch recipes from the API endpoint using the fetch function
-        const response = await fetch("http://localhost:3001/api/mealPlan", {
+        const response = await fetch("http://localhost:3001/api/mealPlan/recipe", {
           method: "GET",
           credentials: "include",
         });

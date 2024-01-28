@@ -1,109 +1,73 @@
+// Import necessary modules and components
 "use client";
-import Footer from '@/components/Footer';
-import Navbar from '@/components/Navbar';
-import Link from 'next/link';
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
+// Define the functional component
 const mpfirst = () => {
-    const userRole ='user';
-    return (
-        <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">
-             <Navbar userRole={userRole} />
-            <div className="flex flex-col justify-center items-center mt-20">
-            <div className="grid grid-cols-3 gap-20 place-items-center">
-                <Link href="/NewsFeed">
-                    <div className="relative hover:brightness-75 transition-all">
-                        <img
-                        src="./high protein meal.jpg" 
-                        alt="High protein diet food" 
-                        width ={380}
-                        height={380}
-                        className="object-cover rounded-[20px] shadow-2xl shadow-black filter brightness-75"
-                        />
-                        <div className="absolute top-0 left-0 right-0 p-4 text-white text-start font-bold text-4xl">
-                        HIGH <br /> PROTEIN <br /> DIET
-                        </div>
-                    </div>
-                </Link>
-                
+  const userRole = "user";
+  const [mealPlans, setMealPlans] = useState([]);
 
-                <Link href="/LowCarbsMealPlan1">
-                    <div className="relative hover:brightness-75 transition-all">
-                        <img
-                        src="./low carbs diet.jpg" 
-                        alt="low carbs diet food" 
-                        width={350}
-                        height={350}
-                        className="object-cover rounded-[20px] shadow-2xl shadow-black filter brightness-75"
-                        />
-                        <div className="absolute top-0 left-0 right-0 p-4 text-white text-start font-bold text-4xl">
-                        LOW <br /> CARBS <br /> DIET
-                        </div>
-                    </div>
-                </Link> 
+  // Function to fetch meal plan options from the backend
+  const fetchMealPlans = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/mealPlan/Fp");
+      const data = await response.json();
+      console.log("Data from the backend:", data);
 
-                <Link href="/NewsFeed">
-                    <div className="relative hover:brightness-75 transition-all">
-                        <img
-                        src="./paleo meal.jpg" 
-                        alt="paleo diet food" 
-                        width={350}
-                        height={350}
-                        className="object-cover rounded-[20px] shadow-2xl shadow-black filter brightness-75"
-                        />
-                        <div className="absolute top-0 left-0 right-0 p-4 text-white text-start font-bold text-4xl">
-                        PALEO <br />  Diet
-                        </div>
-                    </div>
-                </Link>
-                <Link href="/NewsFeed">
-                    <div className="relative hover:brightness-75 transition-all">
-                        <img
-                        src="./vegan diet.jpg" 
-                        alt="vegan diet food" 
-                        width ={380}
-                        height={380}
-                        className="object-cover rounded-[20px] shadow-2xl shadow-black filter brightness-75"
-                        />
-                        <div className="absolute top-0 left-0 right-0 p-4 text-white text-start font-bold text-4xl">
-                        VEGAN <br /> DIET
-                        </div>
-                    </div>
-                </Link> 
-                <Link href="/NewsFeed">
-                    <div className="relative hover:brightness-75 transition-all">
-                        <img
-                        src="./atkins diet.jpg" 
-                        alt="atkins diet food" 
-                        width ={360}
-                        height={360}
-                        className="object-cover rounded-[20px] shadow-2xl shadow-black filter brightness-75"
-                        />
-                        <div className="absolute top-0 left-0 right-0 p-4 text-white text-start font-bold text-4xl">
-                        ATKINS <br /> DIET
-                        </div>
-                    </div>
-                </Link> 
-                <Link href="/NewsFeed">
-                    <div className="relative hover:brightness-75 transition-all">
-                        <img
-                        src="./ultra low fat.jpg" 
-                        alt="ultra low fat diet food" 
-                        width ={380}
-                        height={380}
-                        className="object-cover rounded-[20px] shadow-2xl shadow-black filter brightness-75"
-                        />
-                        <div className="absolute top-0 left-0 right-0 p-4 text-white text-start font-bold text-4xl">
-                        ULTRA <br /> LOW FAT <br /> Diet
-                        </div>
-                    </div>
-                </Link> 
-            </div>
-            </div>
-            <div className="mt-auto">
-                <Footer />
-            </div>
+      // Check if data.mealPlans is an array
+      const mealPlansArray = Array.isArray(data.mealPlans)
+        ? data.mealPlans
+        : [];
+
+      setMealPlans(mealPlansArray);
+    } catch (error) {
+      console.error("Error fetching meal plans:", error);
+    }
+  };
+
+  // useEffect to fetch meal plans when the component mounts
+  useEffect(() => {
+    fetchMealPlans();
+  }, []);
+
+  return (
+    <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">
+      <Navbar userRole={userRole} />
+      <div className="flex flex-col justify-center items-center mt-20">
+        <div className="grid grid-cols-3 gap-20 place-items-center">
+          {mealPlans.map((mealPlan) => (
+            <Link
+              key={mealPlan.MPName}
+              href={`/mpfirst/mpDescription/?MealPlanName=${encodeURIComponent(mealPlan.MPName)}`}
+            >
+              <div className="relative hover:brightness-75 transition-all">
+                {/* Add meal plan image */}
+                {console.log("Base64 Image Data:", mealPlan.MP_Image)}
+                <img
+                  src={mealPlan.MP_Image}
+                  alt={`${mealPlan.MPName} diet food`}
+                  width={380}
+                  height={380}
+                  className="object-cover rounded-[20px] shadow-2xl shadow-black filter brightness-75"
+                />
+                <div className="absolute top-0 left-0 right-0 p-4 text-white text-start font-bold text-4xl">
+                  {mealPlan.MPName.toUpperCase()} {/* Display meal plan name */}
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
-        );
-    };
-    
-    export default mpfirst;
+      </div>
+
+      <div className="mt-auto">
+        <Footer />
+      </div>
+    </div>
+  );
+};
+
+// Export the component as the default export
+export default mpfirst;

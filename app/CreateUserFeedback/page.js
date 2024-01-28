@@ -11,6 +11,7 @@ const CreateUserFeedback = () => {
   const [userId, setUserId] = useState("");
   const [feedbackType, setFeedbackType] = useState("");
   const [comments, setComments] = useState("");
+  const [notification, setNotification] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,12 +34,18 @@ const CreateUserFeedback = () => {
 
       if (response.ok) {
         console.log("Feedback submitted successfully");
-        router.push("/home");
+        setNotification("Thank you for submitting your valuable feedback!");
+        setTimeout(() => {
+          setNotification(null);
+          router.push("/home");
+        }, 3000);
       } else {
         console.error("Error submitting feedback");
+        setNotification("Error submitting feedback");
       }
     } catch (error) {
       console.error("Error submitting feedback:", error);
+      setNotification("Error submitting feedback");
     }
   };
 
@@ -103,6 +110,13 @@ const CreateUserFeedback = () => {
               Submit
             </button>
           </form>
+          {notification && (
+            <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center z-50">
+              <div className="bg-blue-900 text-white font-bold h-10 px-4 py-2 rounded">
+                <p>{notification}</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <Footer />

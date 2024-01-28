@@ -99,7 +99,7 @@ const FilteredRecipePage = () => {
             </div>
           </div>
           {resultsArray.length > 0 && (
-            <div className="relative left-[30rem] top-[0.5rem]">
+            <div className="relative left-[30rem] -top-2">
               <button
                 onClick={() => toggleSortDropdown()}
                 className="flex justify-center items-end w-20 p-2 text-xl text-white font-bold hover:opacity-[0.5] rounded-[10px] bg-[#172554] shadow-md"
@@ -126,19 +126,19 @@ const FilteredRecipePage = () => {
             </div>
           )}
         </div>
-        <div className="mt-8 w-[70%] bg-white max-w-[1114px]">
+        <div className="mt-2 w-[70%] max-w-[1114px]">
           {resultsArray.length === 0 ? (
-            <div className="mt-8 flex flex-col items-center -mt-[30px]">
+            <div className="flex flex-col items-center -mt-[0px]">
               <img 
                 src="/noRecipe.png" 
                 alt="Error" 
                 className="w-3/6 h-3/6 -mt-[24px]" 
               /> 
-              <p className="text-center text-6xl font-extrabold text-[#0A2A67] -mt-24 py-4">No recipes found.</p>
+              <p className="text-center text-6xl font-extrabold text-[#0A2A67] -mt-28 py-4">No recipes found.</p>
             </div>
           ) : (
             displayedRecipes.map((recipe, index) => (
-              <div key={index} className="flex items-center h-[60px] border-b-2 border-gray-300">
+              <div key={index} className="flex items-center h-[60px] bg-white border-b-2 border-gray-300">
                 <Link href={`/detailRecipe?recipeName=${encodeURIComponent(recipe.Rname)}`}>
                   <div className="flex items-center">
                     <p className="text-black text-xl font-medium ml-2">
