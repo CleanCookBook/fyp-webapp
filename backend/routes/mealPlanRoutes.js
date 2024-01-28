@@ -247,4 +247,60 @@ router.post("/upload", isAuthenticated, upload.single("MP_Image"), async (req, r
     });
   });
 
+  router.get('/:mealplanName/recipes', async (req, res) => {
+    const mealplanName = req.params.mealplanName;
+  
+    console.log(`Fetching recipes for meal plan: ${mealplanName}`);
+  
+    const query = 'SELECT Recipe1, Recipe2, Recipe3 FROM MealPlan_FP WHERE MPname = ?';
+  
+    try {
+      const result = await new Promise((resolve, reject) => {
+        db.get(query, [mealplanName], (err, queryResult) => {
+          if (err) {
+            console.error('Error fetching meal plan recipes:', err.message);
+            reject(err);
+          } else {
+            console.log('Meal plan recipes fetched successfully');
+            resolve(queryResult);
+          }
+        });
+      });
+  
+      if (result) {
+        const recipes = {
+          Recipe1: result.Recipe1 ? JSON.parse(result.Recipe1) : [],
+          Recipe2: result.Recipe2 ? JSON.parse(result.Recipe2) : [],
+          Recipe3: result.Recipe3 ? JSON.parse(result.Recipe3) : [],
+        };
+  
+        console.log('Recipes:', recipes);
+  
+        res.json({ recipes });
+      } else {
+        console.log('Meal plan not found');
+        res.status(404).json({ error: 'Meal plan not found' });
+      }
+    } catch (error) {
+      console.error('Unexpected error:', error.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+  app.post('/api/updateMealPlan', async (req, res) => {
+    try {
+      const { userID, dayOfWeek, updatedInfo } = req.body;
+  
+      // Perform the database update here based on the provided parameters
+  
+      // Respond with a success message
+      res.status(200).json({ success: true });
+    } catch (error) {
+      console.error('Error updating meal plan:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
+  
+
 module.exports = router;

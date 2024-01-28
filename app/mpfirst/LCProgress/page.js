@@ -1,11 +1,50 @@
 "use client";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import Link from 'next/link';
 import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+
+// ... (previous imports and code)
 
 const LCProgress = () => {
-  const userRole = 'user';  
+  const userRole = 'user'; 
+  const [mealPlanRecipes, setMealPlanRecipes] = useState(null);
+  const searchParams = useSearchParams();
+  const mealPlanName = searchParams.get("MealPlan");
+  const [checkedDays, setCheckedDays] = useState([]);
+  
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchMealPlanRecipes = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/api/mealPlan/${encodeURIComponent(mealPlanName)}/recipes`);
+        const data = await response.json();
+
+        if (response.ok) {
+          console.log('Fetched meal plan recipes:', data);
+
+          // Organize recipes into separate arrays
+          const recipes = {
+            Recipe1: data.recipes.Recipe1 || [],
+            Recipe2: data.recipes.Recipe2 || [],
+            Recipe3: data.recipes.Recipe3 || [],
+          };
+
+          console.log('Organized recipes:', recipes);
+          setMealPlanRecipes(recipes);
+        } else {
+          console.error('Error fetching meal plan recipes:', data.error);
+        }
+      } catch (error) {
+        console.error('Error fetching meal plan recipes:', error.message);
+      }
+    };
+
+    fetchMealPlanRecipes();
+  }, [mealPlanName]);
+
   const days = [
     "Monday",
     "Tuesday",
@@ -16,67 +55,108 @@ const LCProgress = () => {
     "Sunday",
   ];
 
+  const handleCheckboxChange = (dayIndex) => {
+    const isChecked = checkedDays.includes(dayIndex);
+
+    if (isChecked) {
+      // If already checked, uncheck it
+      setCheckedDays(checkedDays.filter((index) => index !== dayIndex));
+    } else {
+      // If not checked, check it
+      setCheckedDays([...checkedDays, dayIndex]);
+    }
+  };
+
+  const calculateProgressBarWidth = () => {
+    // Calculate the progress based on the number of checked checkboxes
+    const progress = (checkedDays.length / days.length) * 100;
+    return `${progress}%`;
+  };
+
   const handleRecipeClick = (recipeName) => {
     // Handle click for the recipe, e.g., redirect to the recipe page
     console.log(`Clicked recipe: ${recipeName}`);
   };
 
-  return (
-    <section className="flex flex-col h-screen bg-[#F9D548]">
+  return(
+  <section className="flex flex-col h-screen bg-[#F9D548]">
       <Navbar userRole={userRole} />
       <div className="flex-grow w-[1108px] mx-auto mt-8">
-        <Link href="/mpfirst/LowCarbsMP">
-          <button className="flex justify-center items-center w-[94px] h-[38px] bg-blue-950 rounded-[10px] shadow mb-9">
-            <div className="text-white font-medium focus:outline-none">
-              &lt; Back
-            </div>
-          </button>
-        </Link>
-        <h1 className="text-blue-950 text-5xl font-extrabold text-left mb-8 pl-8">
-          Low Carbs Diet{" "}
-        </h1>
+        <button
+          onClick={() => router.push('/mpfirst/LowCarbsMP')}
+          className="flex justify-center items-center w-[94px] h-[38px] bg-blue-950 rounded-[10px] shadow mb-9"
+        >
+          <div className="text-white font-medium focus:outline-none">
+            &lt; Back
+          </div>
+        </button>
+        {/* ... (remaining code) */}
         <div className="grid grid-cols-7 gap-4 text-center">
-          {days.map((day, index) => (
-            <div
-              key={index}
-              className="bg-blue-950 rounded-lg p-4 text-white"
-              onClick={() => handleRecipeClick(`Recipe ${index + 1}`)}
-            >
-              <h2 className="text-lg font-semibold mb-2 relative">
-                {day}
-                <div className="w-full h-0.5 bg-white absolute bottom-0 left-0"></div>
-              </h2>
-              <div className="flex flex-col">
-                <button
-                  onClick={() => handleRecipeClick(`Recipe 1`)}
-                  className="mb-2"
-                >
-                  Recipe 1
-                </button>
-                <button
-                  onClick={() => handleRecipeClick(`Recipe 2`)}
-                  className="mb-2"
-                >
-                  Recipe 2
-                </button>
-                <button onClick={() => handleRecipeClick(`Recipe 3`)}>
-                  Recipe 3
-                </button>
-              </div>
-            </div>
-          ))}
+        {days.map((day, dayIndex) => (
+      <div key={dayIndex} className="bg-blue-950 rounded-lg p-10 text-white flex flex-col items-center">
+      <h2 className="text-lg font-semibold mb-2 relative">
+      <input
+        type="checkbox"
+        id={`day-${dayIndex}`}
+        // Handle the checkbox state and logic here if needed
+      />
+      <label htmlFor={`day-${dayIndex}`}>
+        {day} 
+      </label>
+      <div className="w-full h-0.5 bg-white absolute bottom-0 left-0"></div>
+    </h2>
+    <div className="flex flex-col">
+      {mealPlanRecipes && (
+        <>
+          <button
+            onClick={() => {
+              router.push(`/detailRecipe?recipeName=${encodeURIComponent(mealPlanRecipes.Recipe1[dayIndex])}`);
+              handleRecipeClick(mealPlanRecipes.Recipe1[dayIndex] || 'No recipes available');
+            }}
+            className="mb-2"
+          >
+            {mealPlanRecipes.Recipe1[dayIndex] || 'No recipes available'}
+          </button>
+          <button
+            onClick={() => {
+              router.push(`/detailRecipe?recipeName=${encodeURIComponent(mealPlanRecipes.Recipe2[dayIndex])}`);
+              handleRecipeClick(mealPlanRecipes.Recipe2[dayIndex] || 'No recipes available');
+            }}
+            className="mb-2"
+          >
+            {mealPlanRecipes.Recipe2[dayIndex] || 'No recipes available'}
+          </button>
+          <button
+            onClick={() => {
+              router.push(`/detailRecipe?recipeName=${encodeURIComponent(mealPlanRecipes.Recipe3[dayIndex])}`);
+              handleRecipeClick(mealPlanRecipes.Recipe3[dayIndex] || 'No recipes available');
+            }}
+          >
+            {mealPlanRecipes.Recipe3[dayIndex] || 'No recipes available'}
+          </button>
+        </>
+      )}
+    </div>
+  </div>
+))}
         </div>
         <div className="text-blue-950 font-medium text-start mt-8">
           <p>Check Your Progress!</p>
         </div>
         <div className="relative mt-[4rem]">
-          <div className="w-full h-1 bg-blue-950 rounded-lg overflow-hidden relative"></div>
+        <div
+          className="w-full h-1 bg-blue-950 rounded-lg overflow-hidden relative"
+          // style={{ width: calculateProgressBarWidth() }}
+        ></div>
           <Image
             src="/pin.png"
             alt="Pin"
             className="absolute top-0 -mt-12 left-0"
             height={50}
             width={50} // Set the width to a numeric value in pixels
+            style={{
+              transform: `translateX(${calculateProgressBarWidth()})`,
+            }}
           />
         </div>
       </div>

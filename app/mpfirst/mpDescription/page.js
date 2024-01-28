@@ -2,23 +2,23 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 const mpDescription = () => {
   const userRole = 'user';  
   const router = useRouter();
   const [mealPlanDetails, setMealPlanDetails] = useState(null);
+  const searchParams = useSearchParams();
+  const mealPlanName = searchParams.get("mealplanName");
 
   useEffect(() => {
     const fetchMealPlanDetails = async () => {
       try {
-        const searchParams = new URLSearchParams(window.location.search);
-        const mealplanName = searchParams.get("mealplanName");
 
         
-        if (mealplanName) {
-          const response = await fetch(`http://localhost:3001/api/mealPlan/${mealplanName}`);
+        if (mealPlanName) {
+          const response = await fetch(`http://localhost:3001/api/mealPlan/${mealPlanName}`);
           const data = await response.json();
     
           if (response.ok) {
@@ -56,14 +56,14 @@ const mpDescription = () => {
         {mealPlanDetails?.description.split('\r\n').map((paragraph, index) => (
           <React.Fragment key={index}>
             <p>{paragraph}</p>
-            {index !== mealPlanDetails.description.split('\r\n').length - 1 && <br />} {/* Insert <br /> after each paragraph except the last one */}
+            {index !== mealPlanDetails.description.split('\r\n').length - 1 && <br />} 
           </React.Fragment>
         ))}
         </div>
 
         <div className="flex justify-center mt-11">
           {/* Link to navigate to LCProgress */}
-          <Link href="">
+          <Link href={`/mpfirst/LCProgress/?MealPlan=${encodeURIComponent(mealPlanName)}`}>
             <button className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center">
               <div className="text-white font-medium focus:outline-none">
                 Start Your Meal Plan Now
