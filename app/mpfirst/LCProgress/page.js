@@ -13,6 +13,7 @@ const LCProgress = () => {
   const searchParams = useSearchParams();
   const mealPlanName = searchParams.get("MealPlan");
   const [checkedDays, setCheckedDays] = useState([]);
+  const [movePin, setMovePin] = useState(false); // State to track checkbox state
   
   const router = useRouter();
 
@@ -55,23 +56,30 @@ const LCProgress = () => {
     "Sunday",
   ];
 
+  // Function to handle checkbox state change
   const handleCheckboxChange = (dayIndex) => {
-    const isChecked = checkedDays.includes(dayIndex);
-
-    if (isChecked) {
-      // If already checked, uncheck it
+    // Toggle the checked state for the clicked day
+    if (checkedDays.includes(dayIndex)) {
       setCheckedDays(checkedDays.filter((index) => index !== dayIndex));
     } else {
-      // If not checked, check it
       setCheckedDays([...checkedDays, dayIndex]);
     }
   };
 
-  const calculateProgressBarWidth = () => {
-    // Calculate the progress based on the number of checked checkboxes
-    const progress = (checkedDays.length / days.length) * 100;
-    return `${progress}%`;
+  // Function to calculate the transformation for the pin image
+  const calculatePinTransformation = () => {
+    // Calculate the total movement based on the number of checked days
+    const totalMovement = checkedDays.length * 4; // Assuming each day moves the pin by 5cm
+    
+    // Apply the total movement as translation along the x-axis
+    return `translateX(${totalMovement}cm)`;
   };
+
+  // const calculateProgressBarWidth = () => {
+  //   // Calculate the progress based on the number of checked checkboxes
+  //   const progress = (checkedDays.length / days.length) * 100;
+  //   return `${progress}%`;
+  // };
 
   const handleRecipeClick = (recipeName) => {
     // Handle click for the recipe, e.g., redirect to the recipe page
@@ -98,7 +106,7 @@ const LCProgress = () => {
       <input
         type="checkbox"
         id={`day-${dayIndex}`}
-        // Handle the checkbox state and logic here if needed
+        onChange={() => handleCheckboxChange(dayIndex)} // Connect handleCheckboxChange to onChange event
       />
       <label htmlFor={`day-${dayIndex}`}>
         {day} 
@@ -155,7 +163,7 @@ const LCProgress = () => {
             height={50}
             width={50} // Set the width to a numeric value in pixels
             style={{
-              transform: `translateX(${calculateProgressBarWidth()})`,
+              transform: calculatePinTransformation(),
             }}
           />
         </div>
