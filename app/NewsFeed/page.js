@@ -1,7 +1,9 @@
 "use client";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 
@@ -11,7 +13,6 @@ const Pagination = ({ totalPages, currentPage, setCurrentPage }) => {
       setCurrentPage(page);
     }
   };
-  
 
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
@@ -63,11 +64,13 @@ const Pagination = ({ totalPages, currentPage, setCurrentPage }) => {
 const userRole = "user";
 
 const NewsFeed = () => {
+  const router = useRouter();
   const newsPerPage = 4;
   const [newsItems, setNewsItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-
   const [loading, setLoading] = useState(true);
+  const [subscribed, setSubscribed] = useState(false); // Add state for subscription
+  const [paymentStatus, setPaymentStatus] = useState('');
 
   useEffect(() => {
     const fetchNewsData = async () => {
@@ -91,14 +94,31 @@ const NewsFeed = () => {
     fetchNewsData();
   }, []);
 
-  // ... rest of your component code ...
+  // Update paymentStatus state based on router query parameters
+  useEffect(() => {
+    // Check if router is defined and router.query is not undefined
+    if (router && router.query && router.query.paymentStatus) {
+      const { paymentStatus } = router.query;
+      setPaymentStatus(paymentStatus);
+      console.log("router.query.paymentStatus:", router.query.paymentStatus);
+    }
+    // Inside useEffect for updating paymentStatus
+    
+    console.log("paymentStatus:", paymentStatus);
+  }, [router]);
 
   const totalPages = Math.ceil((newsItems || []).length / newsPerPage);
   const start = (currentPage - 1) * newsPerPage;
   const end = currentPage * newsPerPage;
   const currentNews = (newsItems || []).slice(start, end);
 
-  // ... rest of your component code ...
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
@@ -107,32 +127,57 @@ const NewsFeed = () => {
         <h1 className="text-5xl text-[#0A2A67] font-black mb-8 text-left">
           Catch Up On The Latest News
         </h1>
-        {/* Map through currentNews instead of newsItems */}
-        {currentNews.map((news, index) => (
-          <div key={index} className="w-[80%] mb-6 relative">
-            <div className="text-blue-900 text-sm font-semibold mb-2">
-              {news.source.name}{" "}
-              {/* Use the specific property you want to display */}
+         
+        <div className="w-[90%] mb-6 relative">  
+          {paymentStatus !== "paid" && (
+            <div className="absolute inset-0 flex items-center justify-end -mr-32 z-10">
+              <div className="bg-[#00509D] rounded-[20px] p-2 w-96 h-[456px] mr-8">
+                <img
+                  src="/unlock.gif"  // Replace with the correct path to your GIF file
+                  alt="Unlock"
+                  className="flex justify-center items-center -mt-6"
+                />
+                <p className="text-[#FFFFFF] font-bold text-lg flex justify-center items-center -mt-2">
+                  Upgrade to Unlock : <br />
+                  &#10003; View unlimited recipes. <br />
+                  &#10003; Access to various meal plans. <br />
+                  &#10003; Chat with professional nutritionists.
+                </p>
+                <Link href="/Payment">
+                  <button className="items-center bg-white hover:bg-grey-700 text-blue-950 font-bold py-2 px-4 rounded mt-8 ml-32">
+                    Upgrade
+                  </button>  
+                </Link>
+              </div>
             </div>
-            <div className="text-blue-950 text-2xl font-extrabold">
-              {news.title}
-            </div>
-            <div className="w-full border-b-2 border-black mt-2"></div>
-            <div className="mt-2 flex justify-end items-center text-black text-sm font-medium">
-            <Link href={news.url} target="_blank" passHref>
-                <span className="flex items-center">
-                  Read More <IoIosArrowForward className="ml-.5" />
-                </span>
-              </Link>
-            </div>
+          )}
+        
+          <div className={`w-[80%] mb-6 relative ${paymentStatus !== "paid" ? 'blur' : ''}`}>
+            {currentNews.map((news, index) => (
+              <div key={index} className="w-[80%] mb-6 relative">
+                <div className="text-blue-900 text-sm font-semibold mb-2">
+                  {news.source.name}
+                </div>
+                <div className="text-blue-950 text-2xl font-extrabold">
+                  {news.title}
+                </div>
+                <div className="w-full border-b-2 border-black mt-2"></div>
+                <div className="mt-2 flex justify-end items-center text-black text-sm font-medium">
+                  <Link href={news.url} target="_blank" passHref>
+                    <span className="flex items-center">
+                      Read More <IoIosArrowForward className="ml-.5" />
+                    </span>
+                  </Link>
+                </div>
+              </div>
+            ))}
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />  
           </div>
-        ))}
-
-        <Pagination
-          totalPages={totalPages}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
+        </div>
       </div>
       <Footer />
     </div>
