@@ -228,7 +228,7 @@ router.post("/upload", isAuthenticated, upload.single("MP_Image"), async (req, r
     const mealplanName = req.params.mealplanName;
   
     console.log("testing2");
-    const query = 'SELECT * FROM MealPlan_FP WHERE MPname = ?';
+    const query = 'SELECT * FROM MealPlan_FP WHERE MPName = ?';
   
     db.get(query, [mealplanName], (err, result) => {
       if (err) {
@@ -287,7 +287,7 @@ router.post("/upload", isAuthenticated, upload.single("MP_Image"), async (req, r
     }
   });
 
-  app.post('/api/updateMealPlan', async (req, res) => {
+  router.post('/api/updateMealPlan', async (req, res) => {
     try {
       const { userID, dayOfWeek, updatedInfo } = req.body;
   

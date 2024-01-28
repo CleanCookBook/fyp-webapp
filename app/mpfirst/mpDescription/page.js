@@ -10,30 +10,27 @@ const mpDescription = () => {
   const router = useRouter();
   const [mealPlanDetails, setMealPlanDetails] = useState(null);
   const searchParams = useSearchParams();
-  const mealPlanName = searchParams.get("mealplanName");
+  const mealPlanName = searchParams.get("MealPlanName");
 
   useEffect(() => {
     const fetchMealPlanDetails = async () => {
       try {
-
-        
         if (mealPlanName) {
           const response = await fetch(`http://localhost:3001/api/mealPlan/${mealPlanName}`);
-          const data = await response.json();
-    
           if (response.ok) {
+            const data = await response.json();
             setMealPlanDetails(data); // Set the entire meal plan object in state
           } else {
-            console.error('Error fetching meal plan details:', data.error);
+            console.error('Error fetching meal plan details:', response.statusText);
           }
         }
       } catch (error) {
         console.error('Error fetching meal plan details:', error.message);
       }
     };
-    
+  
     fetchMealPlanDetails();
-  }, []);
+  }, [mealPlanName]);
 
   return (
     <section className="flex flex-col h-screen bg-[#F9D548]">
@@ -49,7 +46,7 @@ const mpDescription = () => {
         </Link>
 
         <h1 className="text-blue-950 text-5xl font-extrabold text-left mb-8 pl-8">
-          {mealPlanDetails?.MPName}
+          {mealPlanName}
         </h1>
 
         <div className="text-blue-950 text-base text-center font-medium">
