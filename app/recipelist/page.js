@@ -103,7 +103,9 @@ const RecipeList = () => {
                   <p className="text-black text-xl font-medium ml-2">
                     {(currentPage - 1) * recipesPerPage + index + 1}.
                   </p>
+                  {/* Render the image */}
                   <p className="ml-2 text-black text-xl font-medium">{recipe.Rname}</p>
+                  <p className="ml-2 text-gray-500 text-lg">by {recipe.createdBy}</p>
                 </div>
               </Link>
             </div>
