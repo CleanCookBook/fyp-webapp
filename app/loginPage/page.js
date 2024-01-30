@@ -53,7 +53,9 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Error during login:", error.message);
-    } 
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Can now login by either pressing the Enter key or clicking the login button
