@@ -2,9 +2,10 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
-import { toast } from 'react-toastify';
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
 
 const LCProgress = () => {
@@ -72,42 +73,146 @@ const LCProgress = () => {
     "Sunday",
   ];
 
-    // Function to handle checkbox state change
-    const handleCheckboxChange = (dayIndex) => {
-      // Toggle the checked state for the clicked day
-      if (checkedDays.includes(dayIndex)) {
-        setCheckedDays(checkedDays.filter((index) => index !== dayIndex));
-      } else {
-        setCheckedDays([...checkedDays, dayIndex]);
-        // Show a notification with a custom message based on the day
-        switch (dayIndex) {
-          case 0:
-            setNotification('Start your week with healthy food choices!');
-            break;
-          case 1:
-            setNotification('Nourish your body with nutritious ingredients!');
-            break;
-          case 2:
-            setNotification('Stay committed to your health and wellnes!');
-            break;
-          case 3:
-            setNotification('Every healthy choice brings you closer to success!');
-            break;
-          case 4:
-            setNotification('Fuel your body for energy and vitality!');
-            break;
-          case 5:
-            setNotification('Embrace the benefits of mindful eating!');
-            break;
-          case 6:
-            setNotification('Celebrate your progress and healthy habits!');
-            break;
-          default:
-            setNotification('Good progress!');
-            break;
+  useEffect(() => {
+    const fetchInitialCheckedDays = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/api/mealPlan/getMealPlanTrack/${encodeURIComponent(mealPlanName)}`, {
+          method: 'GET',
+          credentials: 'include',
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          const initialCheckedDays = days.reduce((acc, day, index) => {
+            // Check if the data exists and has a valid value
+            if (data && Object.prototype.hasOwnProperty.call(data, day)) {
+              switch (data[day]) {
+                case 'checked':
+                  acc.push(index);
+                  break;
+                case 'unchecked':
+                  // Do nothing for 'unchecked'
+                  break;
+                case null:
+
+                  break;
+                default:
+                  acc.push(index);
+              }
+            } else {
+              acc.push(index);
+            }
+            return acc;
+          }, []);
+  
+          setCheckedDays(initialCheckedDays.length > 0 ? initialCheckedDays : []);
+        } else {
+          console.error('Error fetching initial checked days:', response.statusText);
         }
+      } catch (error) {
+        console.error('Error fetching initial checked days:', error.message);
       }
-    }
+    };
+  
+    fetchInitialCheckedDays();
+  }, []);
+  
+    // Function to handle checkbox state change
+    const handleCheckboxChange = async (dayIndex) => {
+      try {
+        setCheckedDays((prevCheckedDays) => {
+          // Toggle the checked state for the clicked day
+          const updatedDays = prevCheckedDays.includes(dayIndex)
+            ? prevCheckedDays.filter((index) => index !== dayIndex)
+            : [...prevCheckedDays, dayIndex];
+    
+          // Show a notification with a custom message based on the day
+          switch (dayIndex) {
+            case 0:
+              setNotification('Start your week with healthy food choices!');
+              break;
+            case 1:
+              setNotification('Nourish your body with nutritious ingredients!');
+              break;
+            case 2:
+              setNotification('Stay committed to your health and wellness!');
+              break;
+            case 3:
+              setNotification('Every healthy choice brings you closer to success!');
+              break;
+            case 4:
+              setNotification('Fuel your body for energy and vitality!');
+              break;
+            case 5:
+              setNotification('Embrace the benefits of mindful eating!');
+              break;
+            case 6:
+              setNotification('Celebrate your progress and healthy habits!');
+              break;
+            default:
+              setNotification('Good progress!');
+              break;
+          }
+    
+          // Update the meal plan tracking in the database
+          fetch('http://localhost:3001/api/mealPlan/updateMealPlanTrack', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              dayOfWeek: days[dayIndex],
+              updatedInfo: updatedDays.includes(dayIndex) ? 'checked' : 'unchecked',
+            }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                console.error('Error updating meal plan track:', response.statusText);
+                toast.error('Failed to update meal plan track. Please try again.');
+              }
+            })
+            .catch((error) => {
+              console.error('Error handling checkbox change:', error.message);
+            });
+    
+          return updatedDays;
+        });
+    
+        // Fetch the updated data after updating the meal plan tracking
+        const response = await fetch('http://localhost:3001/api/mealPlan/updateMealPlanTrack', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            dayOfWeek: days[dayIndex],
+            updatedInfo: updatedDays.includes(dayIndex) ? 'checked' : 'unchecked',
+          }),
+        });
+    
+        if (!response.ok) {
+          console.error('Error updating meal plan track:', response.statusText);
+          toast.error('Failed to update meal plan track. Please try again.');
+        } else {
+          // Update the state of checkedDays based on the backend response
+          const responseData = await response.json();
+          const updatedCheckedDays = days.reduce((acc, day, index) => {
+            if (responseData[day] === 'checked') {
+              acc.push(index);
+            }
+            return acc;
+          }, []);
+          setCheckedDays(updatedCheckedDays);
+        }
+      } catch (error) {
+        console.error('Error handling checkbox change:', error.message);
+      }
+    };
+    
+    
+    
 
   // Function to calculate the transformation for the pin image
   const calculatePinTransformation = () => {
@@ -135,56 +240,89 @@ return(
           &lt; Back
         </div>
       </button>
+
+      {checkedDays.length === 7 && (
+  <div className="flex justify-end absolute right-4 top">
+    <button
+      onClick={async () => {
+        try {
+          const response = await fetch(`http://localhost:3001/api/registration/delete/${encodeURIComponent(mealPlanName)}`, {
+            method: 'POST',
+            credentials: 'include',
+          });
+
+          if (response.ok) {
+            console.log('Meal plan data deleted successfully!');
+            router.push("/mpfirst");
+            // You can optionally redirect the user to another page or show a success message
+          } else {
+            console.error('Error deleting meal plan data:', response.statusText);
+            // Handle the error, show an error message, or redirect the user accordingly
+          }
+        } catch (error) {
+          console.error('Error deleting meal plan data:', error.message);
+          // Handle the error, show an error message, or redirect the user accordingly
+        }
+      }}
+      className="bg-blue-950 text-white px-4 py-2 rounded-lg"
+    >
+      End
+    </button>
+  </div>
+)}
+      
+
       
       <div className="grid grid-cols-7 gap-4 text-center">
-        {days.map((day, dayIndex) => (
-          <div key={dayIndex} className="bg-blue-950 rounded-lg p-10 text-white flex flex-col items-center">
-            <h2 className="text-lg font-semibold mb-2 relative">
-              <input
-                type="checkbox"
-                id={`day-${dayIndex}`}
-                onChange={() => handleCheckboxChange(dayIndex)} // Connect handleCheckboxChange to onChange event
-              />
-              <label htmlFor={`day-${dayIndex}`}>
-                {day} 
-              </label>
-              <div className="w-full h-0.5 bg-white absolute bottom-0 left-0"></div>
-            </h2>
-            <div className="flex flex-col">
-              {mealPlanRecipes && (
-                <>
-                  <button
-                    onClick={() => {
-                      router.push(`/detailRecipe?recipeName=${encodeURIComponent(mealPlanRecipes.Recipe1[dayIndex])}`);
-                      handleRecipeClick(mealPlanRecipes.Recipe1[dayIndex] || 'No recipes available');
-                    }}
-                    className="mb-2"
-                  >
-                    {mealPlanRecipes.Recipe1[dayIndex] || 'No recipes available'}
-                  </button>
-                  <button
-                    onClick={() => {
-                      router.push(`/detailRecipe?recipeName=${encodeURIComponent(mealPlanRecipes.Recipe2[dayIndex])}`);
-                      handleRecipeClick(mealPlanRecipes.Recipe2[dayIndex] || 'No recipes available');
-                    }}
-                    className="mb-2"
-                  >
-                    {mealPlanRecipes.Recipe2[dayIndex] || 'No recipes available'}
-                  </button>
-                  <button
-                    onClick={() => {
-                      router.push(`/detailRecipe?recipeName=${encodeURIComponent(mealPlanRecipes.Recipe3[dayIndex])}`);
-                      handleRecipeClick(mealPlanRecipes.Recipe3[dayIndex] || 'No recipes available');
-                    }}
-                  >
-                    {mealPlanRecipes.Recipe3[dayIndex] || 'No recipes available'}
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
+      {days.map((day, dayIndex) => (
+  <div key={dayIndex} className="bg-blue-950 rounded-lg p-10 text-white flex flex-col items-center">
+    <h2 className="text-lg font-semibold mb-2 relative">
+      <input
+        type="checkbox"
+        id={`day-${dayIndex}`}
+        onChange={() => handleCheckboxChange(dayIndex)}
+        checked={checkedDays.includes(dayIndex)} // Set the checked attribute based on state
+      />
+      <label htmlFor={`day-${dayIndex}`}>
+        {day} 
+      </label>
+      <div className="w-full h-0.5 bg-white absolute bottom-0 left-0"></div>
+    </h2>
+    <div className="flex flex-col">
+      {mealPlanRecipes && (
+        <>
+          <button
+            onClick={() => {
+              router.push(`/detailRecipe?recipeName=${encodeURIComponent(mealPlanRecipes.Recipe1[dayIndex])}`);
+              handleRecipeClick(mealPlanRecipes.Recipe1[dayIndex] || 'No recipes available');
+            }}
+            className="mb-2"
+          >
+            {mealPlanRecipes.Recipe1[dayIndex] || 'No recipes available'}
+          </button>
+          <button
+            onClick={() => {
+              router.push(`/detailRecipe?recipeName=${encodeURIComponent(mealPlanRecipes.Recipe2[dayIndex])}`);
+              handleRecipeClick(mealPlanRecipes.Recipe2[dayIndex] || 'No recipes available');
+            }}
+            className="mb-2"
+          >
+            {mealPlanRecipes.Recipe2[dayIndex] || 'No recipes available'}
+          </button>
+          <button
+            onClick={() => {
+              router.push(`/detailRecipe?recipeName=${encodeURIComponent(mealPlanRecipes.Recipe3[dayIndex])}`);
+              handleRecipeClick(mealPlanRecipes.Recipe3[dayIndex] || 'No recipes available');
+            }}
+          >
+            {mealPlanRecipes.Recipe3[dayIndex] || 'No recipes available'}
+          </button>
+        </>
+      )}
+    </div>
+  </div>
+))}
+</div>
 
       <div className="text-blue-950 font-medium text-start mt-8">
         <p>Check Your Progress!</p>
@@ -205,6 +343,7 @@ return(
           }}
         />
       </div>
+      
 
       {notification && (
         <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center z-50">

@@ -16,6 +16,7 @@ const editUserRoutes = require("./routes/editUserRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const announcementRoutes = require("./routes/announcementRoutes");
 const editRecipeRoutes = require("./routes/editRecipeRoutes");
+const registrationRoutes = require("./routes/registrationRoutes")
 const isAuthenticated = require("./authMiddleware");
 const cors = require("cors");
 const db = require("./db"); // Import the database module
@@ -67,6 +68,7 @@ app.use("/api/edit", editUserRoutes);
 app.use("/api/bookmark", bookMarkRoutes);
 app.use("/api/editRecipe", editRecipeRoutes);
 app.use("/api/mealPlan", mealPlanRoutes);
+app.use("/api/registration",  registrationRoutes);
 
 app.use("/api/announce", announcementRoutes);
 app.get("/home", isAuthenticated, (req, res) => {

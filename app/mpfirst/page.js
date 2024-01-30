@@ -15,7 +15,6 @@ const mpfirst = () => {
     try {
       const response = await fetch("http://localhost:3001/api/mealPlan/Fp");
       const data = await response.json();
-      console.log("Data from the backend:", data);
 
       // Check if data.mealPlans is an array
       const mealPlansArray = Array.isArray(data.mealPlans)
@@ -45,7 +44,7 @@ const mpfirst = () => {
             >
               <div className="relative hover:brightness-75 transition-all">
                 {/* Add meal plan image */}
-                {console.log("Base64 Image Data:", mealPlan.MP_Image)}
+               
                 <img
                   src={mealPlan.MP_Image}
                   alt={`${mealPlan.MPName} diet food`}

@@ -26,7 +26,6 @@ router.get("/recipe", isAuthenticated, async (req, res) => {
     });
 
     res.json({ recipeOptions });
-    console.log("Recipe Options:", recipeOptions);
   } catch (error) {
     console.error("Error fetching recipes:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -222,7 +221,41 @@ router.post("/upload", isAuthenticated, upload.single("MP_Image"), async (req, r
       res.status(500).json({ error: 'Internal Server Error', details: error.message });
     }
   });
-
+  router.get("/TrackStatus/:mealplanName", isAuthenticated, async (req, res) => {
+    try {
+      const MPName = req.params.mealplanName;
+      const userID = req.session.userId;
+  
+      const query = `
+        SELECT * FROM MealPlanTrack
+        WHERE UserID = ? AND MPName = ?;
+      `;
+  
+      await new Promise((resolve, reject) => {
+        db.get(query, [userID, MPName], (err, result) => {
+          if (err) {
+            console.error("Error checking meal plan status:", err.message);
+            reject(err);
+          } else {
+            console.log(result);
+  
+            if (result) {
+              res.status(200).json({ status: "continue" });
+            } else {
+              res.status(200).json({ status: "start" });
+            }
+  
+            resolve();
+          }
+        });
+      });
+    } catch (error) {
+      console.error("Error checking meal plan status:", error.message);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+  
+  
   router.get('/:mealplanName', async (req, res) => {
     console.log("testing1");
     const mealplanName = req.params.mealplanName;
@@ -250,7 +283,6 @@ router.post("/upload", isAuthenticated, upload.single("MP_Image"), async (req, r
   router.get('/:mealplanName/recipes', async (req, res) => {
     const mealplanName = req.params.mealplanName;
   
-    console.log(`Fetching recipes for meal plan: ${mealplanName}`);
   
     const query = 'SELECT Recipe1, Recipe2, Recipe3 FROM MealPlan_FP WHERE MPname = ?';
   
@@ -261,7 +293,6 @@ router.post("/upload", isAuthenticated, upload.single("MP_Image"), async (req, r
             console.error('Error fetching meal plan recipes:', err.message);
             reject(err);
           } else {
-            console.log('Meal plan recipes fetched successfully');
             resolve(queryResult);
           }
         });
@@ -287,20 +318,93 @@ router.post("/upload", isAuthenticated, upload.single("MP_Image"), async (req, r
     }
   });
 
-  router.post('/api/updateMealPlan', async (req, res) => {
+  router.post('/updateMealPlanTrack', isAuthenticated, async (req, res) => {
     try {
-      const { userID, dayOfWeek, updatedInfo } = req.body;
+      const userId = req.session.userId;
+      const { dayOfWeek, updatedInfo } = req.body;
   
-      // Perform the database update here based on the provided parameters
+      // Ensure that the provided dayOfWeek is valid (e.g., "Monday", "Tuesday", etc.)
+      const validDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+      if (!validDays.includes(dayOfWeek)) {
+        return res.status(400).json({ error: 'Invalid day of the week' });
+      }
+  
+      // Update the MealPlanTrack table for the specific user and dayOfWeek
+      const updateQuery = `
+        UPDATE MealPlanTrack
+        SET "${dayOfWeek}" = ?
+        WHERE "UserID" = ?;
+      `;
+  
+      await db.run(updateQuery, [updatedInfo, userId]);
   
       // Respond with a success message
       res.status(200).json({ success: true });
     } catch (error) {
-      console.error('Error updating meal plan:', error);
+      console.error('Error updating meal plan track:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  // Inside your server code
+// Add a new route for deleting the entry
+router.delete("/api/mealPlan/deleteEntry", isAuthenticated, async (req, res) => {
+  try {
+    const mealPlanName = req.body.mealPlanName;
+    const userID = req.session.userId;
+
+    // Perform the deletion based on your database structure
+    // Example:
+    const deleteQuery = `
+      DELETE FROM MealPlanTrack
+      WHERE UserID = ? AND MPName = ?;
+    `;
+
+    await db.run(deleteQuery, [userID, mealPlanName]);
+
+    res.status(200).json({ message: "Entry deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting entry:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+  router.get('/getMealPlanTrack/:mealplanName', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      const mealPlanName = req.params.mealplanName; // Using params to get meal plan name from the URL
+  
+      // Create a promise for the database query
+      const fetchDataPromise = new Promise((resolve, reject) => {
+        // Fetch the meal plan tracking data for the specific user and meal plan name
+        const query = `
+          SELECT "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+          FROM MealPlanTrack
+          WHERE "UserID" = ? AND "MPName" = ?;
+        `;
+  
+        db.get(query, [userId, mealPlanName], (error, data) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(data);
+          }
+        });
+      });
+  
+      // Use await with the promise
+      const data = await fetchDataPromise;
+  
+  
+      // Respond with the fetched data
+      res.status(200).json(data);
+    } catch (error) {
+      console.error('Error fetching meal plan track:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
   });
   
   
-
-module.exports = router;
+  
+  
+  module.exports = router;
