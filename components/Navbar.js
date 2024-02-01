@@ -201,6 +201,11 @@ const Navbar = ({ userRole }) => {
                     Meal Plans
                   </button>
                 </Link>
+                <Link href="/videos">
+                  <button className="px-4 hover:opacity-[0.5]" onClick={handleLinkClick}>
+                    Videos
+                  </button>
+                </Link>
                 <Link href="/BPAnnouncement">
                   <button className="px-4 hover:opacity-[0.5]" onClick={handleLinkClick}>
                     Announcement
