@@ -1,154 +1,111 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import io from "socket.io-client";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import { useState } from "react";
 
 const LiveChat = () => {
-  const [userMessage, setUserMessage] = useState("");
-  const [chatMessages, setChatMessages] = useState([]);
-  const [preChatQuestions, setPreChatQuestions] = useState({
-    age: "",
-    healthCondition: "",
-  });
+  const [messages, setMessages] = useState([]);
+  const [userInput, setUserInput] = useState("");
+  const [selectedOption, setSelectedOption] = useState(null); // Track user selection
 
-  const getSessionId = () => {
-    const cookies = document.cookie.split(';');
-    const sessionIdCookie = cookies.find(cookie => cookie.trim().startsWith('your_session_cookie_name='));
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Add user's message to the messages array
+    setMessages((prevMessages) => [...prevMessages, { type: "user", message: userInput }]);
+    // Clear the input field
+    setUserInput("");
 
-    if (sessionIdCookie) {
-      return sessionIdCookie.split('=')[1];
-    }
-    return null;
-  };
-  
-  const [isChatStarted, setIsChatStarted] = useState(false);  // Track whether the chat is started
-  const socketRef = useRef(null);
-
-  const connectSocket = () => {
-    // Initialize the socket when the chat starts
-    socketRef.current = io('http://localhost:3001', { transports: ['websocket'] });
-  
-    // Event listeners
-    socketRef.current.on("connect", () => {
-      // Retrieve the session ID from the cookie
-      const sessionId = getSessionId();
-      console.log("Connected to the server. Session ID:", sessionId);
-  
-      // You can send the session ID to the server if needed
-      socketRef.current.emit("session", { sessionId });
-    });
-  }
-
-  const disconnectSocket = () => {
-    // Disconnect the socket when the chat ends
-    socketRef.current.disconnect();
-    console.log('Disconnected from server');
+    // Respond with a question about user intent
+    setMessages((prevMessages) => [...prevMessages, { type: "bot", message: "What would you like to do today?" }]);
   };
 
-  useEffect(() => {
-    console.log('LiveChat component mounted');
-    
-    // Cleanup
-    return () => {
-      console.log('LiveChat component unmounted');
-      if (isChatStarted) {
-        disconnectSocket();
-      }
-    };
-  }, [isChatStarted]);
-
-  const handlePreChatSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (!isChatStarted) {
-        connectSocket();
-        // Send pre-chat questions to the server
-        if (socketRef.current) {
-          await socketRef.current.emit("preChatQuestions", preChatQuestions);
-          setIsChatStarted(true);  // Set isChatStarted to true when the chat starts
-        }
-      }
-    } catch (error) {
-      console.error('Error during pre-chat submission:', error);
+  const handleOptionSelect = (selectedOption) => {
+    // Implement specific actions based on the chosen option
+    switch (selectedOption) {
+      case "nutritionist":
+        // Open chat with nutritionist logic
+        break;
+      case "issue":
+        // Report an issue logic
+        break;
+      case "end":
+        // End chat gracefully
+        break;
+      case "others":
+        // Display additional options or prompt for further details
+        break;
     }
   };
   
-  const handleEndChat = () => {
-    setIsChatStarted(false);  // Set isChatStarted to false when the chat ends
-    if (socketRef.current) {
-      // Disconnect the socket when the chat ends
-      socketRef.current.disconnect();
-      console.log('Disconnected from server');
-    }
-  };
-
-  const handleChatSubmit = (e) => {
-    e.preventDefault();
-    // Send user's message to the server
-    socketRef.current.emit("message", userMessage);
-    setUserMessage("");
-  };
-
-
   return (
-    <div>
-      <h2>Live Chat</h2>
+    <div className="flex flex-col min-h-screen bg-[#F9D548]">
+      <Navbar userRole ="user" className="fixed top-0 left-0 right-0" />
+        <div className="container mx-auto px-4 mt-12">
+          <section className="mt-6">
+            <h2 className="text-3xl font-bold mb-4 text-blue-950">Live chat with Bot</h2>
+          </section>
 
-      {/* Pre-chat questions */}
-      {chatMessages.length === 0 && (
-        <form onSubmit={handlePreChatSubmit}>
-          <label>
-            Age:
-            <input
-              type="text"
-              value={preChatQuestions.age}
-              onChange={(e) =>
-                setPreChatQuestions({ ...preChatQuestions, age: e.target.value })
-              }
-            />
-          </label>
-          <label>
-            Health Condition:
-            <input
-              type="text"
-              value={preChatQuestions.healthCondition}
-              onChange={(e) =>
-                setPreChatQuestions({
-                  ...preChatQuestions,
-                  healthCondition: e.target.value,
-                })
-              }
-            />
-          </label>
-          <button type="submit">Start Chat</button>
-        </form>
-      )}
+        <section className="mt-4">
+        <div className="bg-white rounded-lg shadow-md p-4 flex flex-col h-80">
+          <div className="flex-grow">
+            {/* ... message rendering omitted for brevity */}
 
-      {/* Chat messages */}
-      <div>
-        {chatMessages.map((message, index) => (
-          <div key={index}>
-            {typeof message === 'string' ? message : message.toString()}
+            {selectedOption === null && (
+              <div className="mt-1">
+                <p className="text-lg font-bold mb-2">Hello! How can I help you today?</p>
+                <button
+                  className="mr-2 px-4 py-2 rounded bg-blue-500 text-white"
+                  onClick={() => setSelectedOption("nutritionist")}
+                >
+                  Chat with Nutritionist
+                </button>
+                <button
+                  className="mr-2 px-4 py-2 rounded bg-red-500 text-white"
+                  onClick={() => setSelectedOption("issue")}
+                >
+                  Report an Issue
+                </button>
+                <button
+                  className="mr-2 px-4 py-2 rounded bg-gray-500 text-white"
+                  onClick={() => setSelectedOption("end")}
+                >
+                  End
+                </button>
+                <button
+                  className="px-4 py-2 rounded bg-gray-200 text-gray-700"
+                  onClick={() => setSelectedOption("others")}
+                >
+                  Others
+                </button>
+              </div>
+            )}
+
+            {selectedOption !== null && (
+              <div className="mt-2">
+                {handleOptionSelect(selectedOption)}
+              </div>
+            )}
           </div>
-        ))}
+            <form className="flex items-center mt-2">
+              <input
+                type="text"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                className="w-full rounded-md bg-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Type your message here"
+              />
+              <button type="submit" onClick={handleSubmit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md ml-4">
+                Send
+              </button>
+            </form>
+          </div>
+        </section>
       </div>
 
-      {/* Chat input */}
-      {isChatStarted && (
-        <form onSubmit={handleChatSubmit}>
-          <input
-            type="text"
-            value={userMessage}
-            onChange={(e) => setUserMessage(e.target.value)}
-          />
-          <button type="submit">Send</button>
-        </form>
-      )}
-
-      {/* "End Chat" button */}
-      {isChatStarted && (
-        <button onClick={handleEndChat}>End Chat</button>
-      )}
-    </div>  
+      <div className="mt-auto">
+        <Footer />
+      </div>
+    </div>
   );
 };
 

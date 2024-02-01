@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cron = require('node-cron');
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const mealPlanRoutes = require("./routes/mealPlanRoutes");
@@ -16,6 +17,7 @@ const editUserRoutes = require("./routes/editUserRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const announcementRoutes = require("./routes/announcementRoutes");
 const editRecipeRoutes = require("./routes/editRecipeRoutes");
+const registrationRoutes = require("./routes/registrationRoutes")
 const isAuthenticated = require("./authMiddleware");
 const cors = require("cors");
 const db = require("./db"); // Import the database module
@@ -67,10 +69,23 @@ app.use("/api/edit", editUserRoutes);
 app.use("/api/bookmark", bookMarkRoutes);
 app.use("/api/editRecipe", editRecipeRoutes);
 app.use("/api/mealPlan", mealPlanRoutes);
+app.use("/api/registration",  registrationRoutes);
 
 app.use("/api/announce", announcementRoutes);
 app.get("/home", isAuthenticated, (req, res) => {
   res.json({ message: "Welcome to the home page!" });
+});
+
+cron.schedule('0 0 * * *', async () => {
+  try {
+    // Reset search count for all users
+    const resetSearchCountQuery = 'UPDATE User SET search = 0, lastSearchReset = CURRENT_TIMESTAMP';
+    await db.run(resetSearchCountQuery);
+
+    console.log('Search count reset successfully.');
+  } catch (error) {
+    console.error('Error resetting search count:', error);
+  }
 });
 
 // Handle requests to the root path
