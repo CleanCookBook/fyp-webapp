@@ -10,29 +10,64 @@ const FilteredRecipePage = () => {
   
   const userRole = 'user';
   const searchParams = useSearchParams();
-  const recipesParam = searchParams.get('recipes'); // Use 'recipes' instead of 'Rname'
+  const recipesParam = searchParams.get('recipes');
   const recipesObject = JSON.parse(recipesParam) || {};
   const resultsArray = recipesObject.result || [];
   const [selectedFilters, setSelectedFilters] = useState([]);
 
   console.log('resultsArray:', resultsArray);
      
-  // Extract the tags from the URL
-  //const recipesParam = searchParams.get('recipes');
-  //const title = recipesParam ? `Filtered Recipes for Tags: ${recipesParam}` : 'All Recipes';
-
-  // Extract the tags from the URL
   const filtersParam = searchParams.get('filters');
   const filtersArray = JSON.parse(filtersParam) || [];
-  const filterTags = filtersArray.map(filter => `'${filter}'`).join(', ');
+  const filtersObject = JSON.parse(filtersParam) || {};
+  const {
+    dietaryPreferences = [],
+    allergies = [],
+    cookingTime = '',
+    calories = ''
+  } = filtersObject;
 
-  const title = filtersParam ? `Filtered Recipes for Tags: { "result": ${JSON.stringify(resultsArray)} }` : 'All Recipes';
-  const queryParams = filtersParam ? `Query parameters: [ ${filterTags} ]` : '';
+  const filterTags = [
+    ...dietaryPreferences.map(pref => `${pref}`),
+    ...allergies.map(allergy => `${allergy}`),
+    cookingTime && `${cookingTime}`,
+    calories && `${calories}`
+  ].filter(Boolean).join(', ');
 
-  console.log('FilteredresultsArray:', queryParams);
+  // Calculate the count of recipes containing each filter
+  const countByFilter = {};
+
+  // Iterate through dietaryPreferences and initialize counts
+  dietaryPreferences.forEach(pref => {
+    countByFilter[pref] = 0;
+  });
+
+  // Iterate through allergies and initialize counts
+  allergies.forEach(allergy => {
+    countByFilter[allergy] = 0;
+  });
+
+  // Iterate through recipe results to count occurrences of each filter
+  resultsArray.forEach(recipe => {
+    dietaryPreferences.forEach(pref => {
+      if (recipe.Rname.includes(pref)) {
+        countByFilter[pref]++;
+      }
+    });
+    allergies.forEach(allergy => {
+      if (recipe.Rname.includes(allergy)) {
+        countByFilter[allergy]++;
+      }
+    });
+    // Add similar checks for other filters like cookingTime and calories
+  });
+
+  const queryParams = filterTags ? `${filterTags}` : '';
+
+  // console.log('FilteredresultsArray:', queryParams);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const recipesPerPage = 5; // Number of recipes per page
+  const recipesPerPage = 5;
 
   const totalPages = Math.ceil(resultsArray.length / recipesPerPage);
 
@@ -64,7 +99,7 @@ const FilteredRecipePage = () => {
   const goToPrevPage = () => {
     setCurrentPage((prevPage) => {
       console.log('Going to previous page. New Page:', prevPage - 1);
-      return Math.max(prevPage - 1, 1); // Ensure the page doesn't go below 1
+      return Math.max(prevPage - 1, 1);
     });
   };
 
@@ -73,6 +108,12 @@ const FilteredRecipePage = () => {
     sortDropdown.classList.toggle('hidden');
   };
 
+  useEffect(() => {
+    if (filtersArray.length > 0) {
+      setSelectedFilters(filtersArray);
+    }
+  }, []);
+
   return (
     <section className="flex flex-col h-screen bg-[#F9D548]">
       <Navbar userRole={userRole} />
@@ -80,26 +121,61 @@ const FilteredRecipePage = () => {
         <div className="flex items-center mb-4">
           <Link
             href="/home"
-            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[39px] -ml-[660px]"
+            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[39px] -ml-[800px]"
           >
             &lt;&nbsp;&nbsp;Back
           </Link>
-          <h1 className="text-7xl font-extrabold text-[#0A2A67] mb-2 mt-4 ml-[550px]">{title}</h1>
         </div>
-        
+
         <div className="flex items-end justify-end">
-          <div className="relative right-[30rem] top-[0.5rem]">
-            <div className="filter-box">
-              {Object.entries(selectedFilters).map(([filterType, filterValue], index) => (
-                <div key={index} className="filter-tag">
-                  {`${filterType}: ${filterValue}`} 
-                  <button onClick={() => removeFilter(filterType)}>x</button>
+          <div className="-top-2 w-[596px] h-11 flex flex-row space-x-4 relative right-[14rem]">
+            {/* Dietary Preferences */}
+            {dietaryPreferences.map((preference, index) => (
+              <div key={index} className="flex items-start justify-start flex-1">
+                <div className="flex items-center w-full h-full">
+                  <button className="ml-2 text-xl text-white font-bold rounded-[10px] bg-[#172554] shadow-md w-full h-full flex items-center justify-center">
+                    {preference}
+                  </button>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
+
+            {/* Allergies */}
+            {allergies.map((allergy, index) => (
+              <div key={index} className="flex items-center flex-1">
+                <div className="flex items-center w-full h-full">
+                  <p className="ml-2 text-xl text-white font-bold rounded-[10px] bg-[#172554] shadow-md w-full h-full flex items-center justify-center">
+                    {allergy}
+                  </p>
+                </div>
+              </div>
+            ))}
+
+            {/* Cooking Time */}
+            {cookingTime && (
+              <div className="flex items-center flex-1">
+                <div className="flex items-center w-full h-full">
+                  <p className="ml-2 text-xl text-white font-bold rounded-[10px] bg-[#172554] shadow-md w-full h-full flex items-center justify-center">
+                    {cookingTime} minutes
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Calories */}
+            {calories && (
+              <div className="flex items-center flex-1">
+                <div className="flex items-center w-full h-full">
+                  <p className="ml-2 text-xl text-white font-bold rounded-[10px] bg-[#172554] shadow-md w-full h-full flex items-center justify-center">
+                    {calories} kcal
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
+
           {resultsArray.length > 0 && (
-            <div className="relative left-[30rem] -top-2">
+            <div className="relative left-[14rem] -top-2">
               <button
                 onClick={() => toggleSortDropdown()}
                 className="flex justify-center items-end w-20 p-2 text-xl text-white font-bold hover:opacity-[0.5] rounded-[10px] bg-[#172554] shadow-md"

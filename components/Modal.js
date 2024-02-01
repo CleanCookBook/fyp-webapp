@@ -33,15 +33,23 @@ const Modal = ({ onClose }) => {
   
       setRecipes(data);
   
-      const dataQueryString = `recipes=${encodeURIComponent(JSON.stringify(data))}`;
-
+      const filterParams = new URLSearchParams({
+        recipes: JSON.stringify(data),
+        filters: JSON.stringify({
+          dietaryPreferences,
+          allergies,
+          cookingTime,
+          calories
+        })
+      });
   
-      router.push(`/recipelist/recipeFilterlist?${dataQueryString}`);
+      router.push(`/recipelist/recipeFilterlist?${filterParams}`);
+  
     } catch (error) {
       console.error('Error in filterData:', error);
     }
   };
-
+  
   const handleCheckboxChange = (setter) => (e) => {
     // alert(e.target.value);
     if (e.target.checked) {
@@ -173,10 +181,7 @@ const Modal = ({ onClose }) => {
                 onChange={(e) => setCalories(e.target.value)}
               />
                 {/* Calories units dropdown */}
-                <select>
-                  <option value="cal">cal</option>
-                  <option value="kcal">kcal</option>
-                </select>
+                <p>kcal</p>
               </div>
             </div>
 
