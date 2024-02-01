@@ -101,8 +101,9 @@ const RecipeDetails = () => {
         }
       }
     } catch (error) {
-      setLoading(false);
       console.error("Error updating favorite status:", error.message);
+    } finally {
+      setLoading(false); // Set loading to false regardless of success or error
     }
   };
 

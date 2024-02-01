@@ -191,16 +191,32 @@ router.get('/search', async (req, res) => {
 
     // Function to execute a SQL query and return a promise
     function executeQuery(sql, params) {
+      // Function to get full name from UserID
+      function getFullName(userID) {
+        return new Promise((resolve, reject) => {
+          const sql = 'SELECT FName, LName FROM User WHERE UserID = ?';
+          db.get(sql, [userID], (err, row) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(row ? `${row.FName} ${row.LName}` : null);
+            }
+          });
+        });
+      }
+
       return new Promise((resolve, reject) => {
-        db.all(sql, params, (err, results) => {
+        db.all(sql, params, async (err, results) => {
           if (err) {
             reject(err);
           } else {
-            // Extract only the desired columns for each result
-            const extractedResults = results.map(result => ({
-              Rname: result.Rname,
-            }));
-            resolve(extractedResults);
+            // Extract the recipe name and fetch the username using UserID
+            const extractedResults = results.map(async result => {
+              const { Rname, UserID } = result;
+              const createdBy = await getFullName(UserID);
+              return { Rname, createdBy };
+            });
+            Promise.all(extractedResults).then(resolve).catch(reject);
           }
         });
       });
@@ -209,13 +225,16 @@ router.get('/search', async (req, res) => {
     // Function to retrieve all recipes
     async function getRecipes() {
       // const sql = 'SELECT * FROM Recipe_Np';
-      const sql = 'SELECT * FROM Recipe_Np WHERE Rname is not null and Rname LIKE ?';
+      const sql = `
+        SELECT R.*, U.FName, U.LName
+        FROM Recipe_Np AS R
+        INNER JOIN User AS U ON R.UserID = U.UserID
+        WHERE R.Rname IS NOT NULL AND R.Rname LIKE ?
+      `;
       const params = `%${query}%`;
-
+      
       try {
-        // const results = await executeQuery(sql, []);
         const results = await executeQuery(sql, params);
-
         return results;
       } catch (error) {
         throw new Error('Error fetching recipes: ' + error);
