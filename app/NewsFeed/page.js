@@ -152,21 +152,21 @@ const NewsFeed = () => {
          
         <div className="w-[90%] mb-6 relative">  
           {paymentStatus !== "paid" && (
-            <div className="absolute inset-0 flex items-center justify-end -mr-32 z-10">
-              <div className="bg-[#00509D] rounded-[20px] p-2 w-96 h-[456px] mr-8">
+            <div className="absolute inset-0 flex items-center justify-center -mr-32 z-10">
+              <div className="bg-[#00509D] rounded-[20px] p-2 w-[400px] h-[510px]">
                 <img
-                  src="/unlock.gif"  // Replace with the correct path to your GIF file
+                  src="/unlock.png"  // Replace with the correct path to your GIF file
                   alt="Unlock"
-                  className="flex justify-center items-center -mt-6"
+                  className="flex justify-center items-center -mt-2"
                 />
-                <p className="text-[#FFFFFF] font-bold text-lg flex justify-center items-center -mt-2">
+                <p className="text-[#FFFFFF] font-bold text-lg flex justify-center items-center -mt-4">
                   Upgrade to Unlock : <br />
                   &#10003; View unlimited recipes. <br />
                   &#10003; Access to various meal plans. <br />
                   &#10003; Chat with professional nutritionists.
                 </p>
                 <Link href="/Payment">
-                  <button className="items-center bg-white hover:bg-grey-700 text-blue-950 font-bold py-2 px-4 rounded mt-8 ml-32">
+                  <button className="items-center bg-white hover:bg-grey-700 text-blue-950 font-bold py-2 px-4 rounded mt-4 ml-32">
                     Upgrade
                   </button>  
                 </Link>
