@@ -1,7 +1,7 @@
 "use client";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
@@ -106,6 +106,28 @@ const NewsFeed = () => {
     
     console.log("paymentStatus:", paymentStatus);
   }, [router]);
+
+  useEffect(() => {
+    // Function to fetch payment status
+    const fetchPaymentStatus = async () => {
+      try {
+        // Fetch payment status from the server
+        const response = await fetch("http://localhost:3001/api/payment/status", {
+          method: "GET",
+          credentials: "include", // Include credentials to send cookies with the request
+        });
+
+        const data = await response.json();
+        setPaymentStatus(data.status);
+        console.log("Payment Status:", data.status);
+      } catch (error) {
+        console.error("Error fetching payment status:", error.message);
+      }
+    };
+
+    // Call the function to fetch payment status
+    fetchPaymentStatus();
+  }, []);
 
   const totalPages = Math.ceil((newsItems || []).length / newsPerPage);
   const start = (currentPage - 1) * newsPerPage;

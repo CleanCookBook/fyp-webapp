@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cron = require('node-cron');
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const mealPlanRoutes = require("./routes/mealPlanRoutes");
@@ -73,6 +74,18 @@ app.use("/api/registration",  registrationRoutes);
 app.use("/api/announce", announcementRoutes);
 app.get("/home", isAuthenticated, (req, res) => {
   res.json({ message: "Welcome to the home page!" });
+});
+
+cron.schedule('0 0 * * *', async () => {
+  try {
+    // Reset search count for all users
+    const resetSearchCountQuery = 'UPDATE User SET search = 0, lastSearchReset = CURRENT_TIMESTAMP';
+    await db.run(resetSearchCountQuery);
+
+    console.log('Search count reset successfully.');
+  } catch (error) {
+    console.error('Error resetting search count:', error);
+  }
 });
 
 // Handle requests to the root path

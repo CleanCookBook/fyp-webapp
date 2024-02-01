@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from "react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { useState } from "react";
 import { FaTimes } from 'react-icons/fa';
 
 const Payment = () => {
@@ -12,48 +12,46 @@ const Payment = () => {
 
   const handleUpdateClick = async () => {
     try {
-      // Update payment status to premium
-      setPaymentStatus("premium");
-  
-      // Send a POST request to backend to update payment status
-      const response = await fetch('http://localhost:3001/api/payment/updatePaidStatus', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          status: 'paid',
-        }), // Pass the userId here
-        credentials: "include",
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to update payment status');
-      }
-  
       // Show confirmation
       setShowConfirmation(true);
   
       // Set timeout to hide confirmation after 5 seconds
-      setTimeout(() => {
+      setTimeout(async () => {
         setShowConfirmation(false);
   
-        // Show notification
-        setShowNotification(true);
+        // Check if the user confirmed the upgrade
+        if (paymentStatus === "premium") {
+          // Send a POST request to backend to update payment status
+          const response = await fetch('http://localhost:3001/api/payment/updatePaidStatus', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+              status: 'paid',
+            }), // Pass the userId here
+            credentials: "include",
+          });
   
-        // Set timeout to hide notification after 5 days
-        setTimeout(() => {
-          setShowNotification(false);
+          if (!response.ok) {
+            throw new Error('Failed to update payment status');
+          }
   
-          // Downgrade account if payment not made within 5 days
-          setPaymentStatus("free");
-        }, 5 * 24 * 60 * 60 * 1000); // 5 days in milliseconds
+          // Set timeout to hide notification after 5 days
+          setTimeout(() => {
+            setShowNotification(false);
+  
+            // Downgrade account if payment not made within 5 days
+            setPaymentStatus("free");
+          }, 5 * 24 * 60 * 60 * 1000); // 5 days in milliseconds
+        }
       }, 5000); // 5 seconds in milliseconds
     } catch (error) {
       console.error('Error updating payment status:', error.message);
       // Handle error
     }
   };
+  
 
   const handleNotificationDismiss = () => {
     setShowNotification(false);
@@ -61,7 +59,10 @@ const Payment = () => {
 
   const handleConfirmationDismiss = () => {
     setShowConfirmation(false);
+    // Reset payment status to the previous state (free in this case)
+    setPaymentStatus("unpaid");
   };
+  
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-r from-[#F9D548] to-[#F1AB86] text-[#0A2A67]">
