@@ -1,9 +1,9 @@
 // Import necessary modules and components
 "use client";
 import Footer from "@/components/Footer";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 
@@ -13,7 +13,34 @@ const mpfirst = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [mealPlans, setMealPlans] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState('');
+
+  
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/check-auth", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+          
+        } else {
+          router.push('/loginPage');
+        }
+      } catch (error) {
+        console.error('Error during authentication check:', error.message);
+      } finally {
+        // Set loading to false when authentication check is complete
+        setLoading(false);
+      }
+    };
+
+    checkAuthentication();
+  }, [router]);
 
   // Function to fetch meal plan options from the backend
   const fetchMealPlans = async () => {
@@ -74,6 +101,11 @@ const mpfirst = () => {
       fetchPaymentStatus();
     }, []);
 
+    if (!isAuthenticated) {
+      // If not authenticated, the user will be redirected during authentication check
+      return null;
+    }
+  
     if (loading) {
       return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
