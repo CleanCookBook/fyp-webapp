@@ -1,12 +1,11 @@
 "use client";
-import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { useState } from "react";
 import { FaTimes } from 'react-icons/fa';
 
 const Payment = () => {
   const userRole = "user";
-  const [paymentStatus, setPaymentStatus] = useState("free");
+  const [paymentStatus, setPaymentStatus] = useState("unpaid");
   const [showNotification, setShowNotification] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -14,55 +13,56 @@ const Payment = () => {
     try {
       // Show confirmation
       setShowConfirmation(true);
-  
-      // Set timeout to hide confirmation after 5 seconds
-      setTimeout(async () => {
-        setShowConfirmation(false);
-  
-        // Check if the user confirmed the upgrade
-        if (paymentStatus === "premium") {
-          // Send a POST request to backend to update payment status
-          const response = await fetch('http://localhost:3001/api/payment/updatePaidStatus', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-              status: 'paid',
-            }), // Pass the userId here
-            credentials: "include",
-          });
-  
-          if (!response.ok) {
-            throw new Error('Failed to update payment status');
-          }
-  
-          // Set timeout to hide notification after 5 days
-          setTimeout(() => {
-            setShowNotification(false);
-  
-            // Downgrade account if payment not made within 5 days
-            setPaymentStatus("free");
-          }, 5 * 24 * 60 * 60 * 1000); // 5 days in milliseconds
+
+      // Wait for user input in the confirmation box
+      const userResponse = await new Promise((resolve) => {
+        const handleUserResponse = (response) => {
+          resolve(response);
+        };
+        window.confirm("Are you sure you want to upgrade?") ? handleUserResponse("yes") : handleUserResponse("no");
+      });
+
+      if (userResponse === "yes") {
+        setPaymentStatus("premium");
+
+        // Send a POST request to backend to update payment status
+        const response = await fetch('http://localhost:3001/api/payment/updatePaidStatus', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            status: 'paid',
+          }),
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update payment status');
         }
-      }, 5000); // 5 seconds in milliseconds
+
+        console.log('User clicked "Yes" to upgrade.');
+        setShowNotification(true);
+
+        // Set timeout to show notification after 5 days
+        setTimeout(() => {
+          setShowNotification(false);
+          // Downgrade account if payment not made within 5 days
+          setPaymentStatus("unpaid");
+        }, 5 * 24 * 60 * 60 * 1000); // 5 days in milliseconds
+      } else {
+        // User clicked "No"
+        setShowConfirmation(false); // Hide the confirmation box
+      }
     } catch (error) {
       console.error('Error updating payment status:', error.message);
       // Handle error
     }
   };
-  
 
   const handleNotificationDismiss = () => {
     setShowNotification(false);
   };
-
-  const handleConfirmationDismiss = () => {
-    setShowConfirmation(false);
-    // Reset payment status to the previous state (free in this case)
-    setPaymentStatus("unpaid");
-  };
-  
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-r from-[#F9D548] to-[#F1AB86] text-[#0A2A67]">
@@ -99,15 +99,14 @@ const Payment = () => {
                 nutritionists.
               </p>
             </div>
-            </div>
-            <div className="flex justify-center">
-              <button
-                onClick={handleUpdateClick}
-                className="bg-[#0A2A67] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-xl"
-              >
-                Upgrade Now
-              </button>
-            </div>
+          </div>
+          <div className="flex justify-center">
+            <button
+              onClick={handleUpdateClick}
+              className="bg-[#0A2A67] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-xl"
+            >
+              Upgrade Now
+            </button>
           </div>
         </div>
       
@@ -131,29 +130,7 @@ const Payment = () => {
             </div>
           </div>
         )}
-
-        {showConfirmation && (
-          <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-md shadow-lg text-center">
-              <p>Are you sure you want to upgrade?</p>
-              <div className="flex justify-center mt-4">
-                <button
-                  onClick={handleUpdateClick}
-                  className="bg-[#0A2A67] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-xl mr-2"
-                >
-                  Yes
-                </button>
-                <button
-                  onClick={handleConfirmationDismiss}
-                  className="text-blue-500 font-semibold py-2 px-4 rounded-xl focus:outline-none"
-                >
-                  No
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      <Footer className="mt-auto" />
+      </div>
     </div>
   );
 };
