@@ -139,6 +139,14 @@ const AnnouncementsPage = () => {
               &lt;&nbsp;&nbsp;Back
             </Link>
           )}
+          {userRole === "user" && (
+            <Link 
+              href="/home"
+              className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[45px] -ml-36"
+            >
+              &lt;&nbsp;&nbsp;Back
+            </Link>
+          )}
           <h1 className="text-5xl font-extrabold text-[#0A2A67] mb-4 mt-10 ml-8">
             {userRole === "nutritionist" ? "Your Announcements" : "All Announcements"}
           </h1>
