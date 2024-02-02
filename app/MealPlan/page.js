@@ -1,6 +1,7 @@
 "use client";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 
@@ -51,9 +52,19 @@ const BPMealPlan = () => {
     <div className="flex flex-col h-screen bg-[#F9D548]">
         <Navbar userRole={userRole} className="fixed top-0 left-0 right-0" />
       <div className="container mx-auto p-4 flex-1">
-        <h1 className="text-5xl font-bold text-[#0A2A67] mb-4">
-          Your Meal Plans
-        </h1>
+        <div className="flex items-center mb-4">
+          <Link 
+            href="/home/BPHomepage" 
+            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[45px] -ml-36"
+          >
+            &lt;&nbsp;&nbsp;Back
+          </Link>
+
+          <h1 className="text-5xl font-extrabold text-[#0A2A67] mb-4 mt-10 ml-8">
+            Your Meal Plans
+          </h1>
+        </div>
+        
         <div className="bg-white rounded-lg p-4">
         {currentMealPlans.map((singleMealPlan,index) => (
             <a

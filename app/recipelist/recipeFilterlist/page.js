@@ -125,7 +125,9 @@ const FilteredRecipePage = () => {
           >
             &lt;&nbsp;&nbsp;Back
           </Link>
-          <h1 className="flex justify-center items-center text-7xl text-[#0A2A67] font-black ml-[28rem]">All Recipes</h1>
+          {displayedRecipes.length > 0 && (
+            <h1 className="flex justify-center items-center text-7xl text-[#0A2A67] font-black ml-[28rem]">All Recipes</h1>
+          )}
         </div>
         
         <div className="flex items-end justify-end mt-6">
@@ -209,7 +211,7 @@ const FilteredRecipePage = () => {
               <img 
                 src="/noRecipe.png" 
                 alt="Error" 
-                className="w-3/6 h-3/6 -mt-[24px]" 
+                className="w-3/6 h-3/6 -mt-[80px]" 
               /> 
               <p className="text-center text-6xl font-extrabold text-[#0A2A67] -mt-28 py-4">No recipes found.</p>
             </div>
