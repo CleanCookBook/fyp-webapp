@@ -152,7 +152,7 @@ const NewsFeed = () => {
          
         <div className="w-[90%] mb-6 relative">  
           {paymentStatus !== "paid" && (
-            <div className="absolute inset-0 flex items-center justify-center -mr-32 z-10">
+            <div className="absolute inset-0 flex items-end justify-end -mr-38 z-10 -mt-4">
               <div className="bg-[#00509D] rounded-[20px] p-2 w-[400px] h-[510px]">
                 <img
                   src="/unlock.png"  // Replace with the correct path to your GIF file
@@ -166,7 +166,7 @@ const NewsFeed = () => {
                   &#10003; Chat with professional nutritionists.
                 </p>
                 <Link href="/Payment">
-                  <button className="items-center bg-white hover:bg-grey-700 text-blue-950 font-bold py-2 px-4 rounded mt-4 ml-32">
+                  <button className="items-center bg-white hover:bg-grey-700 text-blue-950 font-bold py-2 px-4 rounded mt-4 ml-[138px]">
                     Upgrade
                   </button>  
                 </Link>

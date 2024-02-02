@@ -121,13 +121,14 @@ const FilteredRecipePage = () => {
         <div className="flex items-center mb-4">
           <Link
             href="/home"
-            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[39px] -ml-[800px]"
+            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[39px] -ml-[600px]"
           >
             &lt;&nbsp;&nbsp;Back
           </Link>
+          <h1 className="flex justify-center items-center text-7xl text-[#0A2A67] font-black ml-[28rem]">All Recipes</h1>
         </div>
-
-        <div className="flex items-end justify-end">
+        
+        <div className="flex items-end justify-end mt-6">
           <div className="-top-2 w-[596px] h-11 flex flex-row space-x-4 relative right-[14rem]">
             {/* Dietary Preferences */}
             {dietaryPreferences.map((preference, index) => (
@@ -202,7 +203,7 @@ const FilteredRecipePage = () => {
             </div>
           )}
         </div>
-        <div className="mt-2 w-[70%] max-w-[1114px]">
+        <div className="mt-4 w-[70%] max-w-[1114px]">
           {resultsArray.length === 0 ? (
             <div className="flex flex-col items-center -mt-[0px]">
               <img 

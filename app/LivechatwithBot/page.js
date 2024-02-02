@@ -2,14 +2,25 @@
 import React, { useState, useRef, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { FaSync } from "react-icons/fa";
 
 const LivechatwithBot = () => {
   const userRole = 'user';
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState("");
+  const [loading, setLoading] = useState(true);
   const [selectedOption, setSelectedOption] = useState(null);
   const chatBottomRef = useRef(null);
+
+  useEffect(() => {
+    // Simulate loading delay
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer); // Cleanup timer on unmount
+  }, []);
 
   useEffect(() => {
     // Scroll to the bottom of the chat when a new message is added
@@ -78,6 +89,14 @@ const LivechatwithBot = () => {
     // Clear the selected option
     setSelectedOption(null);
   };
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">

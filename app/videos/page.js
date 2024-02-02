@@ -2,6 +2,8 @@
 "use client";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import Link from "next/link";
 import { formatDistanceToNow } from 'date-fns';
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -9,7 +11,9 @@ import { useEffect, useState } from "react";
 const videos = () => {
   const userRole = "user";
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const [videoList, setVideoList] = useState([]);
+  const [paymentStatus, setPaymentStatus] = useState('');
 
   useEffect(() => {
     // Fetch videos from YouTube API or your backend
@@ -36,12 +40,36 @@ const videos = () => {
 
         // Set the state with the newly created 'videos' array
         setVideoList(videos);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching videos:", error.message);
+        setLoading(false);
       }
     };
 
     fetchVideos();
+  }, []);
+
+  useEffect(() => {
+    // Function to fetch payment status
+    const fetchPaymentStatus = async () => {
+      try {
+        // Fetch payment status from the server
+        const response = await fetch("http://localhost:3001/api/payment/status", {
+          method: "GET",
+          credentials: "include", // Include credentials to send cookies with the request
+        });
+
+        const data = await response.json();
+        setPaymentStatus(data.status);
+        console.log("Payment Status:", data.status);
+      } catch (error) {
+        console.error("Error fetching payment status:", error.message);
+      }
+    };
+
+    // Call the function to fetch payment status
+    fetchPaymentStatus();
   }, []);
 
   const handleVideoClick = (videoId) => {
@@ -49,36 +77,69 @@ const videos = () => {
     window.open(videoUrl, "_blank");
   };
 
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       <Navbar userRole={userRole} />
-
-      <div className="flex flex-col justify-center items-center mt-20">
-        <h2 className="text-3xl font-semibold mb-4"> Recipes </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {videoList.map((video) => (
-            <div
-              key={video.id}
-              className="cursor-pointer p-4 border border-blue-950 rounded-lg transition-transform transform hover:scale-105"
-              onClick={() => handleVideoClick(video.id)}
-            >
-              <img
-                src={`https://i.ytimg.com/vi/${video.id}/mqdefault.jpg`}
-                alt={video.title}
-                className="w-full h-36 object-cover rounded-lg mb-2"
-              />
-              <div className="flex flex-col">
-                <p className="text-blue-950 text-lg font-semibold mb-1">
-                  {video.title}
+      <div className="flex flex-col justify-center items-center mt-20 mb-20">
+        <h2 className="text-5xl text-[#0A2A67] font-black text-left mb-4"> Recipes </h2>
+        <div className="relative">
+          {paymentStatus !== "paid" && (
+            <div className="absolute inset-0 -top-40 flex items-center justify-center z-10">
+              <div className="bg-[#00509D] rounded-[20px] p-8 w-[400px]">
+                <img
+                  src="/unlock.png"  // Replace with the correct path to your GIF file
+                  alt="Unlock"
+                  className="mx-auto"
+                />
+                <p className="text-[#FFFFFF] font-bold text-lg flex justify-center items-center -mt-4">
+                  Upgrade to Unlock : <br />
+                  &#10003; View unlimited recipes. <br />
+                  &#10003; Access to various meal plans. <br />
+                  &#10003; Chat with professional nutritionists.
                 </p>
-                {/* Access publishedAt from the original API response item */}
-                <p className="text-green-900 text-sm">
-                  Uploaded on {video.publishedAt}
-                </p>
+                <Link href="/Payment">
+                  <button className="block mx-auto bg-white hover:bg-grey-700 text-blue-950 font-bold py-2 px-4 rounded mt-4">
+                    Upgrade
+                  </button>  
+                </Link>
               </div>
             </div>
-          ))}
+          )}
+
+          <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ${paymentStatus !== "paid" ? 'blur' : ''}`}>
+            {videoList.map((video) => (
+              <div
+                key={video.id}
+                className="cursor-pointer p-4 border border-blue-950 rounded-lg transition-transform transform hover:scale-105"
+                onClick={() => handleVideoClick(video.id)}
+              >
+                <img
+                  src={`https://i.ytimg.com/vi/${video.id}/mqdefault.jpg`}
+                  alt={video.title}
+                  className="w-full h-36 object-cover rounded-lg mb-2"
+                />
+                <div className="flex flex-col">
+                  <p className="text-blue-950 text-lg font-semibold mb-1">
+                    {video.title}
+                  </p>
+                  {/* Access publishedAt from the original API response item */}
+                  <p className="text-green-900 text-sm">
+                    Uploaded on {video.publishedAt}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>  
         </div>
+        
       </div>
 
       <div className="mt-auto">
