@@ -1,6 +1,7 @@
 "use client";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -194,9 +195,18 @@ const BPCreateMealPlan = () => {
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       <Navbar />
       <div className="container mx-auto p-4 flex-1">
-        <h1 className="text-5xl font-bold text-[#0A2A67] mb-4">
-          Create a Meal Plan
-        </h1>
+        <div className="flex items-center mb-4">
+          <Link 
+            href="/MealPlan" 
+            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[45px] -ml-36"
+          >
+            &lt;&nbsp;&nbsp;Back
+          </Link>
+
+          <h1 className="text-5xl font-extrabold text-[#0A2A67] mb-4 mt-10 ml-8">
+            Create a Meal Plan
+          </h1>
+        </div>
         <form
           className="flex flex-col items-start my-8"
           onSubmit={handleSubmit}
@@ -354,7 +364,7 @@ const BPCreateMealPlan = () => {
 
           <button
             type="submit"
-            className="w-[259px] h-7 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow self-end"
+            className="w-[259px] h-10 bg-blue-950 hover:bg-[#154083] text-white text-lg font-bold rounded-[10px] shadow self-end"
           >
             Submit
           </button>
