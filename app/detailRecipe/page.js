@@ -8,7 +8,7 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
 import NutritionalFact from "@/components/NutritionalFact";
 import StarRating from "@/components/StarRating";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 
@@ -19,8 +19,11 @@ const RecipeDetails = () => {
   const [userRole, setUserRole] = useState("user");
   const [showEditButton, setShowEditButton] = useState(false);
   const [notification, setNotification] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setIsLoading] = useState(true);
+  const [isFromBookmarkSite, setIsFromBookmarkSite] = useState(false); 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const searchParams = useSearchParams();
+  const recipeName = searchParams.get("recipeName");
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -47,13 +50,7 @@ const RecipeDetails = () => {
     checkAuthentication();
   }, [router]);
   
-  const handleEditClick = () => {
-    const recipeName = recipeDetails?.RName;
-    if (recipeName) {
-      const editFavoriteUrl = `/detailRecipe/favorite/editFavorite?recipeName=${encodeURIComponent(recipeName)}`;
-      router.push(editFavoriteUrl);
-    }
-  };
+  
 
   const showNotification = (message) => {
     setNotification(message);
@@ -67,7 +64,7 @@ const RecipeDetails = () => {
 
   const toggleFavorite = async () => {
     try {
-      setLoading(true); 
+      setIsLoading(true); 
       console.log("Toggle Favorite Clicked!");
 
       if (isFavorite) {
@@ -129,7 +126,7 @@ const RecipeDetails = () => {
     } catch (error) {
       console.error("Error updating favorite status:", error.message);
     } finally {
-      setLoading(false); // Set loading to false regardless of success or error
+      setIsLoading(false); // Set loading to false regardless of success or error
     }
   };
 
@@ -143,8 +140,6 @@ const RecipeDetails = () => {
   };
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const recipeName = searchParams.get("recipeName");
 
     const fetchUserType = async () => {
       try {
@@ -171,7 +166,7 @@ const RecipeDetails = () => {
 
     const fetchRecipeDetails = async () => {
       try {
-        setLoading(true);
+        setIsLoading(true);
         const response = await fetch(
           `http://localhost:3001/api/recipe/${recipeName}`
         );
@@ -220,7 +215,9 @@ const RecipeDetails = () => {
           }
 
           const referrer = document.referrer;
-          const isFromBookmarkSite = referrer.includes("favorite");
+          setIsFromBookmarkSite(
+            referrer.includes("favorite") || referrer.includes("ViewRecipe")
+          );
 
           // Show the "Edit" button if the user is from the bookmark site
           setShowEditButton(isFromBookmarkSite);
@@ -230,7 +227,7 @@ const RecipeDetails = () => {
       } catch (error) {
         console.error("Error fetching recipe details:", error.message);
       } finally {
-        setLoading(false); // Set loading to false regardless of success or error
+        setIsLoading(false); // Set loading to false regardless of success or error
       }
 
     };
@@ -239,7 +236,30 @@ const RecipeDetails = () => {
       fetchUserType(); // Fetch user type first
       fetchRecipeDetails(); // Then fetch recipe details
     }
-  }, []);
+  }, [isFromBookmarkSite]); 
+
+  const handleEditClick = () => {
+    const referrer = document.referrer;
+
+    if (recipeName) {
+      let editFavoriteUrl;
+
+      if (isFromBookmarkSite ===  referrer.includes("favorite") ) {
+        // Use === for comparison
+        // If the referrer includes "favorite"
+        editFavoriteUrl = `/detailRecipe/favorite/editFavorite?recipeName=${encodeURIComponent(
+          recipeName
+        )}`;
+      } else {
+        // If the referrer includes "ViewRecipe"
+        editFavoriteUrl = `/detailRecipe/favorite/editNutriFav?recipeName=${encodeURIComponent(
+          recipeName
+        )}`;
+      }
+
+      router.push(editFavoriteUrl);
+    }
+  };
 
   if (!isAuthenticated) {
     // If not authenticated, the user will be redirected during authentication check
@@ -364,11 +384,11 @@ const RecipeDetails = () => {
             </h2>
           </div>
           <NutritionalFact calorie={recipeDetails?.calorie} />
-          <div className="w-28 bg-blue-900 hover:bg-[#1c57b1] text-xl text-white font-bold py-2 px-9 rounded ml-auto mt-10 mr-4 mb-4">
             {showEditButton && (
+              <div className="w-28 bg-blue-900 hover:bg-[#1c57b1] text-xl text-white font-bold py-2 px-9 rounded ml-auto mt-10 mr-4 mb-4">
               <button onClick={() => handleEditClick()}>Edit</button>
+              </div>
             )}
-          </div>
         </div>
 
         {/* Notification */}

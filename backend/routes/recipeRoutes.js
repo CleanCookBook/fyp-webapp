@@ -191,32 +191,16 @@ router.get('/search', async (req, res) => {
 
     // Function to execute a SQL query and return a promise
     function executeQuery(sql, params) {
-      // Function to get full name from UserID
-      function getFullName(userID) {
-        return new Promise((resolve, reject) => {
-          const sql = 'SELECT FName, LName FROM User WHERE UserID = ?';
-          db.get(sql, [userID], (err, row) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(row ? `${row.FName} ${row.LName}` : null);
-            }
-          });
-        });
-      }
-
       return new Promise((resolve, reject) => {
-        db.all(sql, params, async (err, results) => {
+        db.all(sql, params, (err, results) => {
           if (err) {
             reject(err);
           } else {
-            // Extract the recipe name and fetch the username using UserID
-            const extractedResults = results.map(async result => {
-              const { Rname, UserID } = result;
-              const createdBy = await getFullName(UserID);
-              return { Rname, createdBy };
-            });
-            Promise.all(extractedResults).then(resolve).catch(reject);
+            // Extract only the desired columns for each result
+            const extractedResults = results.map(result => ({
+              Rname: result.Rname,
+            }));
+            resolve(extractedResults);
           }
         });
       });
@@ -225,16 +209,13 @@ router.get('/search', async (req, res) => {
     // Function to retrieve all recipes
     async function getRecipes() {
       // const sql = 'SELECT * FROM Recipe_Np';
-      const sql = `
-        SELECT R.*, U.FName, U.LName
-        FROM Recipe_Np AS R
-        INNER JOIN User AS U ON R.UserID = U.UserID
-        WHERE R.Rname IS NOT NULL AND R.Rname LIKE ?
-      `;
+      const sql = 'SELECT * FROM Recipe_Np WHERE Rname is not null and Rname LIKE ?';
       const params = `%${query}%`;
-      
+
       try {
+        // const results = await executeQuery(sql, []);
         const results = await executeQuery(sql, params);
+
         return results;
       } catch (error) {
         throw new Error('Error fetching recipes: ' + error);
@@ -310,6 +291,63 @@ router.post('/add-to-favorites', async (req, res) => {
   }
 });
 
+router.post('/updating/:recipeName', isAuthenticated, async (req, res) => {
+  const userId = req.session.userId;
+  const recipeName = req.params.recipeName;
+  const {
+    description,
+    ingredients,
+    instruction,
+    tips_tricks,
+    funFacts,
+    calorie
+  } = req.body;
+
+  console.log('Recipe Name:', recipeName);
+  console.log('Description:', description);
+  console.log('Ingredients:', ingredients);
+  console.log('Instruction:', instruction);
+  console.log('Tips and Tricks:', tips_tricks);
+  console.log('Fun Facts:', funFacts);
+  console.log('Calorie:', calorie);
+
+  try {
+    // Update the Recipe_Np entry in the database
+    const updateRecipeQuery = `
+      UPDATE Recipe_Np
+      SET description = ?,
+      ingredients = ?,
+          instruction = ?,
+          tips_tricks = ?,
+          info = ?,
+          calorie = ?
+      WHERE Rname = ? AND UserID = ?
+    `;
+
+    await new Promise((resolve, reject) => {
+      db.run(
+        updateRecipeQuery, [description,ingredients, instruction, tips_tricks, funFacts, calorie, recipeName, userId],
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+
+    res.status(200).json({
+      message: 'Recipe updated successfully'
+    });
+  } catch (error) {
+    console.error('Error updating recipe:', error);
+    res.status(500).json({
+      error: 'Internal Server Error'
+    });
+  }
+});
+
 // POST endpoint to remove a recipe from favorites
 router.post('/remove-from-favorites', async (req, res) => {
   try {
@@ -343,54 +381,7 @@ router.get('/user-favorites', async (req, res) => {
   }
 });
 
-// router.get('/user-favorites', async (req, res) => {
-//   try {
-//     const userId = req.session.userId;
 
-//     const favorites = await new Promise((resolve, reject) => {
-//       const sql = 'SELECT UserID FROM Recipe_Np WHERE UserID = ?';
-//       db.all(sql, [userId], (err, rows) => {
-//         if (err) {
-//           reject(err);
-//         } else {
-//           resolve(rows);
-//         }
-//       });
-//     });
-    
-//     // Example SQL query (you need to adapt it based on your database schema)
-//     const selectQuery = 'SELECT RName FROM UserFavorites WHERE UserID = ? AND isFavorite = 1';
 
-//     const rows = await db.all(selectQuery, [userId]);
-
-//     res.json({ favorites });
-//   } catch (err) {
-//     console.error('Error fetching user favorites:', err.message);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-
-//   try {
-//     const userId = req.session.userId;
-
-//     // Fetch recipes for the authenticated user using a Promise
-//     const recipes = await new Promise((resolve, reject) => {
-//       const sql = 'SELECT Rname FROM Recipe_Np WHERE UserID = ?';
-//       db.all(sql, [userId], (err, rows) => {
-//         if (err) {
-//           reject(err);
-//         } else {
-//           resolve(rows);
-//         }
-//       });
-//     });
-
-//     console.log('Fetched recipes:', recipes);
-
-//     res.json(recipes);
-//   } catch (error) {
-//     console.error('Error fetching user recipes:', error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
 
 module.exports = router;
