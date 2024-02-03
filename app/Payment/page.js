@@ -12,6 +12,8 @@ const Payment = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [loading, setIsLoading] = useState(true);
   const router = useRouter();
+  const [upgradeStatus, setUpgradeStatus] = useState("notInitiated");
+
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
@@ -37,33 +39,56 @@ const Payment = () => {
     checkAuthentication();
   }, [router]);
 
+  useEffect(() => {
+    const storedUpgradeTimestamp = localStorage.getItem('upgradeTimestamp');
+    
+    if (storedUpgradeTimestamp) {
+      const upgradeTimestamp = parseInt(storedUpgradeTimestamp, 10);
+      const currentTimestamp = Date.now();
+
+      if (currentTimestamp - upgradeTimestamp < 5 * 24 * 60 * 60 * 1000) {
+        // If within the 5-day window, show the notification
+        setShowNotification(true);
+      } else {
+        // If the 5-day period has passed, reset upgrade status
+        setUpgradeStatus("notInitiated");
+      }
+    }
+  }, []);
 
   const handleUpdateClick = async () => {
     try {
-      // Show confirmation
-      setShowConfirmation(true);
+      if (upgradeStatus === "notInitiated") {
+        // Show confirmation
+        setShowConfirmation(true);
 
-      // Wait for user input in the confirmation box
-      const userResponse = await new Promise((resolve) => {
-        const handleUserResponse = (response) => {
-          resolve(response);
-        };
-        window.confirm("Are you sure you want to upgrade?") ? handleUserResponse("yes") : handleUserResponse("no");
-      });
+        // Wait for user input in the confirmation box
+        const userResponse = await new Promise((resolve) => {
+          const handleUserResponse = (response) => {
+            resolve(response);
+          };
+          window.confirm("Are you sure you want to upgrade?") ? handleUserResponse("yes") : handleUserResponse("no");
+        });
 
-      if (userResponse === "yes") {
-        setPaymentStatus("premium");
+        if (userResponse === "yes") {
+          // Set upgrade status to indicate initiation
+          setUpgradeStatus("initiated");
 
-        // Send a POST request to backend to update payment status
-        const response = await fetch('http://localhost:3001/api/payment/updatePaidStatus', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ 
-            status: 'paid',
-          }),
-          credentials: "include",
+          // Store the upgrade timestamp in local storage
+          localStorage.setItem('upgradeTimestamp', Date.now().toString());
+
+          setPaymentStatus("premium");
+
+          // Send a POST request to backend to update payment status
+          const response = await fetch('http://localhost:3001/api/payment/updatePaidStatus', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+              status: 'paid',
+            }),
+            credentials: "include",
         });
 
         if (!response.ok) {
@@ -78,16 +103,24 @@ const Payment = () => {
           setShowNotification(false);
           // Downgrade account if payment not made within 5 days
           setPaymentStatus("unpaid");
+          // Reset upgrade status
+          setUpgradeStatus("notInitiated");
+          // Remove stored timestamp
+          localStorage.removeItem('upgradeTimestamp');
         }, 5 * 24 * 60 * 60 * 1000); // 5 days in milliseconds
       } else {
         // User clicked "No"
         setShowConfirmation(false); // Hide the confirmation box
       }
-    } catch (error) {
-      console.error('Error updating payment status:', error.message);
-      // Handle error
+    } else {
+      // If upgrade status is already initiated, show a message
+      alert("Upgrade process already initiated. Please contact cleancookbook@gmail.com for assistance.");
     }
-  };
+  } catch (error) {
+    console.error('Error updating payment status:', error.message);
+    // Handle error
+  }
+};
 
   const handleNotificationDismiss = () => {
     setShowNotification(false);
