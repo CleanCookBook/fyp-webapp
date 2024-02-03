@@ -1,10 +1,10 @@
 // pages/videos.js
 "use client";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import Link from "next/link";
+import Navbar from "@/components/Navbar";
 import { formatDistanceToNow } from 'date-fns';
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -14,6 +14,31 @@ const videos = () => {
   const [loading, setLoading] = useState(true);
   const [videoList, setVideoList] = useState([]);
   const [paymentStatus, setPaymentStatus] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/check-auth", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+          
+        } else {
+          router.push('/loginPage');
+        }
+      } catch (error) {
+        console.error('Error during authentication check:', error.message);
+      } finally {
+        // Set loading to false when authentication check is complete
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthentication();
+  }, [router]);
 
   useEffect(() => {
     // Fetch videos from YouTube API or your backend
@@ -76,6 +101,11 @@ const videos = () => {
     const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
     window.open(videoUrl, "_blank");
   };
+
+  if (!isAuthenticated) {
+    // If not authenticated, the user will be redirected during authentication check
+    return null;
+  }
 
   if (loading) {
     return (

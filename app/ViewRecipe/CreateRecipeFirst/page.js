@@ -1,11 +1,11 @@
 "use client";
 import Footer from "@/components/Footer";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const CreateRecipefirst = () => {
-  const router = useRouter();
   const userRole = "bp";
   const [recipeName, setRecipeName] = useState("");
   const [recipeDescription, setRecipeDescription] = useState("");
@@ -15,6 +15,34 @@ const CreateRecipefirst = () => {
   const [adjustingSize, setAdjustingSize] = useState(false);
   const [selectedDpTags, setSelectedDpTags] = useState([]);
   const [selectedAllergyTags, setSelectedAllergyTags] = useState([]);
+  const [loading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const router = useRouter();
+  useEffect(() => {
+      const checkAuthentication = async () => {
+        try {
+          const response = await fetch("http://localhost:3001/api/check-auth", {
+            method: "GET",
+            credentials: "include",
+          });
+  
+          if (response.ok) {
+            setIsAuthenticated(true);
+            
+          } else {
+            router.push('/loginPage');
+          }
+        } catch (error) {
+          console.error('Error during authentication check:', error.message);
+        } finally {
+          // Set loading to false when authentication check is complete
+          setIsLoading(false);
+        }
+      };
+  
+      checkAuthentication();
+    }, [router]);
   const availableDpTags = [
     "Dairy-free",
     "Vegan",
@@ -172,6 +200,18 @@ const CreateRecipefirst = () => {
       // Handle error as needed
     }
   };
+  if (!isAuthenticated) {
+    // If not authenticated, the user will be redirected during authentication check
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">

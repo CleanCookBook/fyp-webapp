@@ -1,17 +1,46 @@
 "use client";
 import Footer from "@/components/Footer";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 
 const BPMealPlan = () => {
     const userRole="nutritionist";
     const [mealPlans, setMealPlans] = useState([]);
-
-
+    const router = useRouter();
+    const [loading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [mealPlansPerPage] = useState(5);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/check-auth", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+          
+        } else {
+          router.push('/loginPage');
+        }
+      } catch (error) {
+        console.error('Error during authentication check:', error.message);
+      } finally {
+        // Set loading to false when authentication check is complete
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthentication();
+  }, [router]);
 
   useEffect(() => {
     const fetchMealPlans = async () => {
@@ -47,6 +76,18 @@ const BPMealPlan = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const totalPages = Math.ceil(mealPlans.length / mealPlansPerPage);
+  if (!isAuthenticated) {
+    // If not authenticated, the user will be redirected during authentication check
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-screen bg-[#F9D548]">

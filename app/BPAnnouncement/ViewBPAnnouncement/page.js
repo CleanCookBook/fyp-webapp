@@ -2,7 +2,7 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const ViewBPAnnouncement = () => {
@@ -10,8 +10,34 @@ const ViewBPAnnouncement = () => {
   const name = searchParams.get("name");
   const [userRole, setUserRole] = useState("nutritionist");
   const [imageData, setImageData] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
+  const [loading,  setIsLoading] = useState(true);
 
-  
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/check-auth", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+          
+        } else {
+          router.push('/loginPage');
+        }
+      } catch (error) {
+        console.error('Error during authentication check:', error.message);
+      } finally {
+        // Set loading to false when authentication check is complete
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthentication();
+  }, [router]);
 
   useEffect(() => {
     const fetchUserType = async () => {
@@ -63,6 +89,19 @@ const ViewBPAnnouncement = () => {
 
     fetchAnnouncementFile();
 }, [name]);
+
+if (!isAuthenticated) {
+  // If not authenticated, the user will be redirected during authentication check
+  return null;
+}
+
+if (loading) {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+      <LoadingSpinner />
+    </div>
+  );
+}
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">

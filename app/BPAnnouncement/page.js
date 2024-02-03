@@ -1,8 +1,8 @@
 "use client"
 import Footer from "@/components/Footer";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 
@@ -14,6 +14,33 @@ const AnnouncementsPage = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [announcementsPerPage] = useState(5);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/check-auth", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+          
+        } else {
+          router.push('/loginPage');
+        }
+      } catch (error) {
+        console.error('Error during authentication check:', error.message);
+      } finally {
+        // Set loading to false when authentication check is complete
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthentication();
+  }, [router]);
 
   useEffect(() => {
     const fetchUserType = async () => {
@@ -117,6 +144,11 @@ const AnnouncementsPage = () => {
     // Call the function to fetch payment status
     fetchPaymentStatus();
   }, []);
+
+  if (!isAuthenticated) {
+    // If not authenticated, the user will be redirected during authentication check
+    return null;
+  }
 
   if (loading) {
     return (

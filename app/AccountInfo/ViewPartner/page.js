@@ -1,6 +1,7 @@
 "use client";
 import DeleteUser from "@/components/DeleteUser";
 import Footer from "@/components/Footer";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,8 +13,35 @@ const SysAdminViewPartner = () => {
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState(null); // Add this line
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const userRole = 'system admin';
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setIsLoading] = useState(true);
   const router = useRouter();
-  const userRole = 'system admin'; 
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/check-auth", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+          
+        } else {
+          router.push('/loginPage');
+        }
+      } catch (error) {
+        console.error('Error during authentication check:', error.message);
+      } finally {
+        // Set loading to false when authentication check is complete
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthentication();
+  }, [router]);
 
   // Mock user data for demonstratio
 
@@ -81,6 +109,18 @@ const SysAdminViewPartner = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const totalPages = Math.ceil(users.length / usersPerPage);
+  if (!isAuthenticated) {
+    // If not authenticated, the user will be redirected during authentication check
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">
       <Navbar userRole={userRole} />

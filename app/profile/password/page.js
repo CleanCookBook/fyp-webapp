@@ -2,9 +2,8 @@
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import Image from "next/image";
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaTimes } from 'react-icons/fa';
 
 const VerifyPasswordForm = () => {
@@ -12,8 +11,36 @@ const VerifyPasswordForm = () => {
     const userRole = 'user';  
     const [errorMessage, setErrorMessage] = useState('');
     const [isOldPasswordHidden, setIsOldPasswordHidden] = useState(true);
-
+    const [loading, setIsLoading] = useState(true);
     const router = useRouter();
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
+
+    useEffect(() => {
+      const checkAuthentication = async () => {
+        try {
+          const response = await fetch("http://localhost:3001/api/check-auth", {
+            method: "GET",
+            credentials: "include",
+          });
+  
+          if (response.ok) {
+            setIsAuthenticated(true);
+            
+          } else {
+            router.push('/loginPage');
+          }
+        } catch (error) {
+          console.error('Error during authentication check:', error.message);
+        } finally {
+          // Set loading to false when authentication check is complete
+          setIsLoading(false);
+        }
+      };
+  
+      checkAuthentication();
+    }, [router]);
+  
 
 const submitPass = async (e) => {
     e.preventDefault();
@@ -48,6 +75,18 @@ const submitPass = async (e) => {
           console.error("Error updating password:", error.message);
         }
       };
+      if (!isAuthenticated) {
+        // If not authenticated, the user will be redirected during authentication check
+        return null;
+      }
+    
+      if (loading) {
+        return (
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+            <LoadingSpinner />
+          </div>
+        );
+      }
 
 return (
 <div className="flex flex-col h-full bg-[#F9D548]">
@@ -91,14 +130,14 @@ return (
                     {errorMessage && <p className="text-red-500 font-bold text-lg flex justify-center items-center mt-2">{errorMessage}</p>}
                     
                     <div className="flex justify-center items-center w-100 p-3 mt-4">
-                        <Link href="/resetPassword">
+                
                         <button
                             type="submit"
                             className="w-[250px] h-9 bg-blue-950 hover:bg-[#154083] text-white font-bold text-xl rounded-[10px] shadow"
                         >
                         Enter
                         </button>
-                        </Link>
+                  
                     </div>
                 </div>
             </div>

@@ -4,9 +4,11 @@ import Footer from "@/components/Footer";
 import FunFact from "@/components/FunFact";
 import Ingredients from "@/components/Ingredients";
 import Instructions from "@/components/Instructions";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+
 
 const customized = () => {
   const [recipeDetails, setRecipeDetails] = useState(null);
@@ -15,6 +17,35 @@ const customized = () => {
   const router = useRouter();
   const [userRole, setUserRole] = useState("user");
   const recipeName = useSearchParams("recipeName");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setIsLoading] = useState(true);
+  
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/check-auth", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+          
+        } else {
+          router.push('/loginPage');
+        }
+      } catch (error) {
+        console.error('Error during authentication check:', error.message);
+      } finally {
+        // Set loading to false when authentication check is complete
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthentication();
+  }, [router]);
+
+
 
   const fetchIngredientsAndInstruction = async (recipeName) => {
     try {
@@ -108,6 +139,20 @@ const customized = () => {
       fetchData();
     }
   }, []);
+  if (!isAuthenticated) {
+    // If not authenticated, the user will be redirected during authentication check
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+ 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       {/* Navbar */}

@@ -1,10 +1,11 @@
 // RecipeList.js
 "use client";
 import Footer from '@/components/Footer';
+import LoadingSpinner from '@/components/LoadingSpinner';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const RecipeList = () => {
   const searchParams = useSearchParams();
@@ -26,6 +27,34 @@ const RecipeList = () => {
   
 
   const [sortOrder, setSortOrder] = useState('asc');
+  const [loading, setIsLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    const router = useRouter();
+    useEffect(() => {
+        const checkAuthentication = async () => {
+          try {
+            const response = await fetch("http://localhost:3001/api/check-auth", {
+              method: "GET",
+              credentials: "include",
+            });
+    
+            if (response.ok) {
+              setIsAuthenticated(true);
+              
+            } else {
+              router.push('/loginPage');
+            }
+          } catch (error) {
+            console.error('Error during authentication check:', error.message);
+          } finally {
+            // Set loading to false when authentication check is complete
+            setIsLoading(false);
+          }
+        };
+    
+        checkAuthentication();
+      }, [router]);
 
   const changeSortOrder = (order) => {
     console.log('Previous sortOrder:', sortOrder);
@@ -58,6 +87,18 @@ const RecipeList = () => {
     const sortDropdown = document.getElementById('sortDropdown');
     sortDropdown.classList.toggle('hidden');
   };
+  if (!isAuthenticated) {
+    // If not authenticated, the user will be redirected during authentication check
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
   
   
 
