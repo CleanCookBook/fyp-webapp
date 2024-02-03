@@ -1,6 +1,7 @@
 "use client";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import DeleteRecipe from "@/components/DeleteRecipe";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -18,6 +19,8 @@ const ViewRecipePage = () => {
   const [announcementsPerPage] = useState(5);
   const [loading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const router = useRouter();
   useEffect(() => {
@@ -122,12 +125,46 @@ const ViewRecipePage = () => {
     }
   };
 
+  const handleDeleteClick = (recipe) => {
+    setSelectedRecipe(recipe);
+    setShowConfirmation(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/editRecipe/${selectedRecipe.Rname}`, {
+        method: "DELETE",
+      });
+  
+      if (response.ok) {
+        // Remove the deleted recipe from userRecipes state
+        setUserRecipes(userRecipes.filter(recipe => recipe.Rname !== selectedRecipe.Rname));
+        console.log('Recipe deleted successfully');
+      } else {
+        // Handle the error
+        console.error("Error deleting recipe:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting recipe:", error);
+    } finally {
+      // Close the confirmation dialog
+      handleDeleteCancel();
+    }
+  };
+  
+
+  const handleDeleteCancel = () => {
+    setSelectedRecipe(null);
+    setShowConfirmation(false);
+  };
+
   // Can click enter key without click the search button
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       handleSearch();
     }
   };
+
   if (!isAuthenticated) {
     // If not authenticated, the user will be redirected during authentication check
     return null;
@@ -201,17 +238,27 @@ const ViewRecipePage = () => {
 
         <div className="bg-white rounded-lg p-4 mt-10">
           {userRecipes.map((recipe) => (
-            <a
-              key={recipe.UserID}
-              href={`/detailRecipe?recipeName=${encodeURIComponent(recipe.Rname)}`}
-              onClick={() => handleAnnouncementClick(recipe.UserID)}
-              className="block cursor-pointer"
-            >
-              <p>{recipe.Rname}</p>
+            <div key={recipe.UserID}>
+              <div className="flex items-center justify-between">
+                <a
+                  href={`/detailRecipe?recipeName=${encodeURIComponent(recipe.Rname)}`}
+                  onClick={() => handleAnnouncementClick(recipe.UserID)}
+                  className="block cursor-pointer"
+                >
+                  <p>{recipe.Rname}</p>
+                </a>
+                <button
+                  onClick={() => handleDeleteClick(recipe)}
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Delete
+                </button>
+              </div>
               <hr className="my-4" />
-            </a>
+            </div>
           ))}
         </div>
+
         <div className="flex justify-center mt-4">
           {/* Pagination */}
           <button
@@ -243,6 +290,14 @@ const ViewRecipePage = () => {
             </a>
           </p>
         </div>
+        {/* Confirmation Pop-up */}
+        {showConfirmation && (
+          <DeleteRecipe
+            recipe={selectedRecipe}
+            onConfirm={handleDeleteConfirm}
+            onCancel={handleDeleteCancel}
+          />
+        )}
         {noResults && <p className="text-red-500 mt-2">No such recipe</p>}
         {emptyQuery && (
           <p className="text-red-500 mt-2">Please type something!</p>

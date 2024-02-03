@@ -35,7 +35,7 @@ const AnnouncementsPage = () => {
         console.error('Error during authentication check:', error.message);
       } finally {
         // Set loading to false when authentication check is complete
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
