@@ -2,7 +2,7 @@
 import ChefNote from "@/components/ChefNote";
 import Footer from "@/components/Footer";
 import FunFact from "@/components/FunFact";
-import HomeIngredients from "@/components/HomeIngredients";
+import Ingredients from "@/components/Ingredients";
 import Instructions from "@/components/Instructions";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
@@ -357,7 +357,7 @@ const RecipeDetails = () => {
             <div name="title" className="p-4 pl-20">
               <h2 className="text-3xl text-[#1D5198] font-bold">Ingredients</h2>
             </div>
-            <HomeIngredients ingredients={recipeDetails?.ingredients} />
+            <Ingredients ingredients={recipeDetails?.ingredients} />
           </div>
           
           <div className="border-t border-gray-500 my-4 pl-20"></div>
