@@ -12,6 +12,7 @@ const LoadingSpinner = () => {
           width: '100px', // Adjust the size of the loading spinner
           height: '100px',
           borderRadius: '50%',
+          backgroundColor: 'transparent',
         }}
       />
     </div>

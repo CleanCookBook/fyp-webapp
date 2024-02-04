@@ -2,13 +2,13 @@
 import ChefNote from "@/components/ChefNote";
 import Footer from "@/components/Footer";
 import FunFact from "@/components/FunFact";
-import HomeIngredients from "@/components/HomeIngredients";
+import Ingredients from "@/components/Ingredients";
 import Instructions from "@/components/Instructions";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
 import NutritionalFact from "@/components/NutritionalFact";
 import StarRating from "@/components/StarRating";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 
@@ -19,15 +19,38 @@ const RecipeDetails = () => {
   const [userRole, setUserRole] = useState("user");
   const [showEditButton, setShowEditButton] = useState(false);
   const [notification, setNotification] = useState(null);
-  const [loading, setLoading] = useState(true)
+  const [loading, setIsLoading] = useState(true);
+  const [isFromBookmarkSite, setIsFromBookmarkSite] = useState(false); 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const searchParams = useSearchParams();
+  const recipeName = searchParams.get("recipeName");
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/check-auth", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+          
+        } else {
+          router.push('/loginPage');
+        }
+      } catch (error) {
+        console.error('Error during authentication check:', error.message);
+      } finally {
+        // Set loading to false when authentication check is complete
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthentication();
+  }, [router]);
   
-  const handleEditClick = () => {
-    const recipeName = recipeDetails?.RName;
-    if (recipeName) {
-      const editFavoriteUrl = `/detailRecipe/favorite/editFavorite?recipeName=${encodeURIComponent(recipeName)}`;
-      router.push(editFavoriteUrl);
-    }
-  };
+  
 
   const showNotification = (message) => {
     setNotification(message);
@@ -41,7 +64,7 @@ const RecipeDetails = () => {
 
   const toggleFavorite = async () => {
     try {
-      setLoading(true); 
+      setIsLoading(true); 
       console.log("Toggle Favorite Clicked!");
 
       if (isFavorite) {
@@ -103,7 +126,7 @@ const RecipeDetails = () => {
     } catch (error) {
       console.error("Error updating favorite status:", error.message);
     } finally {
-      setLoading(false); // Set loading to false regardless of success or error
+      setIsLoading(false); // Set loading to false regardless of success or error
     }
   };
 
@@ -117,8 +140,6 @@ const RecipeDetails = () => {
   };
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const recipeName = searchParams.get("recipeName");
 
     const fetchUserType = async () => {
       try {
@@ -145,7 +166,7 @@ const RecipeDetails = () => {
 
     const fetchRecipeDetails = async () => {
       try {
-        setLoading(true);
+        setIsLoading(true);
         const response = await fetch(
           `http://localhost:3001/api/recipe/${recipeName}`
         );
@@ -194,7 +215,9 @@ const RecipeDetails = () => {
           }
 
           const referrer = document.referrer;
-          const isFromBookmarkSite = referrer.includes("favorite");
+          setIsFromBookmarkSite(
+            referrer.includes("favorite") || referrer.includes("ViewRecipe")
+          );
 
           // Show the "Edit" button if the user is from the bookmark site
           setShowEditButton(isFromBookmarkSite);
@@ -204,7 +227,7 @@ const RecipeDetails = () => {
       } catch (error) {
         console.error("Error fetching recipe details:", error.message);
       } finally {
-        setLoading(false); // Set loading to false regardless of success or error
+        setIsLoading(false); // Set loading to false regardless of success or error
       }
 
     };
@@ -213,7 +236,39 @@ const RecipeDetails = () => {
       fetchUserType(); // Fetch user type first
       fetchRecipeDetails(); // Then fetch recipe details
     }
-  }, []);
+  }, [isFromBookmarkSite]); 
+
+  const handleEditClick = () => {
+    const referrer = document.referrer;
+
+    if (recipeName) {
+      let editFavoriteUrl;
+
+      if (isFromBookmarkSite ===  referrer.includes("favorite") ) {
+        // Use === for comparison
+        // If the referrer includes "favorite"
+        editFavoriteUrl = `/detailRecipe/favorite/editFavorite?recipeName=${encodeURIComponent(
+          recipeName
+        )}`;
+      } else {
+        // If the referrer includes "ViewRecipe"
+        editFavoriteUrl = `/detailRecipe/favorite/editNutriFav?recipeName=${encodeURIComponent(
+          recipeName
+        )}`;
+      }
+
+      router.push(editFavoriteUrl);
+    }
+  };
+
+  const navigateToHomePage = () => {
+    router.push("/home/BPHomepage");
+  };
+
+  if (!isAuthenticated) {
+    // If not authenticated, the user will be redirected during authentication check
+    return null;
+  }
 
   if (loading) {
     return (
@@ -222,7 +277,6 @@ const RecipeDetails = () => {
       </div>
     );
   }
-
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       {/* Navbar */}
@@ -230,19 +284,28 @@ const RecipeDetails = () => {
 
       {/* Main Content */}
       <div className="p-4 pl-20 bg-[#F9D548]">
-        <div className="text-6xl font-extrabold text-blue-950">
-          {recipeDetails?.RName}
-          <button onClick={() => {toggleFavorite()}}>
-            {userRole === "user" && // Only show bookmark for "user" role
-              (isFavorite ? (
-                <FaBookmark className="text-red-500 text-4xl ml-5 hover:blue-950" />
-              ) : (
-                <FaRegBookmark className="text-4xl ml-5" />
-              ))}
-          </button>
+        <div className="flex justify-start items-center mt-4 mb-4">
+          {userRole === "nutritionist" && (
+            <button
+              onClick={navigateToHomePage}
+              className="w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow mr-4"
+            >
+              &lt;&nbsp;&nbsp;Back
+            </button>
+          )} 
+          <div className="text-6xl font-extrabold text-blue-950">
+            {recipeDetails?.RName}
+            <button onClick={() => {toggleFavorite()}}>
+              {userRole === "user" && // Only show bookmark for "user" role
+                (isFavorite ? (
+                  <FaBookmark className="text-red-500 text-4xl ml-5 hover:blue-950" />
+                ) : (
+                  <FaRegBookmark className="text-4xl ml-5" />
+                ))}
+            </button>
+          </div>
         </div>
 
-        
 
         <div className="flex p-4 pl-20 bg-[#F9D548]">
           {/* Division 1 - 1/3 width */}
@@ -294,11 +357,9 @@ const RecipeDetails = () => {
             <div name="title" className="p-4 pl-20">
               <h2 className="text-3xl text-[#1D5198] font-bold">Ingredients</h2>
             </div>
-            <HomeIngredients ingredients={recipeDetails?.ingredients} />
+            <Ingredients ingredients={recipeDetails?.ingredients} />
           </div>
           
-          
-
           <div className="border-t border-gray-500 my-4 pl-20"></div>
           <div name="Instruction">
             <div name="header" className="p-4 pl-20">
@@ -334,11 +395,11 @@ const RecipeDetails = () => {
             </h2>
           </div>
           <NutritionalFact calorie={recipeDetails?.calorie} />
-          <div className="w-28 bg-blue-900 hover:bg-[#1c57b1] text-xl text-white font-bold py-2 px-9 rounded ml-auto mt-10 mr-4 mb-4">
             {showEditButton && (
+              <div className="w-28 bg-blue-900 hover:bg-[#1c57b1] text-xl text-white font-bold py-2 px-9 rounded ml-auto mt-10 mr-4 mb-4">
               <button onClick={() => handleEditClick()}>Edit</button>
+              </div>
             )}
-          </div>
         </div>
 
         {/* Notification */}

@@ -11,6 +11,52 @@ const isAuthenticated = (req, res, next) => {
     }
   };
 
+  router.get('/changed/:recipeName', (req, res) => {
+    const recipeName = req.params.recipeName;
+
+
+    const selectRecipeQuery = `
+      SELECT Ingredients, Instruction
+      FROM Bookmark
+      WHERE RName = ? AND Instruction IS NOT NULL
+    `;
+  
+    db.get(selectRecipeQuery, [recipeName], (err, row) => {
+      if (err) {
+        console.error('Error fetching ingredients and instruction:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else if (row) {
+        const ingredients = row.Ingredients.split('\r\n');
+        const instruction = row.Instruction.split('\r\n');
+        console.log (ingredients);
+        res.json({ ingredients, instruction });
+      } else {
+        res.status(404).json({ error: 'Recipe not found' });
+      }
+    });
+  });
+
+  router.delete("/:recipeName", async (req, res) => {
+    const recipeName = req.params.recipeName;
+    console.log("Received DELETE request for recipe:", recipeName);
+  
+    try {
+      await db.run("BEGIN TRANSACTION");
+  
+      // Delete from Recipe_Np table
+      await db.run("DELETE FROM Recipe_Np WHERE Rname = ?", [recipeName]);
+  
+      await db.run("COMMIT");
+      console.log("Transaction committed successfully");
+  
+      res.json({ success: true, message: "Recipe deleted successfully." });
+    } catch (error) {
+      await db.run("ROLLBACK");
+      console.error("Error deleting recipe:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+
   router.get('/showEdit', isAuthenticated, async (req, res) => {
     const userId = req.userId;
   
@@ -46,33 +92,5 @@ const isAuthenticated = (req, res, next) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
-
-  router.get('/changed/:recipeName', (req, res) => {
-    const recipeName = req.params.recipeName;
-
-
-    const selectRecipeQuery = `
-      SELECT Ingredients, Instruction
-      FROM Bookmark
-      WHERE RName = ? AND Instruction IS NOT NULL
-    `;
-  
-    db.get(selectRecipeQuery, [recipeName], (err, row) => {
-      if (err) {
-        console.error('Error fetching ingredients and instruction:', err);
-        res.status(500).json({ error: 'Internal Server Error' });
-      } else if (row) {
-        const ingredients = row.Ingredients.split('\r\n');
-        const instruction = row.Instruction.split('\r\n');
-        console.log (ingredients);
-        res.json({ ingredients, instruction });
-      } else {
-        res.status(404).json({ error: 'Recipe not found' });
-      }
-    });
-  });
-  
-  
-  
 
 module.exports = router;

@@ -1,6 +1,8 @@
 "use client";
 import Footer from "@/components/Footer";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const SysAdminReviewApp = () => {
@@ -10,6 +12,35 @@ const SysAdminReviewApp = () => {
   const userRole = 'system admin'; 
   const [selectedImage, setSelectedImage] = useState(null);
   // Mock user data for demonstration
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setIsLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/check-auth", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+          
+        } else {
+          router.push('/loginPage');
+        }
+      } catch (error) {
+        console.error('Error during authentication check:', error.message);
+      } finally {
+        // Set loading to false when authentication check is complete
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthentication();
+  }, [router]);
+
 
   useEffect(() => {
     const fetchPartnerInfo = async () => {
@@ -58,6 +89,18 @@ const SysAdminReviewApp = () => {
       console.error(`Error approving user with ID ${userId}:`, error);
     }
   };
+  if (!isAuthenticated) {
+    // If not authenticated, the user will be redirected during authentication check
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   const handleDelete = async (userId) => {
     try {

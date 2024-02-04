@@ -71,6 +71,34 @@ const NewsFeed = () => {
   const [loading, setLoading] = useState(true);
   const [subscribed, setSubscribed] = useState(false); // Add state for subscription
   const [paymentStatus, setPaymentStatus] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/check-auth", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+          
+        } else {
+          router.push('/loginPage');
+        }
+      } catch (error) {
+        console.error('Error during authentication check:', error.message);
+      } finally {
+        // Set loading to false when authentication check is complete
+        setLoading(false);
+      }
+    };
+
+    checkAuthentication();
+  }, [router]);
+
 
   useEffect(() => {
     const fetchNewsData = async () => {
@@ -134,6 +162,11 @@ const NewsFeed = () => {
   const end = currentPage * newsPerPage;
   const currentNews = (newsItems || []).slice(start, end);
 
+  if (!isAuthenticated) {
+    // If not authenticated, the user will be redirected during authentication check
+    return null;
+  }
+
   if (loading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
@@ -152,7 +185,7 @@ const NewsFeed = () => {
          
         <div className="w-[90%] mb-6 relative">  
           {paymentStatus !== "paid" && (
-            <div className="absolute inset-0 flex items-center justify-center -mr-32 z-10">
+            <div className="absolute inset-0 flex items-end justify-end -mr-38 z-10 -mt-4">
               <div className="bg-[#00509D] rounded-[20px] p-2 w-[400px] h-[510px]">
                 <img
                   src="/unlock.png"  // Replace with the correct path to your GIF file
@@ -166,7 +199,7 @@ const NewsFeed = () => {
                   &#10003; Chat with professional nutritionists.
                 </p>
                 <Link href="/Payment">
-                  <button className="items-center bg-white hover:bg-grey-700 text-blue-950 font-bold py-2 px-4 rounded mt-4 ml-32">
+                  <button className="items-center bg-white hover:bg-grey-700 text-blue-950 font-bold py-2 px-4 rounded mt-4 ml-[138px]">
                     Upgrade
                   </button>  
                 </Link>

@@ -1,8 +1,9 @@
 "use client"
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import Navbar from "@/components/Navbar";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const customizedlist = () => {
@@ -12,6 +13,33 @@ const customizedlist = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [favoritesPerPage] = useState(5);
   const [userFirstName, setUserFirstName] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/check-auth", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+          
+        } else {
+          router.push('/loginPage');
+        }
+      } catch (error) {
+        console.error('Error during authentication check:', error.message);
+      } finally {
+        // Set loading to false when authentication check is complete
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthentication();
+  }, [router]);
 
   const fetchUserInfo = async () => {
     try {
@@ -81,6 +109,11 @@ const indexOfLastFavorite = currentPage * favoritesPerPage;
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const totalPages = Math.ceil(favorites.length / favoritesPerPage);
+
+  if (!isAuthenticated) {
+    // If not authenticated, the user will be redirected during authentication check
+    return null;
+  }
 
   if (loading) {
     return (

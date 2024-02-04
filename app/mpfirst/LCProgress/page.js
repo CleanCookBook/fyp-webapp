@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const LCProgress = () => {
-  const userRole = 'user'; 
+  const [userRole, setUserRole] = useState("user"); 
   const [mealPlanRecipes, setMealPlanRecipes] = useState(null);
   const searchParams = useSearchParams();
   const mealPlanName = searchParams.get("MealPlan");
@@ -19,6 +19,61 @@ const LCProgress = () => {
   const [gifPaths, setGifPaths] = useState([]);
   
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const isNutritionist = userRole === "nutritionist";
+
+  
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/check-auth", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+          
+        } else {
+          router.push('/loginPage');
+        }
+      } catch (error) {
+        console.error('Error during authentication check:', error.message);
+      } finally {
+        // Set loading to false when authentication check is complete
+        setLoading(false);
+      }
+    };
+
+    checkAuthentication();
+  }, [router]);
+
+  useEffect(() => {
+    const fetchUserType = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3001/api/user/userType",
+          {
+            method: "POST",
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserRole(data.userType || "user"); // Set the userRole based on the response
+        } else {
+          console.error("Error fetching user type:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching user type:", error.message);
+      }
+    };
+
+    // Fetch user type when the component mounts
+    fetchUserType();
+  }, []);
 
   useEffect(() => {
     const fetchMealPlanRecipes = async () => {
@@ -228,6 +283,20 @@ const LCProgress = () => {
     console.log(`Clicked recipe: ${recipeName}`);
   };
 
+  if (!isAuthenticated) {
+    // If not authenticated, the user will be redirected during authentication check
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+
 return(
 <section className="flex flex-col h-screen bg-[#F9D548]">
   <Navbar userRole={userRole} />
@@ -277,12 +346,14 @@ return(
       {days.map((day, dayIndex) => (
   <div key={dayIndex} className="bg-blue-950 rounded-lg p-10 text-white flex flex-col items-center">
     <h2 className="text-lg font-semibold mb-2 relative">
-      <input
-        type="checkbox"
-        id={`day-${dayIndex}`}
-        onChange={() => handleCheckboxChange(dayIndex)}
-        checked={checkedDays.includes(dayIndex)} // Set the checked attribute based on state
-      />
+    {!isNutritionist && (
+          <input
+            type="checkbox"
+            id={`day-${dayIndex}`}
+            onChange={() => handleCheckboxChange(dayIndex)}
+            checked={checkedDays.includes(dayIndex)} // Set the checked attribute based on state
+          />
+        )}
       <label htmlFor={`day-${dayIndex}`}>
         {day} 
       </label>
@@ -324,6 +395,9 @@ return(
 ))}
 </div>
 
+{!isNutritionist && (
+          <>
+          
       <div className="text-blue-950 font-medium text-start mt-8">
         <p>Check Your Progress!</p>
       </div>
@@ -362,8 +436,10 @@ return(
           </div>
         </div>
       )}
-    </div>
-  <Footer />
+     </>
+     )}
+   </div>
+   <Footer />
 </section>
 );
 };

@@ -3,7 +3,7 @@
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const FilteredRecipePage = () => {
@@ -16,6 +16,34 @@ const FilteredRecipePage = () => {
   const [selectedFilters, setSelectedFilters] = useState([]);
 
   console.log('resultsArray:', resultsArray);
+  const [loading, setIsLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    const router = useRouter();
+    useEffect(() => {
+        const checkAuthentication = async () => {
+          try {
+            const response = await fetch("http://localhost:3001/api/check-auth", {
+              method: "GET",
+              credentials: "include",
+            });
+    
+            if (response.ok) {
+              setIsAuthenticated(true);
+              
+            } else {
+              router.push('/loginPage');
+            }
+          } catch (error) {
+            console.error('Error during authentication check:', error.message);
+          } finally {
+            // Set loading to false when authentication check is complete
+            setIsLoading(false);
+          }
+        };
+    
+        checkAuthentication();
+      }, [router]);
      
   const filtersParam = searchParams.get('filters');
   const filtersArray = JSON.parse(filtersParam) || [];
@@ -113,6 +141,18 @@ const FilteredRecipePage = () => {
       setSelectedFilters(filtersArray);
     }
   }, []);
+  if (!isAuthenticated) {
+    // If not authenticated, the user will be redirected during authentication check
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <section className="flex flex-col h-screen bg-[#F9D548]">
@@ -121,13 +161,16 @@ const FilteredRecipePage = () => {
         <div className="flex items-center mb-4">
           <Link
             href="/home"
-            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[39px] -ml-[800px]"
+            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[39px] -ml-[600px]"
           >
             &lt;&nbsp;&nbsp;Back
           </Link>
+          {displayedRecipes.length > 0 && (
+            <h1 className="flex justify-center items-center text-7xl text-[#0A2A67] font-black ml-[28rem]">All Recipes</h1>
+          )}
         </div>
-
-        <div className="flex items-end justify-end">
+        
+        <div className="flex items-end justify-end mt-6">
           <div className="-top-2 w-[596px] h-11 flex flex-row space-x-4 relative right-[14rem]">
             {/* Dietary Preferences */}
             {dietaryPreferences.map((preference, index) => (
@@ -202,13 +245,13 @@ const FilteredRecipePage = () => {
             </div>
           )}
         </div>
-        <div className="mt-2 w-[70%] max-w-[1114px]">
+        <div className="mt-4 w-[70%] max-w-[1114px]">
           {resultsArray.length === 0 ? (
             <div className="flex flex-col items-center -mt-[0px]">
               <img 
                 src="/noRecipe.png" 
                 alt="Error" 
-                className="w-3/6 h-3/6 -mt-[24px]" 
+                className="w-3/6 h-3/6 -mt-[80px]" 
               /> 
               <p className="text-center text-6xl font-extrabold text-[#0A2A67] -mt-28 py-4">No recipes found.</p>
             </div>

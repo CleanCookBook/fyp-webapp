@@ -1,6 +1,8 @@
 "use client";
 import Footer from "@/components/Footer";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -14,6 +16,32 @@ const BPCreateMealPlan = () => {
   const [recipeOptions, setRecipeOptions] = useState([]);
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
   const router = useRouter();
+  const [loading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/check-auth", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+          
+        } else {
+          router.push('/loginPage');
+        }
+      } catch (error) {
+        console.error('Error during authentication check:', error.message);
+      } finally {
+        // Set loading to false when authentication check is complete
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthentication();
+  }, [router]);
 
   const handleDpTagChange = (tag) => {
     if (selectedDpTags.includes(tag)) {
@@ -189,14 +217,35 @@ const BPCreateMealPlan = () => {
       // Handle error appropriately (e.g., show an error message)
     }
   };
+  if (!isAuthenticated) {
+    // If not authenticated, the user will be redirected during authentication check
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       <Navbar />
       <div className="container mx-auto p-4 flex-1">
-        <h1 className="text-5xl font-bold text-[#0A2A67] mb-4">
-          Create a Meal Plan
-        </h1>
+        <div className="flex items-center mb-4">
+          <Link 
+            href="/MealPlan" 
+            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[45px] -ml-36"
+          >
+            &lt;&nbsp;&nbsp;Back
+          </Link>
+
+          <h1 className="text-5xl font-extrabold text-[#0A2A67] mb-4 mt-10 ml-8">
+            Create a Meal Plan
+          </h1>
+        </div>
         <form
           className="flex flex-col items-start my-8"
           onSubmit={handleSubmit}
@@ -280,7 +329,7 @@ const BPCreateMealPlan = () => {
             placeholder="Enter Meal Plan Description"
           />
           <label className="text-blue-950 text-lg font-medium mb-2 mt-4 self-start">
-            Select Dietary Preferance Tags:
+            Select Dietary Preference Tags:
           </label>
           {availableDpTags.map((tag) => (
             <div key={tag} className="flex items-center mb-2">
@@ -354,7 +403,7 @@ const BPCreateMealPlan = () => {
 
           <button
             type="submit"
-            className="w-[259px] h-7 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow self-end"
+            className="w-[259px] h-10 bg-blue-950 hover:bg-[#154083] text-white text-lg font-bold rounded-[10px] shadow self-end"
           >
             Submit
           </button>

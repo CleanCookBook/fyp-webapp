@@ -2,7 +2,7 @@
 import React from 'react';
 
 const Ingredients = ({ ingredients }) => {
-  const ingredientsArray = Array.isArray(ingredients) && ingredients.length > 0 ? ingredients[0].split('\n') : [];
+  const ingredientsArray = Array.isArray(ingredients) ? ingredients : [];
   const midpoint = Math.ceil(ingredientsArray.length / 2);
 
   return (
