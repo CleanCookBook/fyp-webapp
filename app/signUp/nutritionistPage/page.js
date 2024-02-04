@@ -29,17 +29,6 @@ const BusinessPartnerSignup = () => {
       return;
     }
   
-    // Check if the file type is PDF
-    if (file.type !== "application/pdf") {
-      alert("Please upload a PDF file.");
-      setState(null);
-      setFileName("Choose File");
-  
-      // Reset the file input value
-      e.target.value = "";
-      return;
-    }
-  
     setState(file); // Update the respective state with the selected file
     setFileName(file.name); // Update the UI to show the selected file name
   };
@@ -134,7 +123,7 @@ const BusinessPartnerSignup = () => {
                 <input
                   type="file"
                   id="licenseUpload"
-                  accept="application/pdf"
+                  accept="image/jpeg"
                   className="hidden"
                   onChange={(e) =>
                     handleFileChange(e, setLicenseImage, setLicenseFileName)
@@ -170,7 +159,7 @@ const BusinessPartnerSignup = () => {
                 <input
                   type="file"
                   id="userPhotoUpload"
-                  accept="application/pdf"
+                  accept="image/jpeg"
                   className="hidden"
                   onChange={(e) =>
                     handleFileChange(e, setUserPhoto, setUserPhotoFileName)
@@ -211,7 +200,7 @@ const BusinessPartnerSignup = () => {
                 <input
                   type="file"
                   id="experienceUpload"
-                  accept="application/pdf"
+                  accept="image/jpeg"
                   className="hidden"
                   onChange={(e) =>
                     handleFileChange(
@@ -252,7 +241,7 @@ const BusinessPartnerSignup = () => {
                 <input
                   type="file"
                   id="testimonyUpload"
-                  accept="application/pdf"
+                  accept="image/jpeg"
                   className="hidden"
                   onChange={(e) =>
                     handleFileChange(e, setTestimonyFile, setTestimonyFileName)
