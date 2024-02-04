@@ -11,15 +11,14 @@ const editNutriFav = () => {
   const [recipeInstruction, setRecipeInstruction] = useState("");
   const [recipeIngredients, setRecipeIngredients] = useState("");
   const [noteChef,setNoteChef] = useState("");
-  const [recipeDetails, setRecipeDetails] = useState(null);
   const [funFacts, setFunFacts] = useState(""); // Add this line for fun facts
   const [nutritionalFacts, setNutritionalFacts] = useState("");
   const [description, setDescriptionChange]=useState("");
-
   const searchParams = useSearchParams();
   const recipeName = searchParams.get("recipeName");
   const [loading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [recipeDetails, setRecipeDetails] = useState(null);
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -70,6 +69,7 @@ const editNutriFav = () => {
     setFunFacts(e.target.value);
   };
   
+  // Handling Input for Nutritional Facts
   const handleNutritionalFactsChange = (e) => {
     // Update the state variable for nutritionalFacts
     setNutritionalFacts(e.target.value);
@@ -85,7 +85,7 @@ const editNutriFav = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-        body: JSON.stringify({
+          body: JSON.stringify({
             description:description,
             ingredients: recipeIngredients,
             instruction: recipeInstruction,
@@ -102,7 +102,7 @@ const editNutriFav = () => {
 
       if (response.ok) {
         console.log("Recipe updated successfully!");
-        router.push("/ViewRecipe");
+        router.push(`/detailRecipe?recipeName=${encodeURIComponent(recipeDetails?.RName || "")}`);
       } else {
         try {
           const errorData = await response.json();
@@ -191,6 +191,7 @@ const editNutriFav = () => {
 
   // Add any additional cleanup or dependencies as needed
 }, []);
+
       
   if (!isAuthenticated) {
     // If not authenticated, the user will be redirected during authentication check
@@ -206,29 +207,29 @@ const editNutriFav = () => {
   }
 
 return (
-  <div className="h-full bg-[#F9D548] text-[#0A2A67]">
+  <div className="flex flex-col min-h-screen bg-[#F9D548]">
     {/* Navbar */}
     <Navbar userRole={userRole} />
 
-    <div className="h-full bg-[#F9D548] text-[#0A2A67] flex-grow">
+    <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67] flex-grow mb-10">
       {/* Main Content */}
       <div className="p-4 pl-20 bg-[#F9D548]">
-        <div className="flex justify-center items-center mb-4">
+        <div className="flex justify-start items-center -mt-6 mb-4">
           <Link 
             href="/ViewRecipe" 
-            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[10px] mr-[320px]"
+            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[45px]"
           >
             &lt;&nbsp;&nbsp;Back
           </Link>
-          <h2 className="flex justify-center items-center text-5xl font-black pb-8 mr-[500px]">Edit your Recipe</h2>
+          <h2 className="text-5xl font-extrabold text-[#0A2A67] mb-4 mt-10 ml-[32rem]">Edit your Recipe</h2>
         </div>
-        <div className="text-5xl font-extrabold text-blue-950 -mt-4">
+        <div className="text-5xl font-extrabold text-blue-950 -mt-2">
           {recipeDetails?.RName}
         </div>
 
         <div className="flex p-4 pl-20 bg-[#F9D548]">
           {/* Division 1 - 1/3 width */}
-          <div className="w-1/3 -mt-1">
+          <div className="w-1/3">
             <img
               src={recipeDetails?.image || "/placeholder-image.jpg"} // Use your placeholder image or another fallback
               alt={recipeDetails?.RName || "Recipe Image"}
@@ -239,7 +240,7 @@ return (
           </div>
 
           {/* Division 2 - 2/3 width */}
-          <div className="w-2/3  justify-center text-center mt-14">
+          <div className="w-2/3 justify-center text-center mt-2 mr-20">
             {/* Content for Division 2 with blue-colored stars */}
             <div className="text-3xl text-[#1D5198] font-bold">
               Why this Recipe?
@@ -250,7 +251,8 @@ return (
                 id="recipeDescription"
                 value={description}
                 onChange={handleDescriptionChange}
-                ></textarea>
+                className="w-full h-48 border border-gray-300 rounded-lg p-4 focus:outline-none focus:ring-2"
+              ></textarea>
               </div>
             </div>
           </div>
@@ -258,7 +260,7 @@ return (
       </div>
 
       <div className="flex">
-        {/* First Column - 1/3 width */}
+        {/* First Column - 3/5 width */}
         <div className="w-3/5 p-4">
           <div className="p-8 pl-20 -mt-4">
             <label className="text-3xl text-[#1D5198] font-bold">
@@ -294,55 +296,62 @@ return (
         <div className="border-l border-gray-500"></div>
 
         {/* Second Column - 4/6 width */}
-        <div className="w-4/6 p-4">
-          <div name="title" className="p-4 pl-20 -mt-5">
+        <div className="w-8/12 p-8">
+          <div name="title" className="p-6 pl-4 -mt-6">
             <h2 className="text-3xl text-[#1D5198] font-bold">
               Notes From the Chef!
             </h2>
           </div>
-          <textarea
-            id="noteChef"
-            value={noteChef} 
-            onChange={handleChefNoteChange}
-            className="w-full text-neutral-400 font-medium border-none outline-none resize-none bg-white rounded-[10px] pl-4 pr-4 py-2"
-          />
+          <div className="pl-4">
+            <textarea
+              id="noteChef"
+              value={noteChef} 
+              onChange={handleChefNoteChange}
+              className="w-full h-56 text-neutral-400 font-medium border-none outline-none resize-none bg-white rounded-[10px] pl-4 pr-4 py-2"
+            />  
+          </div>
+          
           {/* <ChefNote chefNote={recipeDetails?.tips_tricks} /> */}
 
           <div className="border-t border-gray-500 my-4 pl-20"></div>
-            <div name="title" className="p-4 pl-20">
+            <div name="title" className="p-6 pl-4">
               <h2 className="text-3xl text-[#1D5198] font-bold">Edit Fun Facts</h2>
             </div>
-            <textarea
-            id="funFacts"
-            value={funFacts} 
-            onChange={handleFunFactsChange}
-            className="w-full h-300 text-neutral-400 font-medium border-none outline-none resize-none bg-white rounded-[10px] pl-4 pr-4 py-2"
-          />
+            <div className="pl-4">
+              <textarea
+                id="funFacts"
+                value={funFacts} 
+                onChange={handleFunFactsChange}
+                className="w-full h-44 text-neutral-400 font-medium border-none outline-none resize-none bg-white rounded-[10px] pl-4 pr-4 py-2"
+              />
+            </div>
           {/* <FunFact facts={recipeDetails?.funFacts} /> */}
 
           <div className="border-t border-gray-500 my-4 pl-20"></div>
-            <div name="title" className="p-4 pl-20">
+            <div name="title" className="p-6 pl-4">
               <h2 className="text-3xl text-[#1D5198] font-bold">
               Nutritional Facts
               </h2>
             </div>
-            <textarea
-            id="nutritionalFacts"
-            value={nutritionalFacts}  
-            onChange={handleNutritionalFactsChange}
-            className="w-full h-300 text-neutral-400 font-medium border-none outline-none resize-none bg-white rounded-[10px] pl-4 pr-4 py-2"
-          />
-        </div>
+            <div className="pl-4">
+              <textarea
+                id="nutritionalFacts"
+                value={nutritionalFacts}  
+                onChange={handleNutritionalFactsChange}
+                className="w-full h-36 text-neutral-400 font-medium border-none outline-none resize-none bg-white rounded-[10px] pl-4 pr-4 py-2"
+              />
+            </div>
+          </div>
 
-        <div className="flex justify-end items-end py-6">
-          <button
-            onClick={(e) => handleNext(e, recipeName)}
-            className="w-[259px] h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold self-end rounded-[10px] shadow mr-8"
-          >
-            Submit
-          </button>
+          <div className="flex justify-end items-end py-6 -mb-8">
+            <button
+              onClick={(e) => handleNext(e, recipeName)}
+              className="w-[259px] h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold self-end rounded-[10px] shadow mr-8"
+            >
+              Submit
+            </button>
+          </div>
         </div>
-      </div>
 
     </div>
     <Footer />

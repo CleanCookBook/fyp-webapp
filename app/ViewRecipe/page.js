@@ -11,6 +11,7 @@ const ViewRecipePage = () => {
   const userRole = "bp";
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRecipes, setUserRecipes] = useState([]);
+  const [recipeDetails, setRecipeDetails] = useState(null);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -152,7 +153,6 @@ const ViewRecipePage = () => {
     }
   };
   
-
   const handleDeleteCancel = () => {
     setSelectedRecipe(null);
     setShowConfirmation(false);
@@ -177,7 +177,6 @@ const ViewRecipePage = () => {
       </div>
     );
   }
-
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
@@ -242,17 +241,26 @@ const ViewRecipePage = () => {
               <div className="flex items-center justify-between">
                 <a
                   href={`/detailRecipe?recipeName=${encodeURIComponent(recipe.Rname)}`}
-                  onClick={() => handleAnnouncementClick(recipe.UserID)}
                   className="block cursor-pointer"
                 >
                   <p>{recipe.Rname}</p>
                 </a>
-                <button
-                  onClick={() => handleDeleteClick(recipe)}
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  Delete
-                </button>
+                  <div className="flex justify-center">
+                    {/* Edit/Delete buttons */}
+                    <a href={`/detailRecipe?recipeName=${encodeURIComponent(recipe.Rname)}`}>
+                      <button
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                      >
+                        Edit
+                      </button>
+                    </a>
+                    <button
+                      onClick={() => handleDeleteClick(recipe)}
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      Delete
+                    </button>
+                  </div>
               </div>
               <hr className="my-4" />
             </div>
