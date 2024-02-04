@@ -329,7 +329,7 @@ const BPCreateMealPlan = () => {
             placeholder="Enter Meal Plan Description"
           />
           <label className="text-blue-950 text-lg font-medium mb-2 mt-4 self-start">
-            Select Dietary Preferance Tags:
+            Select Dietary Preference Tags:
           </label>
           {availableDpTags.map((tag) => (
             <div key={tag} className="flex items-center mb-2">

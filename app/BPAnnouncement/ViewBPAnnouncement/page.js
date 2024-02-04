@@ -106,15 +106,15 @@ if (loading) {
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       <Navbar userRole={userRole} />
-      <div className="container mx-auto w-auto p-4 flex-1">
+      <div className="container mx-auto w-auto p-4 flex-1 mb-11">
         <div className="flex flex-col items-center mb-4">
           <Link
             href="/BPAnnouncement"
-            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[45px] -ml-36"
+            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[45px] -ml-[28rem]"
           >
             &lt;&nbsp;&nbsp;Back
           </Link>
-          <h1 className="text-5xl font-extrabold text-[#0A2A67] mb-2 mt-4 ml-8">
+          <h1 className="text-5xl font-extrabold text-[#0A2A67] -mt-11 ml-8">
             {name}
           </h1>
           <h2 className="text-4xl font-extrabold text-[#0A2A67]">Details:</h2>
