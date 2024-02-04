@@ -261,6 +261,10 @@ const RecipeDetails = () => {
     }
   };
 
+  const navigateToHomePage = () => {
+    router.push("/home/BPHomepage");
+  };
+
   if (!isAuthenticated) {
     // If not authenticated, the user will be redirected during authentication check
     return null;
@@ -280,19 +284,28 @@ const RecipeDetails = () => {
 
       {/* Main Content */}
       <div className="p-4 pl-20 bg-[#F9D548]">
-        <div className="text-6xl font-extrabold text-blue-950">
-          {recipeDetails?.RName}
-          <button onClick={() => {toggleFavorite()}}>
-            {userRole === "user" && // Only show bookmark for "user" role
-              (isFavorite ? (
-                <FaBookmark className="text-red-500 text-4xl ml-5 hover:blue-950" />
-              ) : (
-                <FaRegBookmark className="text-4xl ml-5" />
-              ))}
-          </button>
+        <div className="flex justify-start items-center mt-4 mb-4">
+          {userRole === "nutritionist" && (
+            <button
+              onClick={navigateToHomePage}
+              className="w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow mr-4"
+            >
+              &lt;&nbsp;&nbsp;Back
+            </button>
+          )} 
+          <div className="text-6xl font-extrabold text-blue-950">
+            {recipeDetails?.RName}
+            <button onClick={() => {toggleFavorite()}}>
+              {userRole === "user" && // Only show bookmark for "user" role
+                (isFavorite ? (
+                  <FaBookmark className="text-red-500 text-4xl ml-5 hover:blue-950" />
+                ) : (
+                  <FaRegBookmark className="text-4xl ml-5" />
+                ))}
+            </button>
+          </div>
         </div>
 
-        
 
         <div className="flex p-4 pl-20 bg-[#F9D548]">
           {/* Division 1 - 1/3 width */}
@@ -347,8 +360,6 @@ const RecipeDetails = () => {
             <HomeIngredients ingredients={recipeDetails?.ingredients} />
           </div>
           
-          
-
           <div className="border-t border-gray-500 my-4 pl-20"></div>
           <div name="Instruction">
             <div name="header" className="p-4 pl-20">
