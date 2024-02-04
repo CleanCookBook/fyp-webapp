@@ -110,7 +110,7 @@ const BPMealPlan = () => {
         {currentMealPlans.map((singleMealPlan,index) => (
             <a
               key={index}
-              href="#"
+              href={`/mpfirst/mpDescription/?MealPlanName=${encodeURIComponent(singleMealPlan.MPName)}`}
               onClick={() => handelMealPlansClick(singleMealPlan.ID)}
               className="block cursor-pointer"
             >

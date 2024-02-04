@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const mpDescription = () => {
-  const userRole = "user";
+  const [userRole, setUserRole] = useState("user");
   const router = useRouter();
   const [mealPlanDetails, setMealPlanDetails] = useState(null);
   const searchParams = useSearchParams();
@@ -15,6 +15,7 @@ const mpDescription = () => {
 
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const isNutritionist = userRole === "nutritionist"
 
   
   useEffect(() => {
@@ -41,6 +42,32 @@ const mpDescription = () => {
 
     checkAuthentication();
   }, [router]);
+
+  useEffect(() => {
+    const fetchUserType = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3001/api/user/userType",
+          {
+            method: "POST",
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserRole(data.userType || "user"); // Set the userRole based on the response
+        } else {
+          console.error("Error fetching user type:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching user type:", error.message);
+      }
+    };
+
+    // Fetch user type when the component mounts
+    fetchUserType();
+  }, []);
 
   useEffect(() => {
     const fetchMealPlanDetails = async () => {
@@ -183,24 +210,38 @@ const mpDescription = () => {
         </div>
 
         <div className="flex justify-center mt-11">
-          {/* Render different buttons based on mealPlanStatus */}
-          {mealPlanStatus === "start" ? (
-            <button
-              onClick={handleStartMealPlan}
-              className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center"
-            >
-              <div className="text-white font-medium focus:outline-none">
-                Start Your Meal Plan Now
-              </div>
-            </button>
-          ) : (
+  {/* Render "Start" and "Continue" buttons only for users */}
+  {!isNutritionist && (
+    <>
+      {mealPlanStatus === "start" ? (
+        <button
+          onClick={handleStartMealPlan}
+          className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center"
+        >
+          <div className="text-white font-medium focus:outline-none">
+            Start Your Meal Plan Now
+          </div>
+        </button>
+      ) : (
+        <Link href={`/mpfirst/LCProgress/?MealPlan=${encodeURIComponent(mealPlanName)}`}>
+          <button className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center">
+            <div className="text-white font-medium focus:outline-none">
+              Continue Your Meal Plan
+            </div>
+          </button>
+        </Link>
+      )}
+    </>
+  )}
+
+{isNutritionist && (
             <Link href={`/mpfirst/LCProgress/?MealPlan=${encodeURIComponent(mealPlanName)}`}>
-            <button className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center">
-              <div className="text-white font-medium focus:outline-none">
-                Continue Your Meal Plan
-              </div>
-            </button>
-          </Link>
+              <button className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center">
+                <div className="text-white font-medium focus:outline-none">
+                  Next
+                </div>
+              </button>
+            </Link>
           )}
         </div>
       </div>
