@@ -71,16 +71,9 @@ const BPHomepage = () => {
               </button>
             </Link>
 
-            {/* Chat with Us */}
-            <button className="bg-white hover:bg-gray-200 rounded-lg py-8 px-8 w-72 text-[#0A2A67] font-black text-2xl">
-              Chat with Us
-            </button>
-          </div>
-
-          {/* Create/View MealPlan */}
-          <div className="flex space-x-4 py-10 -mt-16">
+            {/* Create/View MealPlan */}
             <Link href="/MealPlan">
-              <button className="bg-white hover:bg-gray-200 rounded-lg py-8 px-8 w-[56rem] text-[#0A2A67] font-black text-2xl">
+              <button className="bg-white hover:bg-gray-200 rounded-lg py-8 px-8 w-72 text-[#0A2A67] font-black text-2xl">
                 Create/View MealPlan
               </button>
             </Link>

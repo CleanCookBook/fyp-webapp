@@ -163,17 +163,17 @@ const isNil4 = selectedDietMethods.includes("Nil");
     <html className="h-screen bg-[#F9D548] text-[#0A2A67]">
       <body className="h-screen bg-[#F9D548] text-[#0A2A67]">
       <div className="flex flex-col bg-[#F9D548] text-[#0A2A67] justify-center items-center">
-      <Link href="/signUp">
-        <button class="text-2xl font-black font-semibold cursor-pointer hover:opacity-[0.5] absolute top-10 left-10">
-          {"< Back"}
-        </button>
-      </Link>
-    </div>
-        <div className="lg:w-4/5 lg:pr-8 p-8 flex flex-col items-center">
-          <h2 className="text-6xl font-black py-5">
-            Help us get to know you better!
-          </h2>
+        <div className="flex justify-start items-center mt-4 mb-4">
+          <Link href="/signUp">
+            <button class="w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow -ml-96">
+              &lt;&nbsp;&nbsp;Back
+            </button>
+          </Link>
+            <h2 className="text-6xl font-black py-5 ml-4">
+              Help us get to know you better!
+            </h2>          
         </div>
+      </div>
         <div className="lg:pr-8 p-8 grid grid-cols-3 gap-6 place-items-stretch">
           <div className="bg-white p-6 rounded shadow-md">
             <h2 className="text-lg font-semibold mb-4">
@@ -507,7 +507,7 @@ const isNil4 = selectedDietMethods.includes("Nil");
             </div>
           </div>
         </div>
-        <div className="fixed bottom-6 right-20">
+        <div className="flex justify-end items-end mr-8 -mt-16">
         <button
           className="w-[350px] h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow"
           onClick={handleSubmit} // Call the handleSubmit function on button click
