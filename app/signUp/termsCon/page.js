@@ -79,13 +79,13 @@ return (
     
     <div className="flex flex-col bg-[#F9D548] text-[#0A2A67] justify-center items-center">
       <Link href="/signUp/quizPage">
-        <button class="text-2xl font-black font-semibold cursor-pointer hover:opacity-[0.5] absolute top-10 left-10">
-          {"< Back"}
+        <button class="w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow absolute top-12 left-12">
+          &lt;&nbsp;&nbsp;Back
         </button>
       </Link>
     </div>
 
-    <div className="bg-white w-[1600px] h-[585px] mx-auto font-black text-2xl shadow-md flex-row -mt-9">
+    <div className="bg-white w-[1600px] h-[585px] mx-auto font-black text-2xl shadow-md flex-row -mt-24">
       <p className="text-xl font-bold flex py-5 px-5 top-0 left-75">Terms and Conditions :</p>
         <div className="bg-[#E5E4E2] w-[1510px] h-[495px] font-black text-2xl shadow-md border-4 border-gray-300 overflow-auto justify-center items-center ml-10">
           <ol className="text-black text-base font-semibold pb-5 ajustify-center items-center">

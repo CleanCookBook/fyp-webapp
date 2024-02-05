@@ -2,20 +2,13 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import DeleteRecipe from "@/components/DeleteRecipe";
-import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const ViewRecipePage = () => {
   const userRole = "bp";
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRecipes, setUserRecipes] = useState([]);
-  const [recipeDetails, setRecipeDetails] = useState(null);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
   const [currentPage, setCurrentPage] = useState(1);
   const [announcementsPerPage] = useState(5);
   const [loading, setIsLoading] = useState(true);
@@ -86,46 +79,6 @@ const ViewRecipePage = () => {
 
   const totalPages = Math.ceil(userRecipes.length / announcementsPerPage);
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [noResults, setNoResults] = useState(false);
-  const [emptyQuery, setEmptyQuery] = useState(false);
-
-  const handleSearch = async () => {
-    if (searchQuery.trim() === "") {
-      // Display a message for the user to type something
-      setEmptyQuery(true);
-      return;
-    }
-
-    // Fetch data from the API endpoint
-    const encodedQuery = encodeURIComponent(searchQuery);
-    const response = await fetch(
-      `http://localhost:3001/api/recipe/search?query=${encodedQuery}`
-    );
-    const data = await response.json();
-
-    console.log("API Response:", data); // Add this line
-
-    // Update state with search results
-    setSearchResults(data);
-
-    // Check for empty results (empty array or empty object)
-    if (!Array.isArray(data) || data.length === 0) {
-      setNoResults(true);
-    } else {
-      // Recipe found, navigate to RecipeList page
-      const queryString = new URLSearchParams({
-        searchInput: searchQuery,
-        searchResults: JSON.stringify(data),
-      });
-      const newPathname = "/recipelist?" + queryString;
-      router.push(newPathname); // Change '/recipelist' to your actual RecipeList page path
-    }
-  };
-
   const handleDeleteClick = (recipe) => {
     setSelectedRecipe(recipe);
     setShowConfirmation(true);
@@ -158,13 +111,6 @@ const ViewRecipePage = () => {
     setShowConfirmation(false);
   };
 
-  // Can click enter key without click the search button
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      handleSearch();
-    }
-  };
-
   if (!isAuthenticated) {
     // If not authenticated, the user will be redirected during authentication check
     return null;
@@ -193,49 +139,8 @@ const ViewRecipePage = () => {
             View Your Recipe
           </h1>
         </div>
-        <div className="w-[748px] bg-white rounded-[20px] flex items-center text-sm p-2 pl-9 text-stone-300">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Search your library of recipes"
-            className="w-full text-lg text-black outline-none -ml-3"
-          />
-          <div className="ml-auto m-[6px] border-r border-gray-500 mr-3">
-            <button className="mr-3 mt-1" onClick={handleSearch}>
-              <Image
-                src="/search.png"
-                alt="Search"
-                width={25}
-                height={20}
-                style={{ filter: "brightness(0)" }}
-              />
-            </button>
-          </div>
-          <button
-            onClick={openModal}
-            className="mr-3"
-            onKeyDown={(e) => {
-              console.log("Key pressed:", e.key);
-              if (e.key === "Enter") {
-                e.preventDefault();
-                handleSearch();
-              }
-            }}
-            tabIndex={0}
-          >
-            <Image
-              src="/filter.png"
-              alt="Filter"
-              width={25}
-              height={25}
-              style={{ filter: "brightness(0)" }}
-            />
-          </button>
-        </div>
 
-        <div className="bg-white rounded-lg p-4 mt-10">
+        <div className="bg-white rounded-lg p-4 mt-6">
           {userRecipes.map((recipe) => (
             <div key={recipe.UserID}>
               <div className="flex items-center justify-between">
@@ -298,10 +203,6 @@ const ViewRecipePage = () => {
             onConfirm={handleDeleteConfirm}
             onCancel={handleDeleteCancel}
           />
-        )}
-        {noResults && <p className="text-red-500 mt-2">No such recipe</p>}
-        {emptyQuery && (
-          <p className="text-red-500 mt-2">Please type something!</p>
         )}
       </div>
       <Footer />
