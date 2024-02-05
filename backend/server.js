@@ -2,6 +2,7 @@
   const bodyParser = require("body-parser");
   const axios = require("axios");
   const authRoutes = require("./routes/authRoutes");
+  const commentsRoute = require("./routes/commentRoutes");
   const profileRoutes = require("./routes/profileRoutes");
   const mealPlanRoutes = require("./routes/mealPlanRoutes");
   const newsfeedRoutes = require("./routes/NewsfeedRoutes");
@@ -69,6 +70,7 @@
   app.use("/api/bookmark", bookMarkRoutes);
   app.use("/api/editRecipe", editRecipeRoutes);
   app.use("/api/mealPlan", mealPlanRoutes);
+  app.use("/api/comments",  commentsRoute );
   app.use("/api/registration",  registrationRoutes);
 
   app.use("/api/announce", announcementRoutes);
