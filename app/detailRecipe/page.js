@@ -262,7 +262,7 @@ const RecipeDetails = () => {
   };
 
   const navigateToHomePage = () => {
-    router.push("/home/BPHomepage");
+    router.push("/ViewRecipe");
   };
 
   if (!isAuthenticated) {

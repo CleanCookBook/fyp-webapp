@@ -22,6 +22,8 @@ Fiber= `;
   const [nutritionalFacts, setNutritionalFacts] = useState(
     defaultNutritionalFacts
   );
+  const [isFormComplete, setIsFormComplete] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -77,8 +79,36 @@ Fiber= `;
     setTips(e.target.value);
   };
 
+  // Function to check if all required fields are filled
+  const checkFormCompletion = () => {
+    console.log("Recipe Steps :", recipeSteps);
+    console.log("Nutritional Facts:", nutritionalFacts);
+    console.log("Fun Facts:", funFacts);
+    console.log("Tips:", tips);
+  
+    if (
+      recipeSteps &&
+      nutritionalFacts &&
+      funFacts &&
+      tips
+    ) {
+      setIsFormComplete(true);
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check form completion before proceeding
+    checkFormCompletion();
+
+    // If form is not complete, show modal and return
+    if (!isFormComplete) {
+      setIsModalOpen(true);
+      return;
+    }
 
     const recipeData = {
       recipeSteps,
@@ -103,7 +133,7 @@ Fiber= `;
 
       if (response.ok) {
         console.log("Recipe created successfully!");
-        router.push("/home/BPHomepage");
+        router.push("/ViewRecipe");
       } else {
         try {
           const errorData = await response.json();
@@ -195,16 +225,29 @@ Fiber= `;
           </form>
         </div>
       </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+          <div className="bg-white p-8 rounded-lg shadow-md">
+            <h2 className="text-center mb-4">Please fill out all the required fields before submitting!</h2>
+            <button 
+              onClick={() => setIsModalOpen(false)} 
+              className="bg-blue-950 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-44 mt-4 focus:outline-none focus:shadow-outline"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
       <div className="w-full mt-auto flex justify-between px-4 py-4">
         <div>
-          <Link href="/ViewRecipe/CreateRecipefirst">
+          <Link href="/ViewRecipe/CreateRecipeFirst">
             <button className="w-[259px] h-10 bg-blue-950 hover:bg-[#154083] text-white font-bold text-lg rounded-[10px] shadow ml-16">
               Back
             </button>
           </Link>
         </div>
         <div>
-          <Link href="/home/BPHomepage">
+          <Link href="/ViewRecipe">
             <button
               onClick={handleSubmit}
               className="w-[259px] h-10 bg-blue-950 hover:bg-[#154083] text-white font-bold text-lg rounded-[10px] shadow -mt-7 mr-16"
