@@ -4,15 +4,27 @@ import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 const ViewBPAnnouncement = () => {
-  const searchParams = useSearchParams(window.location.search);
-  const name = searchParams.get("name");
+  const [searchParams, setSearchParams] = useState(null);
+  const [name, setName] = useState(null);
   const [userRole, setUserRole] = useState("nutritionist");
   const [imageData, setImageData] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
   const [loading,  setIsLoading] = useState(true);
+  const [isLiked, setIsLiked] = useState(false);
+
+  useEffect(() => {
+    // Ensure the code runs only in the browser environment
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      setSearchParams(params);
+      const paramName = params.get("name");
+      setName(paramName);
+    }
+  }, [router]);
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -90,6 +102,17 @@ const ViewBPAnnouncement = () => {
     fetchAnnouncementFile();
 }, [name]);
 
+// Define handleLikeClick function to toggle the isLiked state
+const handleLikeClick = () => {
+  setIsLiked(!isLiked);
+};
+
+useEffect(() => {
+  // Fetch like status or set it based on some condition
+  // For demonstration purposes, let's set it to true initially
+  setIsLiked(true);
+}, []);
+
 if (!isAuthenticated) {
   // If not authenticated, the user will be redirected during authentication check
   return null;
@@ -103,31 +126,118 @@ if (loading) {
   );
 }
 
-  return (
+return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       <Navbar userRole={userRole} />
-      <div className="container mx-auto w-auto p-4 flex-1 mb-11">
-        <div className="flex flex-col items-center mb-4">
+      <div className="container mx-auto w-auto p-4 flex-1 mb-16 flex flex-col items-center">
+        {/* Back link and details */}
+        <div className="flex justify-start items-start mt-4 mb-4  text-center">
           <Link
             href="/BPAnnouncement"
-            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[45px] -ml-[28rem]"
+            className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow -ml-[28rem]"
           >
             &lt;&nbsp;&nbsp;Back
           </Link>
-          <h1 className="text-5xl font-extrabold text-[#0A2A67] -mt-11 ml-8">
-            {name}
-          </h1>
-          <h2 className="text-4xl font-extrabold text-[#0A2A67]">Details:</h2>
+          <div className="relative ml-[28rem]">
+            <h1 className="text-5xl font-extrabold text-[#0A2A67]">
+              {name}
+            </h1>
+            <h2 className="text-4xl font-extrabold text-[#0A2A67]">Details:</h2>
+          </div>
         </div>
-        <div className="bg-white w-auto rounded-lg p-4 flex justify-center items-center">
-          {imageData && (
-            <img src={imageData} alt="Announcement" className="max-w-full" />
-          )}
+
+        <div className="container mx-auto w-auto p-4 flex-1 flex">
+          {/* Left Section: Announcement */}
+          <div className="w-1/2 mr-4">
+            <div className="relative">
+              <div className="bg-white rounded-lg p-4">
+                {imageData && (
+                  <img 
+                    src={imageData} 
+                    alt="Announcement" 
+                    className="max-w-full" 
+                    style={{ height: "auto" }} />
+                )}
+                {/* Like button */}
+                <div className="mt-4">
+                  <button 
+                    className="text-red-500 hover:text-red-700 text-3xl"
+                    onClick={handleLikeClick}
+                  >
+                    {!isLiked ? (
+                      <FaHeart className="text-red-500 text-4xl ml-5" />
+                    ) : (
+                      <FaRegHeart className="text-blue-950 text-4xl ml-5" />
+                    )}
+                  </button> 
+                </div>              
+              </div>   
+            </div>
+          </div>
+          
+          {/* Right Section: Comments */}
+          <div className="w-1/2">
+            <div className="mt-1">
+              <div className="mt-1">
+                {/* Comment section goes here */}
+                <h2 className="text-3xl font-bold text-[#0A2A67]">Comments :</h2>
+                {/* Add your comment components or form here */}
+                <div className="bg-white p-4 rounded-lg shadow-md mt-4">
+                  <div className="flex items-center mb-4">
+                    <img
+                      src="profile logo.png"
+                      alt="Profile Picture"
+                      className="w-16 h-16 rounded-full mr-4"
+                    />
+                    <div className="flex flex-col">
+                      <div className="flex items-center">
+                        <div className="text-blue-950 font-bold">@JohnDoe</div>
+                        {/* Display the user's rating */}
+                      </div>
+                      <p className="text-blue-950 font-semibold">
+                        This is a sample comment.
+                      </p>
+                      <div>
+                        {/* Display star rating */}
+                        {/* You can customize this or remove it if not needed */}
+                      </div>
+                      {/* Display delete button */}
+                      {/* You can customize this or remove it if not needed */}
+                    </div>
+                  </div>
+                  <div className="flex items-center">
+                    <img
+                      src="profile logo.png"
+                      alt="Profile Picture"
+                      className="w-16 h-16 rounded-full mr-4"
+                    />
+                    <div className="flex flex-col">
+                      <div className="flex items-center">
+                        <div className="text-blue-950 font-bold">@JaneDoe</div>
+                        {/* Display the user's rating */}
+                      </div>
+                      <p className="text-blue-950 font-semibold">
+                        Another sample comment.
+                      </p>
+                      <div>
+                        {/* Display star rating */}
+                        {/* You can customize this or remove it if not needed */}
+                      </div>
+                      {/* Display delete button */}
+                      {/* You can customize this or remove it if not needed */}
+                    </div>
+                  </div>
+                </div>
+                {/* Add more static comments as needed */}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <Footer />
     </div>
   );
+
 };
 
 export default ViewBPAnnouncement;
