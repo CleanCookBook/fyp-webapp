@@ -126,7 +126,7 @@ const Navbar = ({ userRole }) => {
               src="/logo.jpg" // Update the path based on your actual file structure
               alt="Logo"
               width={80} // Adjust the width as needed
-              height={80} // Adjust the height as needed
+              height={80} // Adjust the height as needed.
             />
           </Link>
         </div>
