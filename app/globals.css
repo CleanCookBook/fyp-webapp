@@ -30,6 +30,31 @@
   pointer-events: none; /* Disable pointer events when content is blurred */
 }
 
+.shadow-left {
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.1); /* Adjust the values as needed */
+}
+
+.scrollbar-container {
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
+  overflow-y: auto;
+}
+
+/* Rounded scrollbar */
+.scrollbar-container::-webkit-scrollbar {
+  width: 10px; /* Set the width of the scrollbar */
+}
+
+.scrollbar-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+.scrollbar-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
 
 @keyframes blink {
     0% {opacity: 1;}
