@@ -16,7 +16,6 @@ const AnnouncementsPage = () => {
   const [announcementsPerPage] = useState(5);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   
-
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
@@ -98,18 +97,6 @@ const AnnouncementsPage = () => {
   
   }, [userRole]);
 
-  const indexOfLastAnnouncement = currentPage * announcementsPerPage;
-  const indexOfFirstAnnouncement =
-    indexOfLastAnnouncement - announcementsPerPage;
-  const currentAnnouncements = announcements.slice(
-    indexOfFirstAnnouncement,
-    indexOfLastAnnouncement
-  );
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const totalPages = Math.ceil(announcements.length / announcementsPerPage);
-
   // Update paymentStatus state based on router query parameters
   useEffect(() => {
     // Check if router is defined and router.query is not undefined
@@ -145,6 +132,27 @@ const AnnouncementsPage = () => {
     fetchPaymentStatus();
   }, []);
 
+  // Calculate the index of the last announcement for the current page
+  const indexOfLastAnnouncement = currentPage * announcementsPerPage;
+
+  // Calculate the index of the first announcement for the current page
+  const indexOfFirstAnnouncement = indexOfLastAnnouncement - announcementsPerPage;
+
+  // Slice the announcements array to get only the announcements for the current page
+  const currentAnnouncements = announcements.slice(indexOfFirstAnnouncement, indexOfLastAnnouncement);
+
+  // Update the total pages calculation based on the total number of announcements and announcements per page
+  const totalPages = Math.ceil(announcements.length / announcementsPerPage);
+
+  // Pagination Handlers
+  const goToNextPage = () => {
+    setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
+  };
+
+  const goToPrevPage = () => {
+    setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
+  };
+
   if (!isAuthenticated) {
     // If not authenticated, the user will be redirected during authentication check
     return null;
@@ -161,54 +169,55 @@ const AnnouncementsPage = () => {
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       <Navbar userRole={userRole}/>
-      <div className="container mx-auto p-4 flex-1">
-        <div className="flex items-center mb-4">
-          {userRole === "nutritionist" && (
-            <Link 
-              href="/home/BPHomepage" 
-              className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[45px] -ml-36"
-            >
-              &lt;&nbsp;&nbsp;Back
-            </Link>
-          )}
-          {userRole === "user" && (
-            <Link 
-              href="/home"
-              className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[45px] -ml-36"
-            >
-              &lt;&nbsp;&nbsp;Back
-            </Link>
-          )}
-          <h1 className="text-5xl font-extrabold text-[#0A2A67] mb-4 mt-10 ml-8">
-            {userRole === "nutritionist" ? "Your Announcements" : "All Announcements"}
-          </h1>
-        </div>
-        <div className="relative">
-          {userRole !== "nutritionist" && paymentStatus !== "paid" && (
-            <div className="absolute inset-0 -top-38 flex items-center justify-center z-10">
-              <div className="bg-[#00509D] rounded-[20px] p-8 w-[400px]">
-                <img
-                  src="/unlock.png"  // Replace with the correct path to your GIF file
-                  alt="Unlock"
-                  className="mx-auto"
-                />
-                <p className="text-[#FFFFFF] font-bold text-lg flex justify-center items-center -mt-4">
-                  Upgrade to Unlock : <br />
-                  &#10003; View unlimited recipes. <br />
-                  &#10003; Access to various meal plans. <br />
-                  &#10003; Chat with professional nutritionists.
-                </p>
-                <Link href="/Payment">
-                  <button className="block mx-auto bg-white hover:bg-grey-700 text-blue-950 font-bold py-2 px-4 rounded mt-4">
-                    Upgrade
-                  </button>  
-                </Link>
-              </div>
-            </div>
-          )}
+        <div className="container mx-auto p-4 flex-1">
+          <div className="flex items-center mb-4">
+            {userRole === "nutritionist" && (
+              <Link 
+                href="/home/BPHomepage" 
+                className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[45px] -ml-36"
+              >
+                &lt;&nbsp;&nbsp;Back
+              </Link>
+            )}
+            {userRole === "user" && (
+              <Link 
+                href="/home"
+                className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[45px] -ml-36"
+              >
+                &lt;&nbsp;&nbsp;Back
+              </Link>
+            )}
+            <h1 className="text-5xl font-extrabold text-[#0A2A67] mb-4 mt-10 ml-8">
+              {userRole === "nutritionist" ? "Your Announcements" : "All Announcements"}
+            </h1>
+          </div>
 
-          <div className={`bg-white rounded-lg p-4 mt-6 ${userRole !== "nutritionist" && paymentStatus !== "paid" ? 'blur' : ''}`}>
-              {announcements.map((announcement) => (
+          <div className="relative">
+            {userRole !== "nutritionist" && paymentStatus !== "paid" && (
+              <div className="absolute inset-0 -top-38 flex items-center justify-center z-10">
+                <div className="bg-[#00509D] rounded-[20px] p-8 w-[400px]">
+                  <img
+                    src="/unlock.png"  // Replace with the correct path to your GIF file
+                    alt="Unlock"
+                    className="mx-auto"
+                  />
+                  <p className="text-[#FFFFFF] font-bold text-lg flex justify-center items-center -mt-4">
+                    Upgrade to Unlock : <br />
+                    &#10003; View unlimited recipes. <br />
+                    &#10003; Access to various meal plans. <br />
+                    &#10003; Chat with professional nutritionists.
+                  </p>
+                  <Link href="/Payment">
+                    <button className="block mx-auto bg-white hover:bg-grey-700 text-blue-950 font-bold py-2 px-4 rounded mt-4">
+                      Upgrade
+                    </button>  
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            <div className={`bg-white rounded-lg p-4 mt-6 ${userRole !== "nutritionist" && paymentStatus !== "paid" ? 'blur' : ''}`}>
+              {currentAnnouncements.map((announcement, index) => (
                 <a 
                   key={announcement.id} 
                   href={`/BPAnnouncement/ViewBPAnnouncement?name=${encodeURIComponent(announcement.file_name)}`}
@@ -220,42 +229,41 @@ const AnnouncementsPage = () => {
                 </a>
               ))}
             </div>
-            <div className="flex justify-center mt-4">
-              {/* Pagination */}
+
+            {/* Pagination */}
+            <div className="flex justify-center items-center mt-4">
               <button
-                onClick={() => paginate(1)}
-                className="mx-1 px-3 py-1 rounded hover:bg-gray-200"
+                onClick={goToPrevPage}
+                disabled={currentPage === 1}
+                className="mr-2 p-2 text-gray-800 font-bold hover:opacity-[0.5]"
               >
-                &lt;
+                {"<"}
               </button>
+              <p className="text-l font-semibold text-gray-700">
+                Page {currentPage} of {totalPages}
+              </p>
               <button
-                className="mx-1 px-3 py-1  rounded hover:bg-gray-200"
-                disabled
-              >
-                {currentPage}
-              </button>
-              <button
+                onClick={goToNextPage}
                 disabled={currentPage === totalPages}
-                onClick={() => paginate(currentPage + 1)}
-                className="mx-1 px-3 py-1  rounded hover:bg-gray-200"
+                className="ml-2 p-2 text-gray-800 font-bold hover:opacity-[0.5]"
               >
-                &gt;
+                {">"}
               </button>
             </div>
             {userRole === "nutritionist" && (
-            <div className="flex flex-col items-center justify-center mt-4 font-semibold text-[#0A2A67] text-xl">
-              <p>Or</p>
-              <p>
-                Create A New
-                <a href="/BPAnnouncement/CreateBPAnnouncement" className="ml-1.5 underline font-bold">
-                  Announcement
-                </a>
-              </p>
-            </div>
-          )}
+              <div className="flex flex-col items-center justify-center mt-4 font-semibold text-[#0A2A67] text-xl">
+                <p>Or</p>
+                <p>
+                  Create A New
+                  <a href="/BPAnnouncement/CreateBPAnnouncement" className="ml-1.5 underline font-bold">
+                    Announcement
+                  </a>
+                </p>
+              </div>
+            )}              
+          </div>
+      
         </div>
-        
-      </div>
       <Footer />
     </div>
   );
