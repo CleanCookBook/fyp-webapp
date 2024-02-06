@@ -423,14 +423,11 @@ const Review = () => {
                               </div>   
                             </div>
                           </div>
-                          
-                          
                         </div>
                       )}
                     </div>
                   </div>
                 ))}
-
               </div>
             </section>
 
@@ -487,7 +484,6 @@ const Review = () => {
             </section>
           </div>          
         </div>
-
 
       <div className="mt-auto">
         <Footer />
