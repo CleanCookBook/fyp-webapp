@@ -226,34 +226,56 @@ router.post("/upload", isAuthenticated, upload.single("MP_Image"), async (req, r
       const MPName = req.params.mealplanName;
       const userID = req.session.userId;
   
-      const query = `
+      // Check if the user has any existing meal plans
+      const checkExistingMealPlanQuery = `
         SELECT * FROM MealPlanTrack
-        WHERE UserID = ? AND MPName = ?;
+        WHERE UserID = ?;
       `;
   
-      await new Promise((resolve, reject) => {
-        db.get(query, [userID, MPName], (err, result) => {
+      const existingMealPlans = await new Promise((resolve, reject) => {
+        db.all(checkExistingMealPlanQuery, [userID], (err, results) => {
           if (err) {
-            console.error("Error checking meal plan status:", err.message);
+            console.error("Error checking existing meal plans:", err.message);
             reject(err);
           } else {
-            console.log(result);
-  
-            if (result) {
-              res.status(200).json({ status: "continue" });
-            } else {
-              res.status(200).json({ status: "start" });
-            }
-  
-            resolve();
+            resolve(results);
           }
         });
       });
+  
+      // Check if the user has an existing entry for the specified meal plan
+      const existingMealPlanEntry = existingMealPlans.find(
+        (plan) => plan.MPName === MPName
+      );
+  
+      if (existingMealPlanEntry) {
+        // If the user has an existing entry for the specified meal plan, check if it's ongoing
+        if (existingMealPlanEntry.Ongoing) {
+          // If the meal plan is ongoing, deny access with a warning
+          res.status(200).json({
+            status: "warning",
+            ongoingMealPlan: true,
+          });
+        } else {
+          // If the meal plan is not ongoing, it's a "continue"
+          res.status(200).json({ status: "continue" });
+        }
+      } else {
+        // If the user has no existing entry for the specified meal plan, check if they have any existing meal plans
+        if (existingMealPlans.length > 0) {
+          // If the user has other existing meal plans, prevent them from starting a new meal plan
+          res.status(200).json({ status: "cannot_start" });
+        } else {
+          // If the user has no existing meal plans, they can start a new meal plan
+          res.status(200).json({ status: "start" });
+        }
+      }
     } catch (error) {
       console.error("Error checking meal plan status:", error.message);
       res.status(500).json({ error: "Internal Server Error" });
     }
   });
+  
   
   
   router.get('/:mealplanName', async (req, res) => {
