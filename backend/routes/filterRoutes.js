@@ -44,7 +44,12 @@ router.get("/", async (req, res) => {
 
     const conditionsString = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
 
-    const sql = `SELECT Rname FROM Recipe_Np ${conditionsString}`;
+    const sql = `
+      SELECT Recipe_Np.Rname, User.FName, User.LName
+      FROM Recipe_Np
+      JOIN User ON Recipe_Np.UserID = User.UserID
+      ${conditionsString}
+    `;
 
     console.log("Executing SQL query:", sql);
     console.log("Query parameters:", params);
