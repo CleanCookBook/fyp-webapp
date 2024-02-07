@@ -4,13 +4,6 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 const Navbar = ({ userRole }) => {
-  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const [notifications, setNotifications] = useState([
-    { id: 1, text: "Notification 1", isChecked: false },
-    { id: 2, text: "Notification 2", isChecked: false },
-    // Add more notifications as needed
-  ]);
-
   const [loading, setLoading] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
 
@@ -38,34 +31,11 @@ const Navbar = ({ userRole }) => {
   
 
   const [isAccountOpen, setIsAccountOpen] = useState(false);
-  const notificationDropdownRef = useRef(null);
   const accountDropdownRef = useRef(null);
-
-  const toggleNotification = () => {
-    setIsNotificationOpen(!isNotificationOpen);
-    if (isAccountOpen) setIsAccountOpen(false);
-  };
 
   const toggleAccount = () => {
     setIsAccountOpen(!isAccountOpen);
     if (isNotificationOpen) setIsNotificationOpen(false);
-  };
-
-  const handleCheckboxChange = (id) => {
-    const updatedNotifications = notifications.map((notification) =>
-      notification.id === id
-        ? { ...notification, isChecked: !notification.isChecked }
-        : notification
-    );
-    setNotifications(updatedNotifications);
-  };
-
-  const markAsRead = () => {
-    const updatedNotifications = notifications.map((notification) => ({
-      ...notification,
-      isChecked: true,
-    }));
-    setNotifications(updatedNotifications);
   };
 
   const getLogoLink = (userRole) => {
@@ -86,26 +56,6 @@ const Navbar = ({ userRole }) => {
     setLoading(true); // Set loading to true when a link is clicked
     setShowLoader(true); // Show the loader overlay
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        notificationDropdownRef.current &&
-        !notificationDropdownRef.current.contains(event.target) &&
-        accountDropdownRef.current &&
-        !accountDropdownRef.current.contains(event.target)
-      ) {
-        setIsNotificationOpen(false);
-        setIsAccountOpen(false);
-      }
-    };
-
-    window.addEventListener("click", handleClickOutside);
-
-    return () => {
-      window.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
 
   if (showLoader) {
     // Display loading spinner overlay
@@ -142,55 +92,6 @@ const Navbar = ({ userRole }) => {
                 About Us
               </button>
             </Link>
-            <div
-              className="relative inline-block text-left"
-              ref={notificationDropdownRef}
-            >
-              <button
-                onClick={toggleNotification}
-                className="px-4 hover:text-gray-400 focus:outline-none"
-              >
-                Notification
-              </button>
-              {isNotificationOpen && (
-                <div className="origin-top-right absolute right-0 mt-2 w-72 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                  <div className="py-2 px-4">
-                    {notifications.map((notification, index) => (
-                      <div
-                        key={notification.id}
-                        className={`flex items-center justify-between py-2 ${
-                          index !== notifications.length - 1
-                            ? "border-b border-gray-500"
-                            : ""
-                        }`}
-                      >
-                        <label className="flex items-center space-x-2 w-full">
-                          <span className="text-gray-700 flex-grow">
-                            {notification.text}
-                          </span>
-                          <input
-                            type="checkbox"
-                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                            checked={notification.isChecked}
-                            onChange={() =>
-                              handleCheckboxChange(notification.id)
-                            }
-                          />
-                        </label>
-                      </div>
-                    ))}
-                    <div className="flex justify-end mt-4">
-                      <button
-                        onClick={markAsRead}
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                      >
-                        Mark as Read
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
             {userRole === "user" && (
               <>
                 <Link href="/NewsFeed">
