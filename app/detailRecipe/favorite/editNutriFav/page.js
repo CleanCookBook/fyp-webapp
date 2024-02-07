@@ -87,7 +87,7 @@ const editNutriFav = () => {
           },
           body: JSON.stringify({
             description:description,
-            ingredients: recipeIngredients,
+            ingredients: recipeIngredients.replace(/\n/g, '\r\n'), // Replace \n with \r\n
             instruction: recipeInstruction,
             tips_tricks: noteChef,
             funFacts: funFacts,
