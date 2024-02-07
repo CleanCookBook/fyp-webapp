@@ -33,6 +33,7 @@ const Review = () => {
   const [reviewId, setReviewId] = useState(null);
   const [replies, setReplies] = useState({});
   const [recipeNameParam, setRecipeNameParam] = useState(null);
+  const [showReplies, setShowReplies] = useState(false);
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -384,9 +385,20 @@ const Review = () => {
 
                       <div className="flex items-center mt-2">
                         {/* Display reply button/icon */}
-                        <button onClick={() => handleCommentButtonClick(userReview)}>
-                          <FaComment />
-                        </button>
+                        <div className="flex items-center">
+                          <button
+                            onClick={() => handleCommentButtonClick(userReview)}
+                            className="flex items-center"
+                          >
+                            <FaComment />
+                            {replies.length > 0 && ( // Check if there are replies
+                              <span className="text-blue-950 ml-2 font-medium">
+                                {replies.length}
+                              </span> // Show the number of replies
+                            )}
+                          </button>
+                        </div>
+
                         {/* Trash button */}
                         {userId === userReview.UserID && (
                           <button onClick={() => handleDeleteReview(userReview.reviewId)} className="text-red-500 ml-4">
@@ -399,7 +411,7 @@ const Review = () => {
                       {showReplyBox && replyingToReviewId === userReview.reviewId && (
                         <div className="fixed inset-0 flex flex-row items-center justify-center bg-gray-800 bg-opacity-50 z-50">
                           <div className="mt-1">
-                            <div className="bg-white p-8 rounded-t-lg w-[56rem] h-[28rem] relative">
+                            <div className="bg-white p-8 rounded-t-lg w-[56rem] h-[28rem] relative overflow-y-auto scrollbar-container">
                               {/* Render selected user's review */}
                               <div className="mb-4 flex items-start">
                                 <Image 
@@ -413,8 +425,18 @@ const Review = () => {
                                 <div>
                                   <div className="text-blue-950 font-bold">@{selectedUsername}</div>
                                   <p className="text-blue-950 font-semibold">{replyText}</p>
+                                  <div className="flex items-center mt-2">
+                                    <div className="border-b border-solid border-black w-6 ml-5 "></div> {/* Long dash */}
+                                    <span className="mx-2">View Replies</span>
+                                    {replies.length > 0 && (
+                                      <span className="text-blue-950">
+                                        ({replies.length})
+                                      </span>
+                                    )}
+                                  </div>
+                                  
                                   {/* Render the replies */}
-                                  <div className="mb-4">
+                                  <div className=" ml-4">
                                     {replies.map((reply, index) => (
                                       <div key={index} className="flex items-start">
                                         <Image 
@@ -422,11 +444,11 @@ const Review = () => {
                                           alt="Profile Picture" 
                                           width={150}
                                           height={150}
-                                          className="w-12 h-12 rounded-full mr-2" 
+                                          className="w-12 h-12 rounded-full mr-2 mt-6" 
                                           unoptimized={true}
                                         />
                                         <div>
-                                          <div className="text-blue-950 font-bold">@{reply.Username}</div>
+                                          <div className="text-blue-950 font-bold mt-6">@{reply.Username}</div>
                                           <p className="text-blue-950 font-semibold">{reply.Reply}</p>
                                         </div>
                                       </div>
@@ -455,7 +477,7 @@ const Review = () => {
                               {/* Reply input field */}
                               <textarea
                                 type="text"
-                                className="w-[49rem] h-20 p-2 mt-1 flex-grow overflow-y-auto scrollbar-container"
+                                className="w-[49rem] h-20 p-2 mt-1 flex-grow"
                                 placeholder="Write a reply ..."
                                 value={reply}
                                 onChange={(e) => setReply(e.target.value)}
