@@ -18,7 +18,8 @@
   const reviewRoutes = require("./routes/reviewRoutes");
   const announcementRoutes = require("./routes/announcementRoutes");
   const editRecipeRoutes = require("./routes/editRecipeRoutes");
-  const registrationRoutes = require("./routes/registrationRoutes")
+  const registrationRoutes = require("./routes/registrationRoutes");
+  const replyRoutes = require("./routes/replyRoutes");
   const isAuthenticated = require("./authMiddleware");
   const cors = require("cors");
   const db = require("./db"); // Import the database module
@@ -72,6 +73,7 @@
   app.use("/api/mealPlan", mealPlanRoutes);
   app.use("/api/comments",  commentsRoute );
   app.use("/api/registration",  registrationRoutes);
+  app.use("/api/reply",  replyRoutes);
 
   app.use("/api/announce", announcementRoutes);
   app.get("/home", isAuthenticated, (req, res) => {
