@@ -13,9 +13,10 @@ const editFavorite = () => {
   const [recipeInstruction, setRecipeInstruction] = useState("");
   const [recipeIngredients, setRecipeIngredients] = useState("");
   const [recipeDetails, setRecipeDetails] = useState(null);
-  const [loading, setIsLoading] = useState(true);
+
   const searchParams = useSearchParams();
   const recipeName = searchParams.get("recipeName");
+  const [loading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -80,6 +81,11 @@ const editFavorite = () => {
 
   const handleNext = async () => {
     try {
+      console.log('Sending data to backend:', {
+        recipeIngredients: recipeIngredients.trim(),
+        recipeInstructions: recipeInstruction,
+      });
+  
       const response = await fetch(
         `http://localhost:3001/api/bookmark/updating/${recipeName}`,
         {
@@ -88,13 +94,14 @@ const editFavorite = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            recipeIngredients,
+            recipeIngredients: recipeIngredients.trim(),
             recipeInstructions: recipeInstruction,
           }),
           credentials: "include",
         }
       );
-
+  
+      console.log('Response from backend:', response);
       console.log("Response status:", response.status);
 
       if (response.ok) {
@@ -226,7 +233,7 @@ return (
     {/* Navbar */}
     <Navbar userRole={userRole} />
 
-    <div className="h-full bg-[#F9D548] text-[#0A2A67] flex-grow mb-10">
+    <div className="h-full bg-[#F9D548] text-[#0A2A67] flex-grow">
       {/* Main Content */}
       <div className="p-4 pl-20 bg-[#F9D548]">
         <div className="flex justify-center items-center mb-4">
@@ -323,12 +330,12 @@ return (
           <div className="border-t border-gray-500 my-4 pl-20"></div>
             <div name="title" className="p-4 pl-20">
               <h2 className="text-3xl text-[#1D5198] font-bold">
-              Nutritional Facts <br />(Not available as it is edited!)
+              Nutritional Facts (Not available as it is edited!)
               </h2>
             </div>
         </div>
 
-        <div className="flex justify-end items-end py-6 -mb-8">
+        <div className="flex justify-end items-end py-6">
           <button
             onClick={(e) => handleNext(e, recipeName)}
             className="w-[259px] h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold self-end rounded-[10px] shadow mr-8"

@@ -13,6 +13,8 @@ const CreateBPAnnouncement = () => {
   const [announcementImage, setAnnouncementImage] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading,  setIsLoading] = useState(true);
+  const [isFormComplete, setIsFormComplete] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -55,12 +57,17 @@ const CreateBPAnnouncement = () => {
     }
   };
 
-  const handleRemoveImage = () => {
-    setAnnouncementImage(null);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+     // Check form completion before proceeding
+     checkFormCompletion();
+
+     // If form is not complete, show modal and return
+     if (!isFormComplete) {
+      setIsModalOpen(true);
+      return;
+     }
 
     // If you're planning to upload the file to a server, use FormData
     const formData = new FormData();
@@ -84,6 +91,15 @@ const CreateBPAnnouncement = () => {
       }
     } catch (error) {
       console.error("Error:", error);
+    }
+  };
+
+  const checkFormCompletion = () => {
+    // Check if all required fields are filled
+    if (announcementName && announcementImage) {
+      setIsFormComplete(true);
+    } else {
+      setIsModalOpen(true);
     }
   };
 
@@ -181,6 +197,20 @@ const CreateBPAnnouncement = () => {
               </button>
             )}
           </div>
+          {/* Modal for incomplete form notification */}
+          {isModalOpen && (
+            <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+              <div className="bg-white p-8 rounded-lg shadow-md">
+                <h2 className="text-center mb-4">Please fill out all the required fields before proceeding!</h2>
+                <button 
+                  onClick={() => setIsModalOpen(false)} 
+                  className="bg-blue-950 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-44 mt-4 focus:outline-none focus:shadow-outline"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
           <button
             type="submit"
             onClick={handleSubmit}

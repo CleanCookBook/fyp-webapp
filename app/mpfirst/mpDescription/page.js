@@ -15,7 +15,7 @@ const mpDescription = () => {
 
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const isNutritionist = userRole === "nutritionist"
+  const isNutritionist = userRole === "nutritionist";
 
   
   useEffect(() => {
@@ -113,11 +113,19 @@ const mpDescription = () => {
           },
         }
       );
-
+  
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-        setMealPlanStatus(data.status);
+  
+        if (data.status === "warning" && data.ongoingMealPlan) {
+          // Handle the warning status with information about the ongoing meal plan
+          // You may show a warning message to the user and prevent them from starting a new meal plan
+          // Example: alert("Warning: You have an ongoing meal plan. Cannot start a new one.");
+        } else {
+          // Handle other statuses ("start" or "continue")
+          setMealPlanStatus(data.status);
+        }
       } else {
         console.error("Error fetching meal plan status:", response.statusText);
       }
@@ -125,6 +133,8 @@ const mpDescription = () => {
       console.error("Error fetching meal plan status:", error.message);
     }
   };
+  
+  
 
   const handleStartMealPlan = async () => {
     try {
@@ -211,28 +221,45 @@ const mpDescription = () => {
 
         <div className="flex justify-center mt-11">
   {/* Render "Start" and "Continue" buttons only for users */}
-  {!isNutritionist && (
-    <>
-      {mealPlanStatus === "start" ? (
-        <button
-          onClick={handleStartMealPlan}
-          className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center"
-        >
+ {/* Render buttons based on meal plan status */}
+{!isNutritionist && (
+  <>
+    {mealPlanStatus === "start" && (
+      <button
+        onClick={handleStartMealPlan}
+        className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center"
+      >
+        <div className="text-white font-medium focus:outline-none">
+          Start Your Meal Plan Now
+        </div>
+      </button>
+    )}
+
+    {mealPlanStatus === "cannot_start" && (
+      <button
+        onClick={() => {
+          // Handle warning action, e.g., show a modal or alert
+          alert("Warning: Another meal plan is ongoing. You cannot start a new one.");
+        }}
+        className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center"
+      >
+        <div className="text-white font-medium focus:outline-none">
+          Start Your Meal Plan Now
+        </div>
+      </button>
+    )}
+
+    {mealPlanStatus === "continue" && (
+      <Link href={`/mpfirst/LCProgress/?MealPlan=${encodeURIComponent(mealPlanName)}`}>
+        <button className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center">
           <div className="text-white font-medium focus:outline-none">
-            Start Your Meal Plan Now
+            Continue Your Meal Plan
           </div>
         </button>
-      ) : (
-        <Link href={`/mpfirst/LCProgress/?MealPlan=${encodeURIComponent(mealPlanName)}`}>
-          <button className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center">
-            <div className="text-white font-medium focus:outline-none">
-              Continue Your Meal Plan
-            </div>
-          </button>
-        </Link>
-      )}
-    </>
-  )}
+      </Link>
+    )}
+  </>
+)}
 
 {isNutritionist && (
             <Link href={`/mpfirst/LCProgress/?MealPlan=${encodeURIComponent(mealPlanName)}`}>

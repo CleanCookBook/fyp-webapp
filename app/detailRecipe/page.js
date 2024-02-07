@@ -239,30 +239,21 @@ const RecipeDetails = () => {
   }, [isFromBookmarkSite]); 
 
   const handleEditClick = () => {
-    const referrer = document.referrer;
 
+  
     if (recipeName) {
       let editFavoriteUrl;
-
-      if (isFromBookmarkSite ===  referrer.includes("favorite") ) {
-        // Use === for comparison
-        // If the referrer includes "favorite"
-        editFavoriteUrl = `/detailRecipe/favorite/editFavorite?recipeName=${encodeURIComponent(
-          recipeName
-        )}`;
+  
+      if (userRole === "nutritionist") {
+        // If the user is a nutritionist
+        editFavoriteUrl = `/detailRecipe/favorite/editNutriFav?recipeName=${encodeURIComponent(recipeName)}`;
       } else {
-        // If the referrer includes "ViewRecipe"
-        editFavoriteUrl = `/detailRecipe/favorite/editNutriFav?recipeName=${encodeURIComponent(
-          recipeName
-        )}`;
+        // For other user roles (assuming "user" here)
+        editFavoriteUrl = `/detailRecipe/favorite/editFavorite?recipeName=${encodeURIComponent(recipeName)}`;
       }
-
+  
       router.push(editFavoriteUrl);
     }
-  };
-
-  const navigateToHomePage = () => {
-    router.push("/home/BPHomepage");
   };
 
   if (!isAuthenticated) {
@@ -287,7 +278,7 @@ const RecipeDetails = () => {
         <div className="flex justify-start items-center mt-4 mb-4">
           {userRole === "nutritionist" && (
             <button
-              onClick={navigateToHomePage}
+              
               className="w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow mr-4"
             >
               &lt;&nbsp;&nbsp;Back

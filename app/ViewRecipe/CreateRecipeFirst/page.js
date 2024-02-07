@@ -2,6 +2,7 @@
 import Footer from "@/components/Footer";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -17,6 +18,8 @@ const CreateRecipefirst = () => {
   const [selectedAllergyTags, setSelectedAllergyTags] = useState([]);
   const [loading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isFormComplete, setIsFormComplete] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const router = useRouter();
   useEffect(() => {
@@ -81,12 +84,23 @@ const CreateRecipefirst = () => {
   };
 
   const handleTimeUnitChange = (e) => {
-    setTimeUnit(e.target.value);
-    setCookingTime((prevCookingTime) => ({
-      ...prevCookingTime,
-      unit: e.target.value,
-    }));
+    if (e.target.value === "hours") {
+      // Convert cooking time to hours
+      setCookingTime((prevCookingTime) => ({
+        ...prevCookingTime,
+        value: prevCookingTime.value / 60, // Convert to hours
+        unit: e.target.value,
+      }));
+    } else {
+      // Convert cooking time to minutes
+      setCookingTime((prevCookingTime) => ({
+        ...prevCookingTime,
+        value: prevCookingTime.value * 60, // Convert to minutes
+        unit: e.target.value,
+      }));
+    }
   };
+  
 
   const setTimeUnit = (value) => {
     setCookingTime((prevCookingTime) => ({
@@ -143,15 +157,55 @@ const CreateRecipefirst = () => {
     handleFileChange(e);
   };
 
+  // Function to check if all required fields are filled
+  const checkFormCompletion = () => {
+    console.log("Recipe Name:", recipeName);
+    console.log("Recipe Description:", recipeDescription);
+    console.log("Recipe Ingredients:", recipeIngredients);
+    console.log("Cooking Time:", cookingTime.value);
+    console.log("Selected Image:", selectedImage);
+    console.log("Selected DP Tags:", selectedDpTags);
+    console.log("Selected Allergy Tags:", selectedAllergyTags);
+  
+    if (
+      recipeName &&
+      recipeDescription &&
+      recipeIngredients &&
+      cookingTime.value > 0 &&
+      selectedImage &&
+      selectedDpTags.length > 0 &&
+      selectedAllergyTags.length > 0
+    ) {
+      setIsFormComplete(true);
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
   const handleNext = async (e) => {
     e.preventDefault();
+
+    // Check form completion before proceeding
+    checkFormCompletion();
+
+    // If form is not complete, show modal and return
+    if (!isFormComplete) {
+      setIsModalOpen(true);
+      return;
+    }
+
+    // Convert cooking time to minutes if unit is "hours"
+    let cookingTimeInMinutes = cookingTime.value;
+    if (cookingTime.unit === "hours") {
+      cookingTimeInMinutes *= 60; // Convert hours to minutes
+    }
 
     // Get the data from the state
     const recipeData = {
       recipeName,
       imageUrl: "", // Update this line based on your form structure
       recipeDescription,
-      cookingTime: cookingTime.value,
+      cookingTime: cookingTimeInMinutes,
       recipeIngredients,
       selectedDpTags,
       selectedAllergyTags,
@@ -200,6 +254,7 @@ const CreateRecipefirst = () => {
       // Handle error as needed
     }
   };
+
   if (!isAuthenticated) {
     // If not authenticated, the user will be redirected during authentication check
     return null;
@@ -216,10 +271,16 @@ const CreateRecipefirst = () => {
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">
       <Navbar userRole={userRole} className="fixed top-0 left-0 right-0" />
-      <div className="mt-10 ml-8">
-        <h2 className="text-5xl font-black pb-8">Create Your Recipe </h2>
+      <div className="flex items-center mb-4">
+        <Link 
+          href="/home/BPHomepage" 
+          className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[45px] ml-6"
+        >
+          &lt;&nbsp;&nbsp;Back
+        </Link>
+        <h2 className="text-5xl font-extrabold text-[#0A2A67] mb-4 mt-10 ml-8">Create Your Recipe </h2>
       </div>
-      <div className="w-full mx-auto flex items-center px-8 lg:px-20 mt-8">
+      <div className="w-full mx-auto flex items-center px-8 lg:px-20">
         <div className="w-1/2 border-r border-gray-400 pr-8">
           <form
             onSubmit={handleNext}
@@ -373,7 +434,8 @@ const CreateRecipefirst = () => {
                 id="recipeIngredients"
                 value={recipeIngredients}
                 onChange={handleIngredientChange}
-                className="w-full h-full text-neutral-400 font-medium border-none outline-none resize-none bg-white rounded-[10px] pl-4 pr-4 py-2"
+                className="w-full h-full text-neutral-400 text-lg font-medium border-none outline-none resize-none bg-white rounded-[10px] pl-4 pr-4 py-2"
+                placeholder="Write your Recipe Ingredients"
               />
             </div>
             <label className="text-blue-950 text-lg font-medium mb-2 mt-4 self-start">
@@ -394,14 +456,29 @@ const CreateRecipefirst = () => {
           </form>
         </div>
       </div>
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+          <div className="bg-white p-8 rounded-lg shadow-md">
+            <h2 className="text-center mb-4">Please fill out all the required fields before proceeding!</h2>
+            <button 
+              onClick={() => setIsModalOpen(false)} 
+              className="bg-blue-950 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-44 mt-4 focus:outline-none focus:shadow-outline"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
       <div className="w-full flex justify-end mt-auto">
-          <button
-            onClick={handleNext}
-            className="w-28 bg-blue-900 hover:bg-[#1c57b1] text-xl text-white font-bold py-2 px-9 rounded  ml-5  mb-4"
-          >
-            Next
-          </button>
+        <button
+          onClick={handleNext}
+          className="w-28 bg-blue-950 hover:bg-[#1c57b1] text-xl text-white font-bold py-2 px-9 rounded-lg mr-10 mb-12"
+        >
+          Next
+        </button>
       </div>
+
       <div className="mt-auto">
         <Footer />
       </div>

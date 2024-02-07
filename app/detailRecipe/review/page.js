@@ -5,25 +5,36 @@ import SmallStarRating from "@/components/SmallerStars";
 import Star from "@/components/Star";
 import StarRating from "@/components/StarRating";
 import Pagination from "@/components/pagination";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FaTrash } from 'react-icons/fa';
+import { FaComment, FaTimes, FaTrash } from 'react-icons/fa';
 
 
 const Review = () => {
+  const userRole ="user";
+  const router = useRouter();
   const [wordCount, setWordCount] = useState(50); // Initialize word count to 50
   const [recipeName, setRecipeName] = useState("");
   const [recipeRating, setRecipeRating] = useState(0);
   const [reviews, setReviews] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [commentsPerPage] = useState(5);
+  const [replyText, setReplyText] = useState("");
+  const [reply, setReply] = useState("");
+  const [replyingToReviewId, setReplyingToReviewId] = useState(null);
+  const [showReplyBox, setShowReplyBox] = useState(false);
   const [comment, setComment] = useState("");
-  const userRole ="user";
   const [userId, setUserId] = useState(""); 
-  const router = useRouter();
   const [userRating, setUserRating] = useState(0);
-    const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [selectedUsername, setSelectedUsername] = useState(null);
+  const [reviewId, setReviewId] = useState(null);
+  const [replies, setReplies] = useState({});
+  const [recipeNameParam, setRecipeNameParam] = useState(null);
+  const [repliesVisibility, setRepliesVisibility] = useState({});
+
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
@@ -80,6 +91,14 @@ const Review = () => {
     setRecipeRating(overallRating);
   };
 
+  // Function to toggle the visibility of replies for a specific comment index
+  const toggleRepliesVisibility = (index) => {
+    setRepliesVisibility((prevVisibility) => ({
+      ...prevVisibility,
+      [index]: !prevVisibility[index], // Toggle visibility for the specified index
+    }));
+  };
+
   // Handle user clicks on stars to set user rating
   const handleStarClick = (rating) => {
     setUserRating(rating);
@@ -90,6 +109,47 @@ const Review = () => {
     setWordCount(50 - words.length);
     setCurrentPage(1);
   };
+
+  // Function to handle initiating reply to a review
+  const handleReplyClick = async (userReview) => {
+    try {
+      console.log("Clicked on user review:", userReview);
+  
+      // Ensure userReview has the expected structure
+      if (!userReview || !userReview.reviewId) {
+        console.error("Invalid user review:", userReview);
+        return;
+      }
+  
+      const response = await fetch(`http://localhost:3001/api/reply/${userReview.reviewId}`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        const fetchedRepliesWithUsernames = data.repliesWithUsernames || [];
+        console.log("Fetched Replies with Usernames:", fetchedRepliesWithUsernames);
+  
+        // Add some console logs to check values
+        console.log("Setting replyingToReviewId:", userReview.reviewId);
+        console.log("Setting reviewId:", userReview.reviewId);
+  
+        setReplyingToReviewId(userReview.reviewId);
+        setReviewId(userReview.reviewId); // Use 'reviewID' instead of 'reviewId'
+        setSelectedUsername(userReview.Username);
+        setReplyText(`${userReview.comment}`);
+        setReply("");
+        setShowReplyBox(true);
+        // Now you can update your state or UI to display these replies with usernames
+        setReplies(fetchedRepliesWithUsernames);
+      } else {
+        console.error(`Error fetching replies for review ID ${userReview.reviewId}: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error("Error fetching replies:", error.message);
+    }
+  };
+  
+  
+  
 
   const startIndex = (currentPage - 1) * commentsPerPage;
   const endIndex = startIndex + commentsPerPage;
@@ -201,6 +261,91 @@ const Review = () => {
       console.error("Error deleting review:", error.message);
     }
   };
+
+  const handleSubmitReply = async (reviewId, userID, recipeName, reply, replyText) => {
+    try {
+      // Fetch the user ID from /api/userID
+      const userResponse = await fetch("http://localhost:3001/api/userID", {
+        method: "GET",
+        credentials: "include", // Include credentials for cookie authentication
+      });
+
+      if (!userResponse.ok) {
+        console.error("Error fetching user ID:", userResponse.statusText);
+        return;
+      }
+
+      const userData = await userResponse.json();
+      const userId = userData.user.UserID;
+      
+  
+      // Send a POST request to the backend API to submit the reply
+      const response = await fetch(`http://localhost:3001/api/reply/replies/${reviewId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          userId: userId, // Use the userId obtained from the backend
+          reviewId: reviewId, // Ensure reviewId is included in the request body
+          Rname: recipeName, // Assuming Rname is not needed for reply
+          reply: reply, // Pass the reply text
+          comment: replyText, // Include the comment field
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error submitting reply");
+      }
+
+      const responseData = await response.json();
+      console.log("Reply submitted successfully:", responseData.message);
+
+      // Clear reply text and hide reply input box after successful submission
+      setReplyText("");
+      setShowReplyBox(false);
+
+      // Optionally, you may update the replies state to reflect the new reply
+      // For example, refetch the replies after submitting a new reply
+    } catch (error) {
+      console.error("Error submitting reply:", error.message);
+    }
+  };
+
+  const navigateToRecipe = () => {
+    router.push(`/detailRecipe?recipeName=${encodeURIComponent(recipeName)}`)
+  };
+
+  useEffect(() => {
+    const fetchReplies = async () => {
+      try {
+        if (!recipeNameParam) return;
+    
+        const fetchedReplies = {};
+    
+        for (const review of reviews) {
+          const response = await fetch(`http://localhost:3001/api/replies/${review.reviewId}`);
+          if (response.ok) {
+            const data = await response.json();
+            console.log("Replies", data);
+            fetchedReplies[review.reviewId] = data.replies || [];
+          } else {
+            console.error(`Error fetching replies for review ID ${review.reviewId}: ${response.statusText}`);
+            fetchedReplies[review.reviewId] = [];
+          }
+        }
+    
+        setReplies(fetchedReplies);
+      } catch (error) {
+        console.error("Error fetching replies:", error.message);
+      }
+    };
+  
+    fetchReplies();
+}, [recipeNameParam, reviews, reply]);
+
+  
   if (!isAuthenticated) {
     // If not authenticated, the user will be redirected during authentication check
     return null;
@@ -218,123 +363,235 @@ const Review = () => {
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       {/* Navbar */}
       <Navbar userRole={userRole} />
-      <div className="mt-10 ml-8">
-        <h1 className="text-7xl font-extrabold text-blue-950">
-          {recipeName || "Recipe Title"}
-        </h1>
-        <StarRating rating={recipeRating} />
-      </div>
-
-      <div className="container mx-auto px-4">
-        <section className="mt-1">
-          {(reviews.length === 0 && (
-            <div className="text-3xl font-bold mb-4 text-blue-950 text-center">
-              Be the first one to comment!
-            </div>
-          )) || (
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-3xl font-bold text-blue-950 text-center">
-                Read what others are saying!
-              </h2>
-              <p className="text-blue-950">{reviews.length} reviews</p>
-            </div>
-          )}
-
-          {/* Comments section - placeholder for dynamic content */}
-          {/* Comments section - dynamically display reviews */}
-          <div className="space-y-4">
-            {reviews.map((review, index) => (
-              <div
-                key={index}
-                className="bg-white p-4 rounded-lg shadow-md flex items-center"
+        <div className="flex flex-col min-h-screen bg-[#F9D548] mb-16">
+          <div className="flex flex-col mt-10 ml-8">
+            <div className="flex items-center"> {/* Flex container for back button and recipe name */}
+              <button
+                onClick={navigateToRecipe}
+                className="w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow ml-4 -mt-10"
               >
-                <img
-                  src="profile logo.png"
-                  alt="Profile Picture"
-                  className="w-16 h-16 rounded-full mr-4"
-                />
-                {/* You can customize the display of each review here */}
-                <div className="flex flex-col">
-                  <div className="flex items-center">
-                    <div className="text-blue-950 font-bold">
-                      @{review.Username}
-                    </div>
-                    {/* Display the user's rating */}
-                  </div>
-
-                  <p className="text-blue-950 font-semibold">
-                    {review.comment}
-                  </p>
-
-                  <div>
-                    <SmallStarRating rating={review.stars} />
-                  </div>
-
-                  {userId === review.UserID  && (
-                <button
-                  onClick={() => handleDeleteReview(review.reviewId)}
-                  className="text-red-500 ml-right"
-                >
-                  <FaTrash/>
-                </button>
-              )}
-                </div>
+                &lt;&nbsp;&nbsp;Back
+              </button>
+              <div className="flex flex-col ml-9"> {/* Flex container for recipe name and star rating */}
+                <h1 className="text-7xl font-extrabold text-blue-950">
+                  {recipeName || "Recipe Title"}
+                </h1>
+                <StarRating rating={recipeRating} />
               </div>
-            ))}
-          </div>
-        </section>
-        <section className="flex justify-center mt-4">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={Math.ceil(reviews.length / commentsPerPage)}
-            onPageChange={(page) => setCurrentPage(page)}
-          />
-        </section>
-
-        <section className="mt-8">
-          {/* Input field for user reviews - placeholder for dynamic form */}
-          <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-start">
-            <input
-              className="w-full h-32 p-2 border rounded-md"
-              placeholder="Let us know how you feel!..."
-              maxLength={wordCount === 50 ? 300 : null} // Allow 300 characters initially (50 words)
-              onInput={handleWordCount}
-              value={comment}
-              onChange={(e) => setComment(e.target.value)} // Update comment state
-            />
-            <p className="text-gray-500 text-sm mt-2">
-              Words left(Max 50 words):
-              <span
-                style={{
-                  marginLeft: "5px",
-                  marginRight: "10px",
-                  color: wordCount >= 0 ? "inherit" : "red",
-                }}
-              >
-                {wordCount >= 0 ? wordCount : "0 !! "}
-              </span>
-            </p>
-            <span className="text-blue-950 font-bold mr-2">
-              Your Rating(click on the stars!):{" "}
-            </span>
-            <div className="flex">
-              {[1, 2, 3, 4, 5].map((rating) => (
-                <Star
-                  key={rating}
-                  filled={userRating >= rating}
-                  onClick={() => handleStarClick(rating)}
-                />
-              ))}
             </div>
-            <button
-              className="w-[100px] h-7 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow mt-4 self-end"
-              onClick={handleSubmitReview} // Add onClick handler for submitting review
-            >
-              Submit
-            </button>
           </div>
-        </section>
-      </div>
+
+          <div className="container mx-auto px-4">
+            <section className="mt-1">
+              {(reviews.length === 0 && (
+                <div className="text-3xl font-bold mb-4 text-blue-950 text-center">
+                  Be the first one to comment!
+                </div>
+              )) || (
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-3xl font-bold text-blue-950 text-center">
+                    Read what others are saying!
+                  </h2>
+                  <p className="text-blue-950">{reviews.length} reviews</p>
+                </div>
+              )}
+
+              {/* Comments section - placeholder for dynamic content */}
+              {/* Comments section - dynamically display reviews */}
+              <div className="space-y-4">
+                {reviews.map((userReview, index) => (
+                  <div key={index} className="bg-white p-4 rounded-lg shadow-md flex items-center">
+                    <Image 
+                      src="/logo.jpg" 
+                      alt="Profile Picture" 
+                      width={150}
+                      height={150}
+                      className="w-16 h-16 rounded-full mr-4" 
+                      unoptimized={true}
+                    />
+                    <div className="flex flex-col flex-grow">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <div className="text-blue-950 font-bold">@{userReview.Username}</div>
+                            <div className="ml-2 -mt-1"> {/* Add margin to the star rating */}
+                              <SmallStarRating rating={userReview.stars} />
+                            </div>
+                        </div>
+                      </div>
+                      <p className="text-blue-950 font-semibold">{userReview.comment}</p>
+
+                      <div className="flex items-center mt-2">
+                        {/* Display reply button/icon */}
+                        <button onClick={() => handleReplyClick(userReview)}>
+                          <FaComment />
+                        </button>
+                        {/* Trash button */}
+                        {userId === userReview.UserID && (
+                          <button onClick={() => handleDeleteReview(userReview.reviewID)} className="text-red-500 ml-4">
+                            <FaTrash/>
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Display reply input box if replyingToReviewId matches current review ID */}
+                      {showReplyBox && replyingToReviewId === userReview.reviewID && (
+                        <div className="fixed inset-0 flex flex-row items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+                          <div className="mt-1">
+                            <div className="bg-white p-8 rounded-t-lg w-[56rem] h-[28rem] relative">
+                              {/* Render selected user's review */}
+                              <div className="mb-4 flex items-start">
+                                <Image 
+                                  src="/logo.jpg" 
+                                  alt="Profile Picture" 
+                                  width={150}
+                                  height={150}
+                                  className="w-16 h-16 rounded-full mr-4" 
+                                  unoptimized={true}
+                                />
+                                <div>
+                                  <div className="text-blue-950 font-bold">@{selectedUsername}</div>
+                                  <p className="text-blue-950 font-semibold">{replyText}</p>
+                                  {/* Render the "View Replies" button only if there are replies */}
+                                  {replies[userReview.reviewID] && replies[userReview.reviewID].length > 0 && (
+                                    <button 
+                                      onClick={() => toggleRepliesVisibility(index)}
+                                      className="text-blue-950 font-medium text-sm ml-3 mt-2"
+                                    >
+                                      {repliesVisibility[index] ? "Hide Replies" : "View Replies"}
+                                    </button>
+                                  )}
+                                </div>                              
+                              </div>
+
+                              {/* Render replies if they are visible */}
+                              {repliesVisibility[index] && (
+                                <div>
+                                  {/* Render replies here */}
+                                  {replies[userReview.reviewID] && replies[userReview.reviewID].map((reply, replyIndex) => (
+                                    <div key={replyIndex} className="flex items-start mb-2">
+                                      <Image 
+                                        src="/logo.jpg" 
+                                        alt="Profile Picture" 
+                                        width={150}
+                                        height={150}
+                                        className="w-16 h-16 rounded-full mr-4" 
+                                        unoptimized={true}
+                                      />
+                                      <div className="flex flex-col">
+                                        <div className="text-blue-950 font-bold">@{reply.username}</div>
+                                        <p className="text-blue-950">{reply.text}</p>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+
+                              <button 
+                                onClick={() => {
+                                  setReplyingToReviewId(null);
+                                  setReplyText(""); // Clear reply text if cancelled
+                                  setShowReplyBox(false);
+                                }}
+                                className="absolute top-0 right-0 m-4 text-2xl"
+                              >
+                                <FaTimes />
+                              </button>
+                            </div>
+                            
+                            <div className="bg-white p-4 rounded-b-lg border-t">
+                              {/* Render the username of the user being replied to */}
+                              <div className="text-blue-950 font-bold mb-2">
+                                Replying to @{selectedUsername}
+                              </div>
+
+                              {/* Reply input field */}
+                              <textarea
+                                type="text"
+                                className="w-[49rem] h-20 p-2 mt-1 flex-grow overflow-y-auto scrollbar-container"
+                                placeholder="Write a reply ..."
+                                value={reply}
+                                onChange={(e) => setReply(e.target.value)}
+                              />
+                                
+                              {/* Reply button */}
+                              <div className="flex justify-end -mr-5 -mt-[6.5rem] p-4 h-28">
+                                <button
+                                  onClick={() => {
+                                    console.log("Review ID:", userReview.reviewId);
+                                    console.log("User Review:", userReview);
+                                    handleSubmitReply(userReview.reviewId, userId, recipeName, reply, replyText); // Pass reviewId, userId, recipeName, and replyText
+                                    setReplyingToReviewId(null);
+                                    setReplyText(""); // Clear reply text after submission
+                                    setShowReplyBox(false);
+                                  }}
+                                  className="px-4 py-2 bg-white text-blue-950 hover:text-blue-550 text-md font-extrabold"
+                                >
+                                  Reply
+                                </button>
+                              </div>   
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="flex justify-center mt-4">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(reviews.length / commentsPerPage)}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
+            </section>
+
+            <section className="mt-8">
+              {/* Input field for user reviews - placeholder for dynamic form */}
+              <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-start">
+                <input
+                  className="w-full h-32 p-2 border rounded-md"
+                  placeholder="Let us know how you feel!..."
+                  maxLength={wordCount === 50 ? 300 : null} // Allow 300 characters initially (50 words)
+                  onInput={handleWordCount}
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)} // Update comment state
+                />
+                <p className="text-gray-500 text-sm mt-2">
+                  Words left (Max 50 words) :
+                  <span
+                    style={{
+                      marginLeft: "5px",
+                      marginRight: "10px",
+                      color: wordCount >= 0 ? "inherit" : "red",
+                    }}
+                  >
+                    {wordCount >= 0 ? wordCount : "0 !! "}
+                  </span>
+                </p>
+                <span className="text-blue-950 font-bold mr-2">
+                  Your Rating (click on the stars !) :{" "}
+                </span>
+                <div className="flex">
+                  {[1, 2, 3, 4, 5].map((rating) => (
+                    <Star
+                      key={rating}
+                      filled={userRating >= rating}
+                      onClick={() => handleStarClick(rating)}
+                    />
+                  ))}
+                </div>
+                <button
+                  className="w-[100px] h-10 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow mt-4 self-end"
+                  onClick={handleSubmitReview} // Add onClick handler for submitting review
+                >
+                  Submit
+                </button>
+              </div>
+            </section>
+          </div>          
+        </div>
 
       <div className="mt-auto">
         <Footer />

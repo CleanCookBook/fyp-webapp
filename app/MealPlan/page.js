@@ -106,7 +106,7 @@ const BPMealPlan = () => {
           </h1>
         </div>
         
-        <div className="bg-white rounded-lg p-4">
+        <div className="bg-white rounded-lg p-4 mt-6">
         {currentMealPlans.map((singleMealPlan,index) => (
             <a
               key={index}

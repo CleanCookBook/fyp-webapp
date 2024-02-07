@@ -318,14 +318,6 @@ router.post('/updating/:recipeName', isAuthenticated, async (req, res) => {
     calorie
   } = req.body;
 
-  console.log('Recipe Name:', recipeName);
-  console.log('Description:', description);
-  console.log('Ingredients:', ingredients);
-  console.log('Instruction:', instruction);
-  console.log('Tips and Tricks:', tips_tricks);
-  console.log('Fun Facts:', funFacts);
-  console.log('Calorie:', calorie);
-
   try {
     // Update the Recipe_Np entry in the database
     const updateRecipeQuery = `

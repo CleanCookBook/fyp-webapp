@@ -203,38 +203,48 @@ router.get('/username', isAuthenticated, async (req, res) => {
     const userId = req.userId;
     const recipeName = req.params.recipeName;
     const { recipeIngredients, recipeInstructions } = req.body;
-  
+
+    console.log('Received request to update bookmark:');
+    console.log('User ID:', userId);
     console.log('Recipe Name:', recipeName);
     console.log('Ingredients:', recipeIngredients);
     console.log('Instruction:', recipeInstructions);
-  
+
     try {
-      // Update the bookmark entry in the database
-      const updateBookmarkQuery = `
-        UPDATE Bookmark
-        SET Ingredients = ?, Instruction = ?
-        WHERE RName = ? AND UserID = ?
-      `;
-  
-      await new Promise((resolve, reject) => {
-        db.run(updateBookmarkQuery, [recipeIngredients, recipeInstructions, recipeName, userId], (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
+        // Convert ingredients string to an array using '\r\n' separator
+        const formattedIngredients = recipeIngredients.replace(/\n/g, '\r\n');
+
+        // Update the bookmark entry in the database
+        const updateBookmarkQuery = `
+            UPDATE Bookmark
+            SET Ingredients = ?, Instruction = ?
+            WHERE RName = ? AND UserID = ?
+        `;
+
+        await new Promise((resolve, reject) => {
+            db.run(updateBookmarkQuery, [formattedIngredients, recipeInstructions, recipeName, userId], (err) => {
+                if (err) {
+                    console.error('Error updating bookmark:', err);
+                    reject(err);
+                } else {
+                    console.log('Bookmark updated successfully');
+                    resolve();
+                }
+            });
         });
-      });
-  
-      res.status(200).json({ message: 'Bookmark updated successfully' });
+
+        res.status(200).json({ message: 'Bookmark updated successfully' });
     } catch (error) {
-      console.error('Error updating bookmark:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+        console.error('Error updating bookmark:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
-  });
-  
-  
-  module.exports = router;
-  
+});
+
+
+
+
+module.exports = router;
+
+
 
 
