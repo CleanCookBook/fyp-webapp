@@ -6,10 +6,9 @@ import Star from "@/components/Star";
 import StarRating from "@/components/StarRating";
 import Pagination from "@/components/pagination";
 import Image from "next/image";
-import { FaTimes } from 'react-icons/fa';
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FaComment, FaTrash } from 'react-icons/fa';
+import { FaComment, FaTimes, FaTrash } from 'react-icons/fa';
 
 
 const Review = () => {
@@ -112,14 +111,45 @@ const Review = () => {
   };
 
   // Function to handle initiating reply to a review
-  const handleReplyClick = (userReview) => {
-    setReplyingToReviewId(userReview.id); // Set the ID of the review being replied to
-    setReviewId(userReview.reviewId);
-    setSelectedUsername(userReview.Username); // Set the username of the selected user
-    setReplyText(`${userReview.comment}`); // Set the reply text to include the username and comment
-    setReply("");
-    setShowReplyBox(true); // Show the reply input box
+  const handleReplyClick = async (userReview) => {
+    try {
+      console.log("Clicked on user review:", userReview);
+  
+      // Ensure userReview has the expected structure
+      if (!userReview || !userReview.reviewId) {
+        console.error("Invalid user review:", userReview);
+        return;
+      }
+  
+      const response = await fetch(`http://localhost:3001/api/reply/${userReview.reviewId}`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        const fetchedRepliesWithUsernames = data.repliesWithUsernames || [];
+        console.log("Fetched Replies with Usernames:", fetchedRepliesWithUsernames);
+  
+        // Add some console logs to check values
+        console.log("Setting replyingToReviewId:", userReview.reviewId);
+        console.log("Setting reviewId:", userReview.reviewId);
+  
+        setReplyingToReviewId(userReview.reviewId);
+        setReviewId(userReview.reviewId); // Use 'reviewID' instead of 'reviewId'
+        setSelectedUsername(userReview.Username);
+        setReplyText(`${userReview.comment}`);
+        setReply("");
+        setShowReplyBox(true);
+        // Now you can update your state or UI to display these replies with usernames
+        setReplies(fetchedRepliesWithUsernames);
+      } else {
+        console.error(`Error fetching replies for review ID ${userReview.reviewId}: ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error("Error fetching replies:", error.message);
+    }
   };
+  
+  
+  
 
   const startIndex = (currentPage - 1) * commentsPerPage;
   const endIndex = startIndex + commentsPerPage;
@@ -247,6 +277,7 @@ const Review = () => {
 
       const userData = await userResponse.json();
       const userId = userData.user.UserID;
+      
   
       // Send a POST request to the backend API to submit the reply
       const response = await fetch(`http://localhost:3001/api/reply/replies/${reviewId}`, {
@@ -289,25 +320,22 @@ const Review = () => {
   useEffect(() => {
     const fetchReplies = async () => {
       try {
-        if (!recipeNameParam) return; // Check if recipeNameParam is defined
-        
-        const fetchedReplies = {}; // Object to store replies for each review
-        
-        // Iterate through each review and fetch replies
+        if (!recipeNameParam) return;
+    
+        const fetchedReplies = {};
+    
         for (const review of reviews) {
           const response = await fetch(`http://localhost:3001/api/replies/${review.reviewId}`);
           if (response.ok) {
             const data = await response.json();
-            // Store replies in fetchedReplies, use empty array if no replies
+            console.log("Replies", data);
             fetchedReplies[review.reviewId] = data.replies || [];
           } else {
             console.error(`Error fetching replies for review ID ${review.reviewId}: ${response.statusText}`);
-            // Set an empty array for the review to avoid undefined errors
             fetchedReplies[review.reviewId] = [];
           }
         }
-        
-        // Set the replies state with the fetched replies
+    
         setReplies(fetchedReplies);
       } catch (error) {
         console.error("Error fetching replies:", error.message);
@@ -315,7 +343,8 @@ const Review = () => {
     };
   
     fetchReplies();
-  }, [recipeNameParam, reviews]);
+}, [recipeNameParam, reviews, reply]);
+
   
   if (!isAuthenticated) {
     // If not authenticated, the user will be redirected during authentication check
@@ -398,14 +427,14 @@ const Review = () => {
                         </button>
                         {/* Trash button */}
                         {userId === userReview.UserID && (
-                          <button onClick={() => handleDeleteReview(userReview.reviewId)} className="text-red-500 ml-4">
+                          <button onClick={() => handleDeleteReview(userReview.reviewID)} className="text-red-500 ml-4">
                             <FaTrash/>
                           </button>
                         )}
                       </div>
 
                       {/* Display reply input box if replyingToReviewId matches current review ID */}
-                      {showReplyBox && replyingToReviewId === userReview.id && (
+                      {showReplyBox && replyingToReviewId === userReview.reviewID && (
                         <div className="fixed inset-0 flex flex-row items-center justify-center bg-gray-800 bg-opacity-50 z-50">
                           <div className="mt-1">
                             <div className="bg-white p-8 rounded-t-lg w-[56rem] h-[28rem] relative">
@@ -423,7 +452,7 @@ const Review = () => {
                                   <div className="text-blue-950 font-bold">@{selectedUsername}</div>
                                   <p className="text-blue-950 font-semibold">{replyText}</p>
                                   {/* Render the "View Replies" button only if there are replies */}
-                                  {replies[userReview.id] && replies[userReview.id].length > 0 && (
+                                  {replies[userReview.reviewID] && replies[userReview.reviewID].length > 0 && (
                                     <button 
                                       onClick={() => toggleRepliesVisibility(index)}
                                       className="text-blue-950 font-medium text-sm ml-3 mt-2"
@@ -438,7 +467,7 @@ const Review = () => {
                               {repliesVisibility[index] && (
                                 <div>
                                   {/* Render replies here */}
-                                  {replies[userReview.id] && replies[userReview.id].map((reply, replyIndex) => (
+                                  {replies[userReview.reviewID] && replies[userReview.reviewID].map((reply, replyIndex) => (
                                     <div key={replyIndex} className="flex items-start mb-2">
                                       <Image 
                                         src="/logo.jpg" 
@@ -488,11 +517,10 @@ const Review = () => {
                               <div className="flex justify-end -mr-5 -mt-[6.5rem] p-4 h-28">
                                 <button
                                   onClick={() => {
-                                    console.log("Review ID:", userReview.id);
+                                    console.log("Review ID:", userReview.reviewId);
                                     console.log("User Review:", userReview);
-                                    handleSubmitReply(userReview.id, userId, recipeName, reply, replyText); // Pass reviewId, userId, recipeName, and replyText
+                                    handleSubmitReply(userReview.reviewId, userId, recipeName, reply, replyText); // Pass reviewId, userId, recipeName, and replyText
                                     setReplyingToReviewId(null);
-                                    setReviewId(reviewId);
                                     setReplyText(""); // Clear reply text after submission
                                     setShowReplyBox(false);
                                   }}

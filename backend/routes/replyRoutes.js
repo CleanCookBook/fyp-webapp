@@ -4,6 +4,9 @@ const db = require("../db");
 const isAuthenticated = require("../authMiddleware");
 
 // Submit a new reply to a comment on a review
+// Backend route to fetch replies with usernames for a specific review
+
+
 router.post('/replies/:reviewId', isAuthenticated, async (req, res) => {
   const { userId, Rname, reply, comment } = req.body;
   const reviewId = req.params.reviewId;
@@ -37,11 +40,10 @@ router.post('/replies/:reviewId', isAuthenticated, async (req, res) => {
     console.log('UserID:', userId);
     console.log('ReviewID:', reviewId);
     console.log('Rname:', Rname);
-    console.log('ReplyID:', newReplyId);
     console.log('Reply:', reply);
     console.log('Comment:', comment);
 
-    res.status(201).json({ message: 'Reply submitted successfully', replyId: newReplyId });
+    res.status(201).json({ message: 'Reply submitted successfully'});
   } catch (error) {
     console.error('Error submitting reply:', error);
     return res.status(500).json({ error: 'Internal server error' });
@@ -53,16 +55,15 @@ router.post('/replies/:reviewId', isAuthenticated, async (req, res) => {
 router.get('/:reviewId', async (req, res) => {
   const reviewId = req.params.reviewId;
 
-  // Check if reviewId is valid
-  if (!reviewId) {
-    console.error('Error: reviewId is undefined');
-    return res.status(400).json({ error: 'reviewId is undefined' });
-  }
-
   try {
-    // Query the database to fetch replies for the specified review
-    const replies = await new Promise((resolve, reject) => {
-      db.all('SELECT * FROM reply WHERE ReviewID = ?', [reviewId], (err, rows) => {
+    // Query the database to fetch replies and usernames for the specified review
+    const repliesWithUsernames = await new Promise((resolve, reject) => {
+      db.all(`
+        SELECT reply.Reply, User.Username
+        FROM reply
+        JOIN User ON reply.UserID = User.UserID
+        WHERE reply.ReviewID = ?
+      `, [reviewId], (err, rows) => {
         if (err) {
           reject(err);
           return;
@@ -71,13 +72,14 @@ router.get('/:reviewId', async (req, res) => {
       });
     });
 
-    // Send the fetched replies as a JSON response
-    res.json({ replies });
+    // Send the fetched replies with usernames as a JSON response
+    res.json({ repliesWithUsernames });
   } catch (error) {
-    console.error('Error fetching replies:', error.message);
+    console.error('Error fetching replies with usernames:', error.message);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 
 
