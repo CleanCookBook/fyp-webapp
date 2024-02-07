@@ -33,7 +33,6 @@ const Review = () => {
   const [reviewId, setReviewId] = useState(null);
   const [replies, setReplies] = useState({});
   const [recipeNameParam, setRecipeNameParam] = useState(null);
-  const [repliesVisibility, setRepliesVisibility] = useState({});
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -91,14 +90,6 @@ const Review = () => {
     setRecipeRating(overallRating);
   };
 
-  // Function to toggle the visibility of replies for a specific comment index
-  const toggleRepliesVisibility = (index) => {
-    setRepliesVisibility((prevVisibility) => ({
-      ...prevVisibility,
-      [index]: !prevVisibility[index], // Toggle visibility for the specified index
-    }));
-  };
-
   // Handle user clicks on stars to set user rating
   const handleStarClick = (rating) => {
     setUserRating(rating);
@@ -112,44 +103,13 @@ const Review = () => {
 
   // Function to handle initiating reply to a review
   const handleReplyClick = async (userReview) => {
-    try {
-      console.log("Clicked on user review:", userReview);
-  
-      // Ensure userReview has the expected structure
-      if (!userReview || !userReview.reviewId) {
-        console.error("Invalid user review:", userReview);
-        return;
-      }
-  
-      const response = await fetch(`http://localhost:3001/api/reply/${userReview.reviewId}`);
-      
-      if (response.ok) {
-        const data = await response.json();
-        const fetchedRepliesWithUsernames = data.repliesWithUsernames || [];
-        console.log("Fetched Replies with Usernames:", fetchedRepliesWithUsernames);
-  
-        // Add some console logs to check values
-        console.log("Setting replyingToReviewId:", userReview.reviewId);
-        console.log("Setting reviewId:", userReview.reviewId);
-  
-        setReplyingToReviewId(userReview.reviewId);
-        setReviewId(userReview.reviewId); // Use 'reviewID' instead of 'reviewId'
-        setSelectedUsername(userReview.Username);
-        setReplyText(`${userReview.comment}`);
-        setReply("");
-        setShowReplyBox(true);
-        // Now you can update your state or UI to display these replies with usernames
-        setReplies(fetchedRepliesWithUsernames);
-      } else {
-        console.error(`Error fetching replies for review ID ${userReview.reviewId}: ${response.statusText}`);
-      }
-    } catch (error) {
-      console.error("Error fetching replies:", error.message);
-    }
+    setReplyingToReviewId(userReview.reviewId);
+    setReviewId(userReview.reviewId); // Use 'reviewID' instead of 'reviewId'
+    setSelectedUsername(userReview.Username);
+    setReplyText(`${userReview.comment}`);
+    setReply("");
+    setShowReplyBox(true);
   };
-  
-  
-  
 
   const startIndex = (currentPage - 1) * commentsPerPage;
   const endIndex = startIndex + commentsPerPage;
@@ -313,38 +273,40 @@ const Review = () => {
     }
   };
 
+  // Function to fetch replies for a specific review
+  const fetchReplies = async (reviewId) => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/reply/${reviewId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch replies');
+      }
+      const data = await response.json();
+      // Update the replies state with the fetched replies
+      setReplies(data.repliesWithUsernames);
+    } catch (error) {
+      console.error('Error fetching replies:', error);
+    }
+  };
+
+  // Function to handle clicking on the comment button
+  const handleCommentButtonClick = async (userReview) => {
+    try {
+      // Fetch replies for the selected review
+      await fetchReplies(userReview.reviewId);
+      // Set the state to show the reply input box and populate the necessary data
+      setReplyingToReviewId(userReview.reviewId);
+      setSelectedUsername(userReview.Username);
+      setReplyText(userReview.comment); // Assuming you want to include the original comment in the reply input box
+      setReply(""); // Clear any previous reply text
+      setShowReplyBox(true); // Show the reply input box
+    } catch (error) {
+      console.error('Error handling comment button click:', error);
+    }
+  };
+
   const navigateToRecipe = () => {
     router.push(`/detailRecipe?recipeName=${encodeURIComponent(recipeName)}`)
   };
-
-  useEffect(() => {
-    const fetchReplies = async () => {
-      try {
-        if (!recipeNameParam) return;
-    
-        const fetchedReplies = {};
-    
-        for (const review of reviews) {
-          const response = await fetch(`http://localhost:3001/api/replies/${review.reviewId}`);
-          if (response.ok) {
-            const data = await response.json();
-            console.log("Replies", data);
-            fetchedReplies[review.reviewId] = data.replies || [];
-          } else {
-            console.error(`Error fetching replies for review ID ${review.reviewId}: ${response.statusText}`);
-            fetchedReplies[review.reviewId] = [];
-          }
-        }
-    
-        setReplies(fetchedReplies);
-      } catch (error) {
-        console.error("Error fetching replies:", error.message);
-      }
-    };
-  
-    fetchReplies();
-}, [recipeNameParam, reviews, reply]);
-
   
   if (!isAuthenticated) {
     // If not authenticated, the user will be redirected during authentication check
@@ -422,26 +384,26 @@ const Review = () => {
 
                       <div className="flex items-center mt-2">
                         {/* Display reply button/icon */}
-                        <button onClick={() => handleReplyClick(userReview)}>
+                        <button onClick={() => handleCommentButtonClick(userReview)}>
                           <FaComment />
                         </button>
                         {/* Trash button */}
                         {userId === userReview.UserID && (
-                          <button onClick={() => handleDeleteReview(userReview.reviewID)} className="text-red-500 ml-4">
+                          <button onClick={() => handleDeleteReview(userReview.reviewId)} className="text-red-500 ml-4">
                             <FaTrash/>
                           </button>
                         )}
                       </div>
 
                       {/* Display reply input box if replyingToReviewId matches current review ID */}
-                      {showReplyBox && replyingToReviewId === userReview.reviewID && (
+                      {showReplyBox && replyingToReviewId === userReview.reviewId && (
                         <div className="fixed inset-0 flex flex-row items-center justify-center bg-gray-800 bg-opacity-50 z-50">
                           <div className="mt-1">
                             <div className="bg-white p-8 rounded-t-lg w-[56rem] h-[28rem] relative">
                               {/* Render selected user's review */}
                               <div className="mb-4 flex items-start">
                                 <Image 
-                                  src="/logo.jpg" 
+                                  src="/logo.jpg"
                                   alt="Profile Picture" 
                                   width={150}
                                   height={150}
@@ -451,41 +413,27 @@ const Review = () => {
                                 <div>
                                   <div className="text-blue-950 font-bold">@{selectedUsername}</div>
                                   <p className="text-blue-950 font-semibold">{replyText}</p>
-                                  {/* Render the "View Replies" button only if there are replies */}
-                                  {replies[userReview.reviewID] && replies[userReview.reviewID].length > 0 && (
-                                    <button 
-                                      onClick={() => toggleRepliesVisibility(index)}
-                                      className="text-blue-950 font-medium text-sm ml-3 mt-2"
-                                    >
-                                      {repliesVisibility[index] ? "Hide Replies" : "View Replies"}
-                                    </button>
-                                  )}
+                                  {/* Render the replies */}
+                                  <div className="mb-4">
+                                    {replies.map((reply, index) => (
+                                      <div key={index} className="flex items-start">
+                                        <Image 
+                                          src="/logo.jpg"
+                                          alt="Profile Picture" 
+                                          width={150}
+                                          height={150}
+                                          className="w-12 h-12 rounded-full mr-2" 
+                                          unoptimized={true}
+                                        />
+                                        <div>
+                                          <div className="text-blue-950 font-bold">@{reply.Username}</div>
+                                          <p className="text-blue-950 font-semibold">{reply.Reply}</p>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
                                 </div>                              
                               </div>
-
-                              {/* Render replies if they are visible */}
-                              {repliesVisibility[index] && (
-                                <div>
-                                  {/* Render replies here */}
-                                  {replies[userReview.reviewID] && replies[userReview.reviewID].map((reply, replyIndex) => (
-                                    <div key={replyIndex} className="flex items-start mb-2">
-                                      <Image 
-                                        src="/logo.jpg" 
-                                        alt="Profile Picture" 
-                                        width={150}
-                                        height={150}
-                                        className="w-16 h-16 rounded-full mr-4" 
-                                        unoptimized={true}
-                                      />
-                                      <div className="flex flex-col">
-                                        <div className="text-blue-950 font-bold">@{reply.username}</div>
-                                        <p className="text-blue-950">{reply.text}</p>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-
                               <button 
                                 onClick={() => {
                                   setReplyingToReviewId(null);
