@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FaHeart, FaRegHeart, FaTrash, FaComment } from "react-icons/fa";
@@ -311,10 +312,13 @@ const ViewBPAnnouncement = () => {
                         {/* Display profile picture, username, and comment details */}
                         {comment.comment && (
                           <>
-                            <img
-                              src="profile logo.png"
-                              alt="Profile Picture"
-                              className="w-16 h-16 rounded-full mr-4"
+                            <Image 
+                              src="/logo.jpg" 
+                              alt="Profile Picture" 
+                              width={150}
+                              height={150}
+                              className="w-16 h-16 rounded-full mr-4" 
+                              unoptimized={true}
                             />
                             <div className="flex flex-col flex-grow">
                               {/* Username */}
@@ -330,9 +334,8 @@ const ViewBPAnnouncement = () => {
                                   >
                                     <FaTrash />
                                   </button>
-                                )}                                
+                                )}                           
                               </div>
-
                             </div>
                           </>
                         )}

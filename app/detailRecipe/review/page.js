@@ -22,6 +22,7 @@ const Review = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [commentsPerPage] = useState(5);
   const [replyText, setReplyText] = useState("");
+  const [reply, setReply] = useState("");
   const [replyingToReviewId, setReplyingToReviewId] = useState(null);
   const [showReplyBox, setShowReplyBox] = useState(false);
   const [comment, setComment] = useState("");
@@ -30,6 +31,10 @@ const Review = () => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [selectedUsername, setSelectedUsername] = useState(null);
+  const [reviewId, setReviewId] = useState(null);
+  const [replies, setReplies] = useState({});
+  const [recipeNameParam, setRecipeNameParam] = useState(null);
+  const [repliesVisibility, setRepliesVisibility] = useState({});
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -87,6 +92,14 @@ const Review = () => {
     setRecipeRating(overallRating);
   };
 
+  // Function to toggle the visibility of replies for a specific comment index
+  const toggleRepliesVisibility = (index) => {
+    setRepliesVisibility((prevVisibility) => ({
+      ...prevVisibility,
+      [index]: !prevVisibility[index], // Toggle visibility for the specified index
+    }));
+  };
+
   // Handle user clicks on stars to set user rating
   const handleStarClick = (rating) => {
     setUserRating(rating);
@@ -101,16 +114,10 @@ const Review = () => {
   // Function to handle initiating reply to a review
   const handleReplyClick = (userReview) => {
     setReplyingToReviewId(userReview.id); // Set the ID of the review being replied to
+    setReviewId(userReview.reviewId);
     setSelectedUsername(userReview.Username); // Set the username of the selected user
     setReplyText(`${userReview.comment}`); // Set the reply text to include the username and comment
-    setShowReplyBox(true); // Show the reply input box
-  };
-
-  const handleReply = (userReview) => {
-    const username = `@${userReview.Username} `;
-    setReplyingToReviewId(userReview.id); // Set the ID of the review being replied to
-    setSelectedUsername(userReview.Username); // Set the username of the selected user
-    setReplyText(username); // Set the reply text to include the username
+    setReply("");
     setShowReplyBox(true); // Show the reply input box
   };
 
@@ -225,56 +232,91 @@ const Review = () => {
     }
   };
 
-  const handleSubmitReply = async (reviewId, commentId, recipientUserId, replyText) => {
+  const handleSubmitReply = async (reviewId, userID, recipeName, reply, replyText) => {
     try {
       // Fetch the user ID from /api/userID
-      const userResponse = await fetch(`http://localhost:3001/api/reply/comments/${reviewId}`, {
+      const userResponse = await fetch("http://localhost:3001/api/userID", {
         method: "GET",
         credentials: "include", // Include credentials for cookie authentication
       });
-  
+
       if (!userResponse.ok) {
         console.error("Error fetching user ID:", userResponse.statusText);
         return;
       }
-  
+
       const userData = await userResponse.json();
       const userId = userData.user.UserID;
   
-      // Use the fetch API to submit the reply
-      const replyResponse = await fetch("http://localhost:3001/api/reply/replies", {
+      // Send a POST request to the backend API to submit the reply
+      const response = await fetch(`http://localhost:3001/api/reply/replies/${reviewId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // Include credentials for cookie authentication
+        credentials: "include",
         body: JSON.stringify({
-          commentId: commentId,
-          userId: userId,
-          recipientUserId: recipientUserId, // Pass the recipient user ID
-          text: replyText,
+          userId: userId, // Use the userId obtained from the backend
+          reviewId: reviewId, // Ensure reviewId is included in the request body
+          Rname: recipeName, // Assuming Rname is not needed for reply
+          reply: reply, // Pass the reply text
+          comment: replyText, // Include the comment field
         }),
       });
-  
-      if (!replyResponse.ok) {
-        console.error("Error submitting reply:", replyResponse.statusText);
-        return;
+
+      if (!response.ok) {
+        throw new Error("Error submitting reply");
       }
-  
-      const replyData = await replyResponse.json();
-      console.log("Reply submitted successfully:", replyData.message);
-      // You might want to update the comments state here if needed
-      // For example, refetch the comments after submitting a new reply
-      window.location.reload();
+
+      const responseData = await response.json();
+      console.log("Reply submitted successfully:", responseData.message);
+
+      // Clear reply text and hide reply input box after successful submission
+      setReplyText("");
+      setShowReplyBox(false);
+
+      // Optionally, you may update the replies state to reflect the new reply
+      // For example, refetch the replies after submitting a new reply
     } catch (error) {
-      console.error("Error:", error.message);
+      console.error("Error submitting reply:", error.message);
     }
-  };  
+  };
 
   const navigateToRecipe = () => {
     router.push(`/detailRecipe?recipeName=${encodeURIComponent(recipeName)}`)
   };
 
+  useEffect(() => {
+    const fetchReplies = async () => {
+      try {
+        if (!recipeNameParam) return; // Check if recipeNameParam is defined
+        
+        const fetchedReplies = {}; // Object to store replies for each review
+        
+        // Iterate through each review and fetch replies
+        for (const review of reviews) {
+          const response = await fetch(`http://localhost:3001/api/replies/${review.reviewId}`);
+          if (response.ok) {
+            const data = await response.json();
+            // Store replies in fetchedReplies, use empty array if no replies
+            fetchedReplies[review.reviewId] = data.replies || [];
+          } else {
+            console.error(`Error fetching replies for review ID ${review.reviewId}: ${response.statusText}`);
+            // Set an empty array for the review to avoid undefined errors
+            fetchedReplies[review.reviewId] = [];
+          }
+        }
+        
+        // Set the replies state with the fetched replies
+        setReplies(fetchedReplies);
+      } catch (error) {
+        console.error("Error fetching replies:", error.message);
+      }
+    };
+  
+    fetchReplies();
+  }, [recipeNameParam, reviews]);
+  
   if (!isAuthenticated) {
     // If not authenticated, the user will be redirected during authentication check
     return null;
@@ -380,8 +422,41 @@ const Review = () => {
                                 <div>
                                   <div className="text-blue-950 font-bold">@{selectedUsername}</div>
                                   <p className="text-blue-950 font-semibold">{replyText}</p>
+                                  {/* Render the "View Replies" button only if there are replies */}
+                                  {replies[userReview.id] && replies[userReview.id].length > 0 && (
+                                    <button 
+                                      onClick={() => toggleRepliesVisibility(index)}
+                                      className="text-blue-950 font-medium text-sm ml-3 mt-2"
+                                    >
+                                      {repliesVisibility[index] ? "Hide Replies" : "View Replies"}
+                                    </button>
+                                  )}
                                 </div>                              
                               </div>
+
+                              {/* Render replies if they are visible */}
+                              {repliesVisibility[index] && (
+                                <div>
+                                  {/* Render replies here */}
+                                  {replies[userReview.id] && replies[userReview.id].map((reply, replyIndex) => (
+                                    <div key={replyIndex} className="flex items-start mb-2">
+                                      <Image 
+                                        src="/logo.jpg" 
+                                        alt="Profile Picture" 
+                                        width={150}
+                                        height={150}
+                                        className="w-16 h-16 rounded-full mr-4" 
+                                        unoptimized={true}
+                                      />
+                                      <div className="flex flex-col">
+                                        <div className="text-blue-950 font-bold">@{reply.username}</div>
+                                        <p className="text-blue-950">{reply.text}</p>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+
                               <button 
                                 onClick={() => {
                                   setReplyingToReviewId(null);
@@ -394,7 +469,7 @@ const Review = () => {
                               </button>
                             </div>
                             
-                            <div className="bg-white p-4 rounded-b-lg">
+                            <div className="bg-white p-4 rounded-b-lg border-t">
                               {/* Render the username of the user being replied to */}
                               <div className="text-blue-950 font-bold mb-2">
                                 Replying to @{selectedUsername}
@@ -403,23 +478,28 @@ const Review = () => {
                               {/* Reply input field */}
                               <textarea
                                 type="text"
-                                className="w-full h-20 p-2 rounded-md mb-4"
+                                className="w-[49rem] h-20 p-2 mt-1 flex-grow overflow-y-auto scrollbar-container"
                                 placeholder="Write a reply ..."
+                                value={reply}
+                                onChange={(e) => setReply(e.target.value)}
                               />
                                 
                               {/* Reply button */}
-                              <div className="flex justify-end -mr-4 -mt-4 p-4">
+                              <div className="flex justify-end -mr-5 -mt-[6.5rem] p-4 h-28">
                                 <button
                                   onClick={() => {
-                                    handleSubmitReply(replyingToReviewId, userReview.commentId, userReview.userId, replyText); // Pass userReview as the first argument
+                                    console.log("Review ID:", userReview.id);
+                                    console.log("User Review:", userReview);
+                                    handleSubmitReply(userReview.id, userId, recipeName, reply, replyText); // Pass reviewId, userId, recipeName, and replyText
                                     setReplyingToReviewId(null);
+                                    setReviewId(reviewId);
                                     setReplyText(""); // Clear reply text after submission
                                     setShowReplyBox(false);
                                   }}
-                                  className="px-4 py-2 bg-blue-950 text-white text-medium font-bold rounded-lg shadow-md"
+                                  className="px-4 py-2 bg-white text-blue-950 hover:text-blue-550 text-md font-extrabold"
                                 >
                                   Reply
-                                </button>                            
+                                </button>
                               </div>   
                             </div>
                           </div>
