@@ -35,7 +35,6 @@ const Navbar = ({ userRole }) => {
 
   const toggleAccount = () => {
     setIsAccountOpen(!isAccountOpen);
-    if (isNotificationOpen) setIsNotificationOpen(false);
   };
 
   const getLogoLink = (userRole) => {
@@ -135,7 +134,7 @@ const Navbar = ({ userRole }) => {
                 Account
               </button>
               {isAccountOpen && (
-                <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                   <div className="py-1">
                   {userRole === "system admin" && (
                   <>
