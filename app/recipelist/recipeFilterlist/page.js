@@ -264,6 +264,7 @@ const FilteredRecipePage = () => {
                       {(currentPage - 1) * recipesPerPage + index + 1}.
                     </p>
                     <p className="ml-2 text-black text-xl font-medium">{recipe.Rname}</p>
+                    <p className="ml-2 text-gray-500 text-lg">by {recipe.FName} {recipe.LName}</p>
                   </div>
                 </Link>
               </div>
