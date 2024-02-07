@@ -208,7 +208,7 @@ const Navbar = ({ userRole }) => {
                 </Link>
                 <Link href="/BPAnnouncement">
                   <button className="px-4 hover:opacity-[0.5]" onClick={handleLinkClick}>
-                    Announcement
+                    Socials
                   </button>
                 </Link>
                 <Link href="/LivechatwithBot">
