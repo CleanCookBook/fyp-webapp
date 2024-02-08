@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const BPCreateMealPlan = () => {
+  const userRole = "nutritionist";
   const [mealPlanName, setMealPlanName] = useState("");
   const [mealPlanDescription, setMealPlanDescription] = useState("");
   const [adjustingSize, setAdjustingSize] = useState(false);
@@ -232,7 +233,7 @@ const BPCreateMealPlan = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
-      <Navbar />
+      <Navbar userRole={userRole} />
       <div className="container mx-auto p-4 flex-1">
         <div className="flex items-center mb-4">
           <Link 
