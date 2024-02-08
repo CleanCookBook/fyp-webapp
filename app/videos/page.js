@@ -120,7 +120,7 @@ const videos = () => {
       <Navbar userRole={userRole} />
       <div className="flex flex-col justify-center items-center mt-20 mb-20">
         <h2 className="text-5xl text-[#0A2A67] font-black text-left mb-4"> Recipes </h2>
-        <div className="relative">
+        <div className="relative mt-2">
           {paymentStatus !== "paid" && (
             <div className="absolute inset-0 -top-40 flex items-center justify-center z-10">
               <div className="bg-[#00509D] rounded-[20px] p-8 w-[400px]">
@@ -144,24 +144,24 @@ const videos = () => {
             </div>
           )}
 
-          <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ${paymentStatus !== "paid" ? 'blur' : ''}`}>
+          <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 ${paymentStatus !== "paid" ? 'blur' : ''}`}>
             {videoList.map((video) => (
               <div
                 key={video.id}
-                className="cursor-pointer p-4 border border-blue-950 rounded-lg transition-transform transform hover:scale-105"
+                className="cursor-pointer p-4 border border-slate-600 rounded-lg transition-transform transform hover:scale-105"
                 onClick={() => handleVideoClick(video.id)}
               >
                 <img
                   src={`https://i.ytimg.com/vi/${video.id}/mqdefault.jpg`}
                   alt={video.title}
-                  className="w-full h-36 object-cover rounded-lg mb-2"
+                  className="w-full h-48 object-cover rounded-lg mb-2"
                 />
                 <div className="flex flex-col">
-                  <p className="text-blue-950 text-lg font-semibold mb-1">
+                  <p className="text-blue-950 text-lg font-bold mb-1">
                     {video.title}
                   </p>
                   {/* Access publishedAt from the original API response item */}
-                  <p className="text-green-900 text-sm">
+                  <p className="text-green-900 text-sm font-medium">
                     Uploaded on {video.publishedAt}
                   </p>
                 </div>

@@ -6,6 +6,7 @@ import Ingredients from "@/components/Ingredients";
 import Instructions from "@/components/Instructions";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
+import Link from "next/link";
 import NutritionalFact from "@/components/NutritionalFact";
 import StarRating from "@/components/StarRating";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -277,12 +278,13 @@ const RecipeDetails = () => {
       <div className="p-4 pl-20 bg-[#F9D548]">
         <div className="flex justify-start items-center mt-4 mb-4">
           {userRole === "nutritionist" && (
-            <button
-              
-              className="w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow mr-4"
-            >
+            <Link href="/ViewRecipe">
+              <button
+                className="w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow mr-4"
+              >
               &lt;&nbsp;&nbsp;Back
-            </button>
+            </button>  
+            </Link>
           )} 
           <div className="text-6xl font-extrabold text-blue-950">
             {recipeDetails?.RName}
