@@ -185,27 +185,25 @@ const mpDescription = () => {
     );
   }
 
-  return (
-    <section className="flex flex-col h-screen bg-[#F9D548]">
-      <Navbar userRole={userRole} />
-      <div className="flex-grow w-[1108px] mx-auto mt-8">
+return (
+  <section className="flex flex-col h-screen bg-[#F9D548]">
+    <Navbar userRole={userRole} />
+      <div className="flex-grow w-[1208px] mx-auto mt-8">
         {/* Link to navigate back */}
         <Link href="/mpfirst">
           <button
             onClick={handleStartMealPlan}
-            className="flex justify-center items-center w-[94px] h-[38px] bg-blue-950 rounded-[10px] shadow mb-9"
+            className="w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow mr-4"
           >
-            <div className="text-white font-medium focus:outline-none">
-              &lt; Back
-            </div>
+            &lt; Back
           </button>
         </Link>
 
-        <h1 className="text-blue-950 text-5xl font-extrabold text-left mb-8 pl-8">
+        <h1 className="text-blue-950 text-5xl font-black text-left mt-8 pl-8 -ml-8">
           {mealPlanName}
         </h1>
 
-        <div className="text-blue-950 text-base text-center font-medium">
+        <div className="text-blue-950 text-lg text-center font-medium mt-4">
           {mealPlanDetails?.description
             .split("\r\n")
             .map((paragraph, index) => (
@@ -220,48 +218,48 @@ const mpDescription = () => {
         </div>
 
         <div className="flex justify-center mt-11">
-  {/* Render "Start" and "Continue" buttons only for users */}
- {/* Render buttons based on meal plan status */}
-{!isNutritionist && (
-  <>
-    {mealPlanStatus === "start" && (
-      <button
-        onClick={handleStartMealPlan}
-        className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center"
-      >
-        <div className="text-white font-medium focus:outline-none">
-          Start Your Meal Plan Now
-        </div>
-      </button>
-    )}
+          {/* Render "Start" and "Continue" buttons only for users */}
+          {/* Render buttons based on meal plan status */}
+          {!isNutritionist && (
+            <>
+              {mealPlanStatus === "start" && (
+                <button
+                  onClick={handleStartMealPlan}
+                  className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center"
+                >
+                  <div className="text-white font-medium focus:outline-none">
+                    Start Your Meal Plan Now
+                  </div>
+                </button>
+              )}
 
-    {mealPlanStatus === "cannot_start" && (
-      <button
-        onClick={() => {
-          // Handle warning action, e.g., show a modal or alert
-          alert("Warning: Another meal plan is ongoing. You cannot start a new one.");
-        }}
-        className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center"
-      >
-        <div className="text-white font-medium focus:outline-none">
-          Start Your Meal Plan Now
-        </div>
-      </button>
-    )}
+              {mealPlanStatus === "cannot_start" && (
+                <button
+                  onClick={() => {
+                    // Handle warning action, e.g., show a modal or alert
+                    alert("Warning: Another meal plan is ongoing. You cannot start a new one.");
+                  }}
+                  className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center"
+                >
+                  <div className="text-white font-medium focus:outline-none">
+                    Start Your Meal Plan Now
+                  </div>
+                </button>
+              )}
 
-    {mealPlanStatus === "continue" && (
-      <Link href={`/mpfirst/LCProgress/?MealPlan=${encodeURIComponent(mealPlanName)}`}>
-        <button className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center">
-          <div className="text-white font-medium focus:outline-none">
-            Continue Your Meal Plan
-          </div>
-        </button>
-      </Link>
-    )}
-  </>
-)}
+              {mealPlanStatus === "continue" && (
+                <Link href={`/mpfirst/LCProgress/?MealPlan=${encodeURIComponent(mealPlanName)}`}>
+                  <button className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center">
+                    <div className="text-white font-medium focus:outline-none">
+                      Continue Your Meal Plan
+                    </div>
+                  </button>
+                </Link>
+              )}
+            </>
+          )}
 
-{isNutritionist && (
+          {isNutritionist && (
             <Link href={`/mpfirst/LCProgress/?MealPlan=${encodeURIComponent(mealPlanName)}`}>
               <button className="w-[234px] h-[46px] bg-blue-950 rounded-[10px] shadow flex items-center justify-center">
                 <div className="text-white font-medium focus:outline-none">
@@ -272,9 +270,9 @@ const mpDescription = () => {
           )}
         </div>
       </div>
-      <Footer className="mt-auto" />
-    </section>
-  );
+    <Footer className="mt-auto" />
+  </section>
+);
 };
 
 export default mpDescription;
