@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 const LivechatwithBot = () => {
   const [selectedOption, setSelectedOption] = useState(null);
+  const [isSatisfied, setIsSatisfied] = useState(null);
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
@@ -149,9 +150,43 @@ const LivechatwithBot = () => {
                   </li>
                 ))}
               </ul>
+              {selectedOption && (
+                <div className="mt-8 text-center font-bold">
+                    <p className="mb-4 text-blue-950">Were these FAQs helpful?</p>
+                    <button
+                      className="px-4 py-2 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow mr-2"
+                      onClick={() => setIsSatisfied(true)}
+                      aria-label="Mark FAQs as helpful"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      className="px-4 py-2 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow"
+                      onClick={() => setIsSatisfied(false)}
+                      aria-label="Mark FAQs as not helpful"
+                    >
+                      No
+                    </button>
+                </div>
+              )}
+              {isSatisfied !== null && (
+                  <div className="mt-8 text-center font-bold">
+                    {isSatisfied ? (
+                      <p className="text-blue-950">Thank you for your feedback! We're glad the FAQs were helpful.</p>
+                    ) : (
+                      <div>
+                        <p className="text-blue-950"> We're sorry the FAQs didn't answer your question. Please reach out to us for further assistance! </p>
+                        <Link href="/CreateUserFeedback" key="contact-us-link">
+                          <button className="px-4 py-2 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow mt-4"> Contact Us</button>
+                        </Link>  
+                      </div>
+                    )}
+                  </div>
+                )}
             </div>
           )}
-            {selectedOption === "recipe" && (
+
+          {selectedOption === "recipe" && (
             <div>
               <h2 className="text-3xl font-bold mb-4 text-blue-950">FAQs about Recipes</h2>
               <ul className="mb-4">
@@ -162,6 +197,39 @@ const LivechatwithBot = () => {
                   </li>
                 ))}
               </ul>
+              {selectedOption && (
+                <div className="mt-8 text-center font-bold">
+                    <p className="mb-4 text-blue-950">Were these FAQs helpful?</p>
+                    <button
+                      className="px-4 py-2 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow mr-2"
+                      onClick={() => setIsSatisfied(true)}
+                      aria-label="Mark FAQs as helpful"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      className="px-4 py-2 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow"
+                      onClick={() => setIsSatisfied(false)}
+                      aria-label="Mark FAQs as not helpful"
+                    >
+                      No
+                    </button>
+                </div>
+              )}
+              {isSatisfied !== null && (
+                  <div className="mt-8 text-center font-bold">
+                    {isSatisfied ? (
+                      <p className="text-blue-950">Thank you for your feedback! We're glad the FAQs were helpful.</p>
+                    ) : (
+                      <div>
+                        <p className="text-blue-950"> We're sorry the FAQs didn't answer your question. Please reach out to us for further assistance! </p>
+                        <Link href="/CreateUserFeedback" key="contact-us-link">
+                          <button className="px-4 py-2 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow mt-4"> Contact Us</button>
+                        </Link>  
+                      </div>
+                    )}
+                  </div>
+                )}
             </div>
           )}
             {selectedOption === "account" && (
@@ -175,6 +243,39 @@ const LivechatwithBot = () => {
                   </li>
                 ))}
               </ul>
+              {selectedOption && (
+                <div className="mt-8 text-center font-bold">
+                    <p className="mb-4 text-blue-950">Were these FAQs helpful?</p>
+                    <button
+                      className="px-4 py-2 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow mr-2"
+                      onClick={() => setIsSatisfied(true)}
+                      aria-label="Mark FAQs as helpful"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      className="px-4 py-2 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow"
+                      onClick={() => setIsSatisfied(false)}
+                      aria-label="Mark FAQs as not helpful"
+                    >
+                      No
+                    </button>
+                </div>
+              )}
+              {isSatisfied !== null && (
+                  <div className="mt-8 text-center font-bold">
+                    {isSatisfied ? (
+                      <p className="text-blue-950">Thank you for your feedback! We're glad the FAQs were helpful.</p>
+                    ) : (
+                      <div>
+                        <p className="text-blue-950"> We're sorry the FAQs didn't answer your question. Please reach out to us for further assistance! </p>
+                        <Link href="/CreateUserFeedback" key="contact-us-link">
+                          <button className="px-4 py-2 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow mt-4"> Contact Us</button>
+                        </Link>  
+                      </div>
+                    )}
+                  </div>
+                )}
             </div>
           )}
             {selectedOption === "nutritionist" && (
@@ -188,6 +289,39 @@ const LivechatwithBot = () => {
                   </li>
                 ))}
               </ul>
+              {selectedOption && (
+                <div className="mt-8 text-center font-bold">
+                    <p className="mb-4 text-blue-950">Were these FAQs helpful?</p>
+                    <button
+                      className="px-4 py-2 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow mr-2"
+                      onClick={() => setIsSatisfied(true)}
+                      aria-label="Mark FAQs as helpful"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      className="px-4 py-2 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow"
+                      onClick={() => setIsSatisfied(false)}
+                      aria-label="Mark FAQs as not helpful"
+                    >
+                      No
+                    </button>
+                </div>
+              )}
+              {isSatisfied !== null && (
+                  <div className="mt-8 text-center font-bold">
+                    {isSatisfied ? (
+                      <p className="text-blue-950">Thank you for your feedback! We're glad the FAQs were helpful.</p>
+                    ) : (
+                      <div>
+                        <p className="text-blue-950"> We're sorry the FAQs didn't answer your question. Please reach out to us for further assistance! </p>
+                        <Link href="/CreateUserFeedback" key="contact-us-link">
+                          <button className="px-4 py-2 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow mt-4"> Contact Us</button>
+                        </Link>  
+                      </div>
+                    )}
+                  </div>
+                )}
             </div>
           )}
           </div>
