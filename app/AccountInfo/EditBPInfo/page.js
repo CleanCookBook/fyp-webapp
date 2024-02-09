@@ -1,7 +1,6 @@
 "use client";
-
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 const EditBPInfo = () => {
   const [linkedinUrl, setLinkedinUrl] = useState(""); // State to hold the LinkedIn URL
@@ -206,6 +205,7 @@ const EditBPInfo = () => {
           </form>
         </div>
         <div className="w-1/2 pl-8">
+        <Suspense fallback={<LoadingSpinner />}>
           <form onSubmit={handleSubmit} className="flex flex-col items-start">
             {/* Experience File */}
             <label
@@ -298,6 +298,7 @@ const EditBPInfo = () => {
               Cancel
             </button>
           </form>
+          </Suspense>
         </div>
       </div>
     </div>
