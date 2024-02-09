@@ -13,6 +13,7 @@ const Payment = () => {
   const [loading, setIsLoading] = useState(true);
   const router = useRouter();
   const [upgradeStatus, setUpgradeStatus] = useState("notInitiated");
+  const [isUpgraded, setIsUpgraded] = useState(false);
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -38,6 +39,35 @@ const Payment = () => {
 
     checkAuthentication();
   }, [router]);
+
+  useEffect(() => {
+    const fetchPaymentStatus = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/payment/status", {
+          method: "GET",
+          credentials: "include",
+        });
+  
+        if (response.ok) {
+          const { status } = await response.json();
+          setIsUpgraded(status === "paid");
+  
+          // Only show notification if user has upgraded
+          if (status === "paid") {
+            setShowNotification(true);
+          }
+        } else {
+          // Handle error when fetching payment status
+          console.error('Failed to fetch payment status');
+        }
+      } catch (error) {
+        console.error('Error during payment status fetch:', error.message);
+      }
+    };
+  
+    fetchPaymentStatus();
+  }, []);
+  
 
   useEffect(() => {
     const storedUpgradeTimestamp = localStorage.getItem('upgradeTimestamp');
@@ -175,13 +205,17 @@ const Payment = () => {
             </div>
           </div>
           <div className="flex justify-center">
-            <button
-              onClick={handleUpdateClick}
-              className="bg-[#0A2A67] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-xl"
-            >
-              Upgrade Now
-            </button>
-          </div>
+        {isUpgraded ? (
+          <p className="text-green-600 font-bold">Upgraded</p>
+        ) : (
+          <button
+            onClick={handleUpdateClick}
+            className="bg-[#0A2A67] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-xl"
+          >
+            Upgrade Now
+          </button>
+        )}
+      </div>
         </div>
       
         {showNotification && (
