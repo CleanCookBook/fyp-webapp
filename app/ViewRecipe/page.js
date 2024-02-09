@@ -1,13 +1,13 @@
 "use client";
+import DeleteRecipe from "@/components/DeleteRecipe";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import DeleteRecipe from "@/components/DeleteRecipe";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const ViewRecipePage = () => {
-  const userRole = "bp";
+  const userRole = "nutritionist";
   const [userRecipes, setUserRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [announcementsPerPage] = useState(5);

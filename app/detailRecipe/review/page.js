@@ -326,62 +326,75 @@ const Review = () => {
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       {/* Navbar */}
       <Navbar userRole={userRole} />
-        <div className="flex flex-col min-h-screen bg-[#F9D548] mb-16">
-          <div className="flex flex-col mt-10 ml-8">
-            <div className="flex items-center"> {/* Flex container for back button and recipe name */}
-              <button
-                onClick={navigateToRecipe}
-                className="w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow ml-4 -mt-10"
-              >
-                &lt;&nbsp;&nbsp;Back
-              </button>
-              <div className="flex flex-col ml-9"> {/* Flex container for recipe name and star rating */}
-                <h1 className="text-7xl font-extrabold text-blue-950">
-                  {recipeName || "Recipe Title"}
-                </h1>
-                <StarRating rating={recipeRating} />
-              </div>
+      <div className="flex flex-col min-h-screen bg-[#F9D548] mb-16">
+        <div className="flex flex-col mt-10 ml-8">
+          <div className="flex items-center">
+            {" "}
+            {/* Flex container for back button and recipe name */}
+            <button
+              onClick={navigateToRecipe}
+              className="w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow ml-4 -mt-10"
+            >
+              &lt;&nbsp;&nbsp;Back
+            </button>
+            <div className="flex flex-col ml-9">
+              {" "}
+              {/* Flex container for recipe name and star rating */}
+              <h1 className="text-7xl font-extrabold text-blue-950">
+                {recipeName || "Recipe Title"}
+              </h1>
+              <StarRating rating={recipeRating} />
             </div>
           </div>
+        </div>
 
-          <div className="container mx-auto px-4">
-            <section className="mt-1">
-              {(reviews.length === 0 && (
-                <div className="text-3xl font-bold mb-4 text-blue-950 text-center">
-                  Be the first one to comment!
-                </div>
-              )) || (
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-3xl font-bold text-blue-950 text-center">
-                    Read what others are saying!
-                  </h2>
-                  <p className="text-blue-950">{reviews.length} reviews</p>
-                </div>
-              )}
+        <div className="container mx-auto px-4">
+          <section className="mt-1">
+            {(reviews.length === 0 && (
+              <div className="text-3xl font-bold mb-4 text-blue-950 text-center">
+                Be the first one to comment!
+              </div>
+            )) || (
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-3xl font-bold text-blue-950 text-center">
+                  Read what others are saying!
+                </h2>
+                <p className="text-blue-950">{reviews.length} reviews</p>
+              </div>
+            )}
 
-              {/* Comments section - placeholder for dynamic content */}
-              {/* Comments section - dynamically display reviews */}
-              <div className="space-y-4">
-                {reviews.map((userReview, index) => (
-                  <div key={index} className="bg-white p-4 rounded-lg shadow-md flex items-center">
-                    <Image 
-                      src="/logo.jpg" 
-                      alt="Profile Picture" 
-                      width={150}
-                      height={150}
-                      className="w-16 h-16 rounded-full mr-4" 
-                      unoptimized={true}
-                    />
-                    <div className="flex flex-col flex-grow">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <div className="text-blue-950 font-bold">@{userReview.Username}</div>
-                            <div className="ml-2 -mt-1"> {/* Add margin to the star rating */}
-                              <SmallStarRating rating={userReview.stars} />
-                            </div>
+            {/* Comments section - placeholder for dynamic content */}
+            {/* Comments section - dynamically display reviews */}
+            <div className="space-y-4">
+              {reviews.map((userReview, index) => (
+                <div
+                  key={index}
+                  className="bg-white p-4 rounded-lg shadow-md flex items-center"
+                >
+                  <Image
+                    src="/logo.jpg"
+                    alt="Profile Picture"
+                    width={150}
+                    height={150}
+                    className="w-16 h-16 rounded-full mr-4"
+                    unoptimized={true}
+                  />
+                  <div className="flex flex-col flex-grow">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <div className="text-blue-950 font-bold">
+                          @{userReview.Username}
+                        </div>
+                        <div className="ml-2 -mt-1">
+                          {" "}
+                          {/* Add margin to the star rating */}
+                          <SmallStarRating rating={userReview.stars} />
                         </div>
                       </div>
-                      <p className="text-blue-950 font-semibold">{userReview.comment}</p>
+                    </div>
+                    <p className="text-blue-950 font-semibold">
+                      {userReview.comment}
+                    </p>
 
                       <div className="flex items-center mt-2">
                         {/* Display reply button/icon */}
@@ -419,13 +432,13 @@ const Review = () => {
                                   alt="Profile Picture" 
                                   width={150}
                                   height={150}
-                                  className="w-16 h-16 rounded-full mr-4" 
+                                  className="w-16 h-16 rounded-full mr-4"
                                   unoptimized={true}
                                 />
                                 <div>
                                   <div className="text-blue-950 font-bold">@{selectedUsername}</div>
                                   <p className="text-blue-950 font-semibold">{replyText}</p>
-                                  <div className="flex items-center mt-2">
+                                  <div class1Name="flex items-center mt-2">
                                     <div className="border-b border-solid border-black w-6 ml-5 "></div> {/* Long dash */}
                                     <span className="mx-2">View Replies</span>
                                     {replies.length > 0 && (
@@ -467,7 +480,7 @@ const Review = () => {
                                 <FaTimes />
                               </button>
                             </div>
-                            
+
                             <div className="bg-white p-4 rounded-b-lg border-t">
                               {/* Render the username of the user being replied to */}
                               <div className="text-blue-950 font-bold mb-2">
@@ -482,86 +495,92 @@ const Review = () => {
                                 value={reply}
                                 onChange={(e) => setReply(e.target.value)}
                               />
-                                
+
                               {/* Reply button */}
                               <div className="flex justify-end -mr-5 -mt-[6.5rem] p-4 h-28">
                                 <button
                                   onClick={() => {
-                                    console.log("Review ID:", userReview.reviewId);
+                                    console.log(
+                                      "Review ID:",
+                                      userReview.reviewId
+                                    );
                                     console.log("User Review:", userReview);
-                                    handleSubmitReply(userReview.reviewId, userId, recipeName, reply, replyText); // Pass reviewId, userId, recipeName, and replyText
-                                    setReplyingToReviewId(null);
-                                    setReplyText(""); // Clear reply text after submission
-                                    setShowReplyBox(false);
+                                    handleSubmitReply(
+                                      userReview.reviewId,
+                                      userId,
+                                      recipeName,
+                                      reply,
+                                      replyText
+                                    ); // Pass reviewId, userId, recipeName, and replyText
                                   }}
                                   className="px-4 py-2 bg-white text-blue-950 hover:text-blue-550 text-md font-extrabold"
                                 >
                                   Reply
                                 </button>
-                              </div>   
+                              </div>
                             </div>
                           </div>
                         </div>
                       )}
-                    </div>
                   </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="flex justify-center mt-4">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={Math.ceil(reviews.length / commentsPerPage)}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
+          </section>
+
+          <section className="mt-8">
+            {/* Input field for user reviews - placeholder for dynamic form */}
+            <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-start">
+              <input
+                className="w-full h-32 p-2 border rounded-md"
+                placeholder="Let us know how you feel!..."
+                maxLength={wordCount === 50 ? 300 : null} // Allow 300 characters initially (50 words)
+                onInput={handleWordCount}
+                value={comment}
+                onChange={(e) => setComment(e.target.value)} // Update comment state
+              />
+              <p className="text-gray-500 text-sm mt-2">
+                Words left (Max 50 words) :
+                <span
+                  style={{
+                    marginLeft: "5px",
+                    marginRight: "10px",
+                    color: wordCount >= 0 ? "inherit" : "red",
+                  }}
+                >
+                  {wordCount >= 0 ? wordCount : "0 !! "}
+                </span>
+              </p>
+              <span className="text-blue-950 font-bold mr-2">
+                Your Rating (click on the stars !) :{" "}
+              </span>
+              <div className="flex">
+                {[1, 2, 3, 4, 5].map((rating) => (
+                  <Star
+                    key={rating}
+                    filled={userRating >= rating}
+                    onClick={() => handleStarClick(rating)}
+                  />
                 ))}
               </div>
-            </section>
-
-            <section className="flex justify-center mt-4">
-              <Pagination
-                currentPage={currentPage}
-                totalPages={Math.ceil(reviews.length / commentsPerPage)}
-                onPageChange={(page) => setCurrentPage(page)}
-              />
-            </section>
-
-            <section className="mt-8">
-              {/* Input field for user reviews - placeholder for dynamic form */}
-              <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-start">
-                <input
-                  className="w-full h-32 p-2 border rounded-md"
-                  placeholder="Let us know how you feel!..."
-                  maxLength={wordCount === 50 ? 300 : null} // Allow 300 characters initially (50 words)
-                  onInput={handleWordCount}
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)} // Update comment state
-                />
-                <p className="text-gray-500 text-sm mt-2">
-                  Words left (Max 50 words) :
-                  <span
-                    style={{
-                      marginLeft: "5px",
-                      marginRight: "10px",
-                      color: wordCount >= 0 ? "inherit" : "red",
-                    }}
-                  >
-                    {wordCount >= 0 ? wordCount : "0 !! "}
-                  </span>
-                </p>
-                <span className="text-blue-950 font-bold mr-2">
-                  Your Rating (click on the stars !) :{" "}
-                </span>
-                <div className="flex">
-                  {[1, 2, 3, 4, 5].map((rating) => (
-                    <Star
-                      key={rating}
-                      filled={userRating >= rating}
-                      onClick={() => handleStarClick(rating)}
-                    />
-                  ))}
-                </div>
-                <button
-                  className="w-[100px] h-10 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow mt-4 self-end"
-                  onClick={handleSubmitReview} // Add onClick handler for submitting review
-                >
-                  Submit
-                </button>
-              </div>
-            </section>
-          </div>          
+              <button
+                className="w-[100px] h-10 bg-blue-950 hover:bg-[#154083] text-white font-bold rounded-[10px] shadow mt-4 self-end"
+                onClick={handleSubmitReview} // Add onClick handler for submitting review
+              >
+                Submit
+              </button>
+            </div>
+          </section>
         </div>
+      </div>
 
       <div className="mt-auto">
         <Footer />
