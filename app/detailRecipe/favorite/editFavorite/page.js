@@ -6,7 +6,7 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 const editFavorite = () => {
   const router = useRouter();
@@ -230,6 +230,7 @@ const editFavorite = () => {
   }
 
 return (
+  <Suspense fallback={<LoadingSpinner />}>
   <div className="h-full bg-[#F9D548] text-[#0A2A67]">
     {/* Navbar */}
     <Navbar userRole={userRole} />
@@ -349,6 +350,7 @@ return (
     </div>
     <Footer />
   </div>
+  </Suspense>
 );
 };
 

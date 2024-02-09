@@ -7,7 +7,7 @@ import Instructions from "@/components/Instructions";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 
 const customized = () => {
@@ -154,6 +154,7 @@ const customized = () => {
 
  
   return (
+    <Suspense fallback={<LoadingSpinner />}>
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       {/* Navbar */}
       <Navbar userRole={userRole} />
@@ -237,6 +238,7 @@ const customized = () => {
       </div>
       <Footer />
     </div>
+    </Suspense>
   );
 };
 

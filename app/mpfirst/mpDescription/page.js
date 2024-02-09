@@ -187,6 +187,7 @@ const mpDescription = () => {
   }
 
 return (
+  <Suspense fallback={<LoadingSpinner />}>
   <section className="flex flex-col h-screen bg-[#F9D548]">
     <Navbar userRole={userRole} />
       <div className="flex-grow w-[1208px] mx-auto mt-8">
@@ -273,6 +274,7 @@ return (
       </div>
     <Footer className="mt-auto" />
   </section>
+  </Suspense>
 );
 };
 

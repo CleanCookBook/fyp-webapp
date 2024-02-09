@@ -103,6 +103,7 @@ const EditBPInfo = () => {
   };
 
   return (
+    <Suspense fallback={<LoadingSpinner />}>
     <div className="flex flex-col h-screen justify-center items-center bg-[#F9D548] text-[#0A2A67]">
       <div className="lg:w-4/5 lg:pr-8 p-8 flex items-center">
         <div className="w-1/2 border-r border-gray-400 pr-8">
@@ -205,7 +206,6 @@ const EditBPInfo = () => {
           </form>
         </div>
         <div className="w-1/2 pl-8">
-        <Suspense fallback={<LoadingSpinner />}>
           <form onSubmit={handleSubmit} className="flex flex-col items-start">
             {/* Experience File */}
             <label
@@ -298,10 +298,10 @@ const EditBPInfo = () => {
               Cancel
             </button>
           </form>
-          </Suspense>
         </div>
       </div>
     </div>
+    </Suspense>
   );
 };
 

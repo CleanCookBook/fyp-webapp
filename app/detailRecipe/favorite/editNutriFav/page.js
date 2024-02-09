@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 
+
 const editNutriFav = () => {
   const router = useRouter();
   const [userRole, setUserRole] = useState("user");
@@ -210,6 +211,7 @@ const editNutriFav = () => {
   }
 
 return (
+  <Suspense fallback={<LoadingSpinner />}>
   <div className="flex flex-col min-h-screen bg-[#F9D548]">
     {/* Navbar */}
     <Navbar userRole={userRole} />
@@ -359,6 +361,7 @@ return (
     </div>
     <Footer />
   </div>
+  </Suspense>
 );
 };
 
