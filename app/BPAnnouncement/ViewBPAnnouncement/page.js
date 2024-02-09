@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { FaComment, FaHeart, FaRegHeart, FaTrash } from "react-icons/fa";
+import { FaComment, FaHeart, FaRegHeart, FaTimes, FaTrash } from "react-icons/fa";
 
 const ViewBPAnnouncement = () => {
   const router = useRouter();
@@ -20,17 +20,16 @@ const ViewBPAnnouncement = () => {
   const [comments, setComments] = useState([]);
   const [likeCount, setLikeCount] = useState(0);
   const nameRef = useRef(null);
-  const[userId,setUserId]=useState(null);
+  const [userId, setUserId] = useState(null);
   const [showReplyPopup, setShowReplyPopup] = useState(false);
   const [replyContent, setReplyContent] = useState("");
   const [commentId, setCommentId] = useState(null);
-  const[ReplyingToCommentId,setReplyingToCommentId] =  useState(null);
+  const [ReplyingToCommentId, setReplyingToCommentId] = useState(null);
   const [selectedUsername, setSelectedUsername] = useState(null);
   const [replyText, setReplyText] = useState("");
   const [reply, setReply] = useState("");
   const [showReplyBox, setShowReplyBox] = useState(false);
   const [replies, setReplies] = useState({});
-  
 
   // Function to toggle reply pop-up
   const toggleReplyPopup = () => {
@@ -50,10 +49,13 @@ const ViewBPAnnouncement = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const authResponse = await fetch("http://localhost:3001/api/check-auth", {
-          method: "GET",
-          credentials: "include",
-        });
+        const authResponse = await fetch(
+          "http://localhost:3001/api/check-auth",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
 
         if (authResponse.ok) {
           setIsAuthenticated(true);
@@ -74,48 +76,70 @@ const ViewBPAnnouncement = () => {
           }
 
           // Fetch user type
-          const userTypeResponse = await fetch("http://localhost:3001/api/user/userType", {
-            method: "POST",
-            credentials: "include",
-          });
+          const userTypeResponse = await fetch(
+            "http://localhost:3001/api/user/userType",
+            {
+              method: "POST",
+              credentials: "include",
+            }
+          );
 
           if (userTypeResponse.ok) {
             const userTypeData = await userTypeResponse.json();
             setUserRole(userTypeData.userType || "user");
           } else {
-            console.error("Error fetching user type:", userTypeResponse.statusText);
+            console.error(
+              "Error fetching user type:",
+              userTypeResponse.statusText
+            );
           }
 
           // Fetch announcement file
-          const announcementFileResponse = await fetch(`http://localhost:3001/api/announce/getAnnouncementFile/${name}`, {
-            credentials: "include",
-          });
+          const announcementFileResponse = await fetch(
+            `http://localhost:3001/api/announce/getAnnouncementFile/${name}`,
+            {
+              credentials: "include",
+            }
+          );
 
           if (announcementFileResponse.ok) {
             const announcementFileData = await announcementFileResponse.json();
             setImageData(announcementFileData.announcementFile);
           } else {
-            console.error("Error fetching announcement file:", announcementFileResponse.statusText);
+            console.error(
+              "Error fetching announcement file:",
+              announcementFileResponse.statusText
+            );
           }
 
           // Fetch comments
-          const commentsResponse = await fetch(`http://localhost:3001/api/comments/${name}`);
+          const commentsResponse = await fetch(
+            `http://localhost:3001/api/comments/${name}`
+          );
 
           if (commentsResponse.ok) {
             const commentsData = await commentsResponse.json();
             setComments(commentsData);
           } else {
-            console.error("Error fetching comments:", commentsResponse.statusText);
+            console.error(
+              "Error fetching comments:",
+              commentsResponse.statusText
+            );
           }
 
           // Fetch like count
-          const likeCountResponse = await fetch(`http://localhost:3001/api/comments/likeCount/${name}`);
+          const likeCountResponse = await fetch(
+            `http://localhost:3001/api/comments/likeCount/${name}`
+          );
 
           if (likeCountResponse.ok) {
             const likeCountData = await likeCountResponse.json();
             setLikeCount(likeCountData.likeCount || 0);
           } else {
-            console.error("Error fetching like count:", likeCountResponse.statusText);
+            console.error(
+              "Error fetching like count:",
+              likeCountResponse.statusText
+            );
           }
 
           // Fetch like status
@@ -128,11 +152,13 @@ const ViewBPAnnouncement = () => {
           if (likeStatusResponse.ok) {
             const likeStatusData = await likeStatusResponse.json();
             console.log("Did I click like?", likeStatusData);
-    
+
             setIsLiked(likeStatusData.isLiked);
-            
           } else {
-            console.error("Error fetching like status:", likeStatusResponse.statusText);
+            console.error(
+              "Error fetching like status:",
+              likeStatusResponse.statusText
+            );
           }
         } else {
           router.push("/loginPage");
@@ -144,8 +170,8 @@ const ViewBPAnnouncement = () => {
     };
 
     fetchData();
-  }, [router, name]);// Assuming you have currentUser state set with the current user's username
-      
+  }, [router, name]); // Assuming you have currentUser state set with the current user's username
+
   const handleLikeClick = async () => {
     try {
       const response = await fetch("http://localhost:3001/api/comments/like", {
@@ -179,58 +205,71 @@ const ViewBPAnnouncement = () => {
     setReplyText(`${comment.comment}`);
     setReply("");
     setShowReplyBox(true);
-    setCommentId(comment.commentId); 
+    setCommentId(comment.commentId);
   };
-  
+
   const handleSubmitComment = async () => {
     try {
-  
       // Use the fetch API to submit the comment
       const commentInput = document.getElementById("comment").value;
       if (!commentInput) {
         // Don't submit empty comments
         return;
       }
-  
-      const response = await fetch("http://localhost:3001/api/comments/addComment", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          announcementName: name,
-          comment: commentInput,
-        }),
-      });
-  
+
+      const response = await fetch(
+        "http://localhost:3001/api/comments/addComment",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            announcementName: name,
+            comment: commentInput,
+          }),
+        }
+      );
+
       if (response.ok) {
         // Clear the comment input field after successful submission
         document.getElementById("comment").value = "";
-  
+
         // Fetch the updated comments from the server
-        const updatedCommentsResponse = await fetch(`http://localhost:3001/api/comments/${name}`);
+        const updatedCommentsResponse = await fetch(
+          `http://localhost:3001/api/comments/${name}`
+        );
         if (updatedCommentsResponse.ok) {
           const updatedCommentsData = await updatedCommentsResponse.json();
           setComments(updatedCommentsData);
         } else {
-          console.error("Error fetching updated comments:", updatedCommentsResponse.statusText);
+          console.error(
+            "Error fetching updated comments:",
+            updatedCommentsResponse.statusText
+          );
         }
       } else {
-        console.error("Error handling comment submission:", response.statusText);
+        console.error(
+          "Error handling comment submission:",
+          response.statusText
+        );
       }
     } catch (error) {
       console.error("Error handling comment submission:", error.message);
     }
-  }
+  };
 
   const handleDeleteComment = async (commentId) => {
     try {
       // Make a DELETE request to the backend API
-      const deleteResponse = await fetch(`http://localhost:3001/api/comments/${commentId}`, {
-        method: "DELETE",
-        credentials: "include", // Include credentials for cookie authentication
-      });
+      const deleteResponse = await fetch(
+        `http://localhost:3001/api/comments/${commentId}`,
+        {
+          method: "DELETE",
+          credentials: "include", // Include credentials for cookie authentication
+        }
+      );
 
       if (!deleteResponse.ok) {
         console.error("Error deleting comment:", deleteResponse.statusText);
@@ -241,13 +280,15 @@ const ViewBPAnnouncement = () => {
       console.log(deleteData.message);
 
       // Remove the deleted comment from the local state
-      setComments((prevComments) => prevComments.filter((comment) => comment.commentID !== commentId));
+      setComments((prevComments) =>
+        prevComments.filter((comment) => comment.commentID !== commentId)
+      );
     } catch (error) {
       console.error("Error deleting comment:", error.message);
     }
   };
 
-  const handleSubmitReply = async (commentId, userID, file_name, reply, replyText) => {
+  const handleSubmitReply = async (commentId,name, reply,replyText) => {
     try {
       // Fetch the user ID from /api/userID
       const userResponse = await fetch("http://localhost:3001/api/userID", {
@@ -262,37 +303,32 @@ const ViewBPAnnouncement = () => {
 
       const userData = await userResponse.json();
       const userId = userData.user.UserID;
-      
-  
-      // Send a POST request to the backend API to submit the reply
-      const response = await fetch(`http://localhost:3001/api/commentReply/replies/${commentId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          userId: userId, // Use the userId obtained from the backend
-          commentId: commentId, // Ensure reviewId is included in the request body
-          file_name: file_name, // Assuming Rname is not needed for reply
-          reply: reply, // Pass the reply text
-          comment: replyText, // Include the comment field
-        }),
-      });
 
+      // Send a POST request to the backend API to submit the reply
+      const response = await fetch(
+        `http://localhost:3001/api/replyComment/replies/${commentId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            userId: userId, // Use the userId obtained from the backend
+            commentId: commentId, // Ensure reviewId is included in the request body
+            file_name: name, // Assuming Rname is not needed for reply
+            reply: reply, // Pass the reply text
+            comment: replyText, // Include the comment field
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error("Error submitting reply");
       }
-
       const responseData = await response.json();
       console.log("Reply submitted successfully:", responseData.message);
-
-      // Clear reply text and hide reply input box after successful submission
       setReplyText("");
       setShowReplyBox(false);
-
-      // Optionally, you may update the replies state to reflect the new reply
-      // For example, refetch the replies after submitting a new reply
     } catch (error) {
       console.error("Error submitting reply:", error.message);
     }
@@ -300,15 +336,17 @@ const ViewBPAnnouncement = () => {
 
   const fetchReplies = async (commentId) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/commentReply/${commentId}`);
+      const response = await fetch(
+        `http://localhost:3001/api/replyComment/${commentId}`
+      );
       if (!response.ok) {
-        throw new Error('Failed to fetch replies');
+        throw new Error("Failed to fetch replies");
       }
       const data = await response.json();
       // Update the replies state with the fetched replies
       setReplies(data.repliesWithUsernames);
     } catch (error) {
-      console.error('Error fetching replies:', error);
+      console.error("Error fetching replies:", error);
     }
   };
 
@@ -324,10 +362,9 @@ const ViewBPAnnouncement = () => {
       setReply("");
       setShowReplyBox(true); // Show the reply input box
     } catch (error) {
-      console.error('Error handling comment button click:', error);
+      console.error("Error handling comment button click:", error);
     }
   };
-
 
   if (!isAuthenticated) {
     // If not authenticated, the user will be redirected during authentication check
@@ -442,9 +479,9 @@ const ViewBPAnnouncement = () => {
                               {/* Comment */}
                               <div className="relative">
                                 <div className="flex items-center">
-                                <p className="text-blue-950 font-semibold">
-                                  {comment.comment}
-                                </p>
+                                  <p className="text-blue-950 font-semibold">
+                                    {comment.comment}
+                                  </p>
                                   <button
                                     onClick={() =>
                                       handleCommentButtonClick(comment)
@@ -461,7 +498,7 @@ const ViewBPAnnouncement = () => {
                                 </div>
 
                                 {/* Trash button */}
-                                
+
                                 {comment.UserID === userId && (
                                   <button
                                     onClick={() =>
@@ -473,116 +510,128 @@ const ViewBPAnnouncement = () => {
                                   </button>
                                 )}
                               </div>
+                              {showReplyBox &&
+                                ReplyingToCommentId === comment.commentId && (
+                                  <div className="fixed inset-0 flex flex-row items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+                                    <div className="mt-1">
+                                      <div className="bg-white p-8 rounded-t-lg w-[56rem] h-[28rem] relative overflow-y-auto scrollbar-container">
+                                        {/* Render selected user's review */}
+                                        <div className="mb-4 flex items-start">
+                                          <Image
+                                            src="/logo.jpg"
+                                            alt="Profile Picture"
+                                            width={150}
+                                            height={150}
+                                            className="w-16 h-16 rounded-full mr-4"
+                                            unoptimized={true}
+                                          />
+                                          <div>
+                                            <div className="text-blue-950 font-bold">
+                                              @{selectedUsername}
+                                            </div>
+                                            <p className="text-blue-950 font-semibold">
+                                              {replyText}
+                                            </p>
+                                            <div className="flex items-center mt-2">
+                                              <div className="border-b border-solid border-black w-6 ml-5 "></div>{" "}
+                                              {/* Long dash */}
+                                              <span className="mx-2">
+                                                View Replies
+                                              </span>
+                                              {replies.length > 0 && (
+                                                <span className="text-blue-950">
+                                                  ({replies.length})
+                                                </span>
+                                              )}
+                                            </div>
 
-                              {showReplyBox && ReplyingToCommentId === comment.commentId && (
-                  <div className="fixed inset-0 flex flex-row items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-                    <div className="mt-1">
-                      <div className="bg-white p-8 rounded-t-lg w-[56rem] h-[28rem] relative overflow-y-auto scrollbar-container">
-                        {/* Render selected user's review */}
-                        <div className="mb-4 flex items-start">
-                          <Image
-                            src="/logo.jpg"
-                            alt="Profile Picture"
-                            width={150}
-                            height={150}
-                            className="w-16 h-16 rounded-full mr-4"
-                            unoptimized={true}
-                          />
-                          <div>
-                            <div className="text-blue-950 font-bold">
-                              @{selectedUsername}
-                            </div>
-                            <p className="text-blue-950 font-semibold">
-                              {replyText}
-                            </p>
-                            <div className="flex items-center mt-2">
-                              <div className="border-b border-solid border-black w-6 ml-5 "></div>{" "}
-                              {/* Long dash */}
-                              <span className="mx-2">View Replies</span>
-                              {replies.length > 0 && (
-                                <span className="text-blue-950">
-                                  ({replies.length})
-                                </span>
-                              )}
-                            </div>
+                                            {/* Render the replies */}
+                                            <div className="ml-4">
+                                              {Array.isArray(replies) &&
+                                                replies.map((reply, index) => (
+                                                  <div
+                                                    key={index}
+                                                    className="flex items-start"
+                                                  >
+                                                    <Image
+                                                      src="/logo.jpg"
+                                                      alt="Profile Picture"
+                                                      width={150}
+                                                      height={150}
+                                                      className="w-12 h-12 rounded-full mr-2 mt-6"
+                                                      unoptimized={true}
+                                                    />
+                                                    <div>
+                                                      <div className="text-blue-950 font-bold mt-6">
+                                                        @{reply.Username}
+                                                      </div>
+                                                      <p className="text-blue-950 font-semibold">
+                                                        {reply.commentReply}
+                                                      </p>
+                                                    </div>
+                                                  </div>
+                                                ))}
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <button
+                                          onClick={() => {
+                                            setReplyingToCommentId(null);
+                                            setReplyText(""); // Clear reply text if cancelled
+                                            setShowReplyBox(false);
+                                          }}
+                                          className="absolute top-0 right-0 m-4 text-2xl"
+                                        >
+                                          <FaTimes />
+                                        </button>
+                                      </div>
 
-                            {/* Render the replies */}
-                            <div className=" ml-4">
-                              {replies.map((reply, index) => (
-                                <div key={index} className="flex items-start">
-                                  <Image
-                                    src="/logo.jpg"
-                                    alt="Profile Picture"
-                                    width={150}
-                                    height={150}
-                                    className="w-12 h-12 rounded-full mr-2 mt-6"
-                                    unoptimized={true}
-                                  />
-                                  <div>
-                                    <div className="text-blue-950 font-bold mt-6">
-                                      @{reply.Username}
+                                      <div className="bg-white p-4 rounded-b-lg border-t">
+                                        {/* Render the username of the user being replied to */}
+                                        <div className="text-blue-950 font-bold mb-2">
+                                          Replying to @{selectedUsername}
+                                        </div>
+
+                                        {/* Reply input field */}
+                                        <textarea
+                                          type="text"
+                                          className="w-[49rem] h-20 p-2 mt-1 flex-grow"
+                                          placeholder="Write a reply ..."
+                                          value={reply}
+                                          onChange={(e) =>
+                                            setReply(e.target.value)
+                                          }
+                                        />
+
+                                        {/* Reply button */}
+                                        <div className="flex justify-end -mr-5 -mt-[6.5rem] p-4 h-28">
+                                          <button
+                                            onClick={() => {
+                                              console.log(
+                                                "Review ID:",
+                                                comment.commentID
+                                              );
+                                              console.log(
+                                                "Comment:",
+                                                comment
+                                              );
+                                              handleSubmitReply(
+                                                comment.commentID,
+                                                userId,
+                                                name,
+                                                reply,
+                                                replyText
+                                              ); // Pass reviewId, userId, recipeName, and replyText
+                                            }}
+                                            className="px-4 py-2 bg-white text-blue-950 hover:text-blue-550 text-md font-extrabold"
+                                          >
+                                            Reply
+                                          </button>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <p className="text-blue-950 font-semibold">
-                                      {reply.Reply}
-                                    </p>
                                   </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                        <button
-                          onClick={() => {
-                            setReplyingToReviewId(null);
-                            setReplyText(""); // Clear reply text if cancelled
-                            setShowReplyBox(false);
-                          }}
-                          className="absolute top-0 right-0 m-4 text-2xl"
-                        >
-                          <FaTimes />
-                        </button>
-                      </div>
-
-                      <div className="bg-white p-4 rounded-b-lg border-t">
-                        {/* Render the username of the user being replied to */}
-                        <div className="text-blue-950 font-bold mb-2">
-                          Replying to @{selectedUsername}
-                        </div>
-
-                        {/* Reply input field */}
-                        <textarea
-                          type="text"
-                          className="w-[49rem] h-20 p-2 mt-1 flex-grow"
-                          placeholder="Write a reply ..."
-                          value={reply}
-                          onChange={(e) => setReply(e.target.value)}
-                        />
-
-                        {/* Reply button */}
-                        <div className="flex justify-end -mr-5 -mt-[6.5rem] p-4 h-28">
-                          <button
-                            onClick={() => {
-                              console.log("Review ID:", userReview.reviewId);
-                              console.log("User Review:", userReview);
-                              handleSubmitReply(
-                                userReview.reviewId,
-                                userId,
-                                recipeName,
-                                reply,
-                                replyText
-                              ); // Pass reviewId, userId, recipeName, and replyText
-                            }}
-                            className="px-4 py-2 bg-white text-blue-950 hover:text-blue-550 text-md font-extrabold"
-                          >
-                            Reply
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-
+                                )}
                             </div>
                           </>
                         )}
@@ -619,7 +668,7 @@ const ViewBPAnnouncement = () => {
           </div>
         </div>
       </div>
-      
+
       <Footer />
     </div>
   );

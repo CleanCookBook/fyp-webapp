@@ -7,7 +7,7 @@
   const mealPlanRoutes = require("./routes/mealPlanRoutes");
   const newsfeedRoutes = require("./routes/NewsfeedRoutes");
   const chatRoutes = require("./routes/chatRoutes");
-  const commentReplyRoutes = require("./routes/replyCommentRoutes");
+  const replyCommentRoutes = require("./routes/replyCommentRoutes");
   const userRoutes = require("./routes/userRoutes");
   const recipeRoutes = require("./routes/recipeRoutes");
   const filterRoutes = require("./routes/filterRoutes");
@@ -75,7 +75,7 @@
   app.use("/api/comments",  commentsRoute );
   app.use("/api/registration",  registrationRoutes);
   app.use("/api/reply",  replyRoutes);
-  app.use("api/commentReply",commentReplyRoutes)
+  app.use("api/commentReply",replyCommentRoutes);
 
   app.use("/api/announce", announcementRoutes);
   app.get("/home", isAuthenticated, (req, res) => {
