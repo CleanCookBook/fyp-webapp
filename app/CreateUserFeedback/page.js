@@ -1,5 +1,6 @@
 "use client";
 import Footer from "@/components/Footer";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -7,13 +8,13 @@ import { useEffect, useState } from "react";
 
 const CreateUserFeedback = () => {
   const userRole = 'user';
-  const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState("");
   const [feedbackType, setFeedbackType] = useState("");
   const [comments, setComments] = useState("");
   const [notification, setNotification] = useState(null);
   const [loading, setIsLoading] = useState(true);
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const checkAuthentication = async () => {
