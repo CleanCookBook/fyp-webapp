@@ -5,7 +5,7 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 const RecipeList = () => {
   const searchParams = useSearchParams();
@@ -103,6 +103,7 @@ const RecipeList = () => {
   
 
   return (
+    <Suspense fallback={<LoadingSpinner />}>
     <section className="flex flex-col h-screen bg-[#F9D548]">
        <Navbar userRole={userRole} />
       <div className="flex flex-col justify-start items-center h-full mt-20">
@@ -174,6 +175,7 @@ const RecipeList = () => {
       </div>
       <Footer />
     </section>
+    </Suspense>
   );
 };
 

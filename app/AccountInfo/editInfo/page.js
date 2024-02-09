@@ -210,10 +210,10 @@ const EditInfo = () => {
   }, [userID])
 
   return (
+    <Suspense fallback={<LoadingSpinner />}>
     <div className="flex flex-col h-full bg-[#F9D548]">
       <Navbar userRole={userRole} />
       <div className="lg:w-4/5 lg:pr-8 p-8 flex flex-col h-full bg-[#F9D548] text-[#0A2A67] justify-start items-start ml-20">
-      <Suspense fallback={<LoadingSpinner />}>
         <form action="/update-account" method="POST" onSubmit={submitForm}>
           <div>
             <h2 className="text-xl underline font-bold left-10 mt-9">
@@ -398,11 +398,11 @@ const EditInfo = () => {
             </div>
           </div>
         </form>
-        </Suspense>
       </div>
       <Footer />
       {isModalOpen && <Modal onClose={closeModal} />}
     </div>
+    </Suspense>
   );
 };
 

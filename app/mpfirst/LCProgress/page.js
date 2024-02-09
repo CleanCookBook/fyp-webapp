@@ -4,7 +4,7 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -293,6 +293,7 @@ const LCProgress = () => {
   }
 
 return(
+  <Suspense fallback={<LoadingSpinner />}>
   <section className="flex flex-col h-screen bg-[#F9D548]">
     <Navbar userRole={userRole} />
       <div className="flex-grow w-[1108px] mx-auto mt-8">
@@ -424,6 +425,7 @@ return(
       </div>
     <Footer />
   </section>
+  </Suspense>
 );
 };
 

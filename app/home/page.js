@@ -5,7 +5,7 @@ import Modal from "@/components/Modal"; // Adjust the path based on your file st
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 const Homepage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -170,6 +170,7 @@ const Homepage = () => {
   };
 
   return (
+    <Suspense fallback={<LoadingSpinner />}>
     <div className="flex flex-col h-screen bg-[#F9D548]">
         <Navbar userRole={userRole} />
       <div className="flex flex-col h-screen bg-[#F9D548] text-[#0A2A67] justify-center items-center">
@@ -218,6 +219,7 @@ const Homepage = () => {
       <Footer />
       {isModalOpen && <Modal onClose={closeModal} />}
     </div>
+    </Suspense>
   );
 };
 

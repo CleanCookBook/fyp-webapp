@@ -10,7 +10,7 @@ import NutritionalFact from "@/components/NutritionalFact";
 import StarRating from "@/components/StarRating";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 
 const RecipeDetails = () => {
@@ -270,6 +270,7 @@ const RecipeDetails = () => {
     );
   }
   return (
+    <Suspense fallback={<LoadingSpinner />}>
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       {/* Navbar */}
       <Navbar userRole={userRole} />
@@ -406,6 +407,7 @@ const RecipeDetails = () => {
       </div>
       <Footer />
     </div>
+    </Suspense>
   );
 };
 
