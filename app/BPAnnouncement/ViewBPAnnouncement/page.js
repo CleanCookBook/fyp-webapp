@@ -288,7 +288,7 @@ const ViewBPAnnouncement = () => {
     }
   };
 
-  const handleSubmitReply = async (commentId,name, reply,replyText) => {
+  const handleSubmitReply = async (commentId, userId,name, reply,replyText) => {
     try {
       // Fetch the user ID from /api/userID
       const userResponse = await fetch("http://localhost:3001/api/userID", {
@@ -314,11 +314,12 @@ const ViewBPAnnouncement = () => {
           },
           credentials: "include",
           body: JSON.stringify({
-            userId: userId, // Use the userId obtained from the backend
-            commentId: commentId, // Ensure reviewId is included in the request body
-            file_name: name, // Assuming Rname is not needed for reply
-            reply: reply, // Pass the reply text
-            comment: replyText, // Include the comment field
+            userId: userId, 
+            file_name: name,
+            reply: reply, 
+            comment: replyText,// Use the userId obtained from the backend
+       // Pass the reply text
+             // Include the comment field
           }),
         }
       );
@@ -343,7 +344,6 @@ const ViewBPAnnouncement = () => {
         throw new Error("Failed to fetch replies");
       }
       const data = await response.json();
-      // Update the replies state with the fetched replies
       setReplies(data.repliesWithUsernames);
     } catch (error) {
       console.error("Error fetching replies:", error);
@@ -353,14 +353,13 @@ const ViewBPAnnouncement = () => {
   const handleCommentButtonClick = async (comment) => {
     try {
       // Fetch replies for the selected review
-      await fetchReplies(comment.commentId);
-      // Set the state to show the reply input box and populate the necessary data
-      setReplyingToCommentId(comment.commentId);
-      // Use 'reviewID' instead of 'reviewId'
+      await fetchReplies(comment.commentID);
+      setReplyingToCommentId(comment.commentID);
       setSelectedUsername(comment.Username);
       setReplyText(comment.comment);
       setReply("");
       setShowReplyBox(true); // Show the reply input box
+      console.log("Clicked Comment ID:", comment.commentID);
     } catch (error) {
       console.error("Error handling comment button click:", error);
     }
@@ -454,9 +453,9 @@ const ViewBPAnnouncement = () => {
                   }}
                 >
                   <div>
-                    {comments.map((comment) => (
+                    {comments.map((comment,index) => (
                       <div
-                        key={comment.commentID}
+                        key={index}
                         className="flex items-start mb-4"
                       >
                         {/* Display profile picture, username, and comment details */}
@@ -499,7 +498,7 @@ const ViewBPAnnouncement = () => {
 
                                 {/* Trash button */}
 
-                                {comment.UserID === userId && (
+                                { userId===comment.UserID && (
                                   <button
                                     onClick={() =>
                                       handleDeleteComment(comment.commentID)
@@ -511,7 +510,7 @@ const ViewBPAnnouncement = () => {
                                 )}
                               </div>
                               {showReplyBox &&
-                                ReplyingToCommentId === comment.commentId && (
+                                ReplyingToCommentId === comment.commentID && (
                                   <div className="fixed inset-0 flex flex-row items-center justify-center bg-gray-800 bg-opacity-50 z-50">
                                     <div className="mt-1">
                                       <div className="bg-white p-8 rounded-t-lg w-[56rem] h-[28rem] relative overflow-y-auto scrollbar-container">
@@ -608,7 +607,7 @@ const ViewBPAnnouncement = () => {
                                           <button
                                             onClick={() => {
                                               console.log(
-                                                "Review ID:",
+                                                "comment ID:",
                                                 comment.commentID
                                               );
                                               console.log(
@@ -618,7 +617,7 @@ const ViewBPAnnouncement = () => {
                                               handleSubmitReply(
                                                 comment.commentID,
                                                 userId,
-                                                name,
+                                                comment.Announcement,
                                                 reply,
                                                 replyText
                                               ); // Pass reviewId, userId, recipeName, and replyText

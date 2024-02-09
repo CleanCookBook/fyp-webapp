@@ -75,7 +75,7 @@
   app.use("/api/comments",  commentsRoute );
   app.use("/api/registration",  registrationRoutes);
   app.use("/api/reply",  replyRoutes);
-  app.use("api/commentReply",replyCommentRoutes);
+  app.use("/api/replyComment",replyCommentRoutes);
 
   app.use("/api/announce", announcementRoutes);
   app.get("/home", isAuthenticated, (req, res) => {

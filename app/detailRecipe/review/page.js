@@ -438,7 +438,7 @@ const Review = () => {
                                 <div>
                                   <div className="text-blue-950 font-bold">@{selectedUsername}</div>
                                   <p className="text-blue-950 font-semibold">{replyText}</p>
-                                  <div className="flex items-center mt-2">
+                                  <div class1Name="flex items-center mt-2">
                                     <div className="border-b border-solid border-black w-6 ml-5 "></div> {/* Long dash */}
                                     <span className="mx-2">View Replies</span>
                                     {replies.length > 0 && (
