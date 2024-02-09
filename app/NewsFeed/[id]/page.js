@@ -1,4 +1,5 @@
 // pages/news/[id].js
+"use client";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
