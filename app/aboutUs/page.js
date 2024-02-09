@@ -2,12 +2,13 @@
 import Footer from "@/components/Footer";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const About = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState("user");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setIsLoading] = useState(true);
   const router = useRouter();
 
@@ -101,7 +102,7 @@ const About = () => {
                 unique preferences and goals.
               </p>
               <div className="flex justify-center">
-                <img
+                <Image
                   className="w-[363px] h-[236px] rounded-[20px] drop-shadow-lg m-8"
                   src="aboutPage.jpg"
                   alt="About Page Image"

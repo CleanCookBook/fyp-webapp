@@ -2,6 +2,7 @@
 import ChefNote from "@/components/ChefNote";
 import Footer from "@/components/Footer";
 import FunFact from "@/components/FunFact";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";

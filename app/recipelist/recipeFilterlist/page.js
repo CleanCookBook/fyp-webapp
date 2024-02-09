@@ -3,9 +3,11 @@
 import Footer from '@/components/Footer';
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from '@/components/Navbar';
+import Image from "next/image";
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
 
 const FilteredRecipePage = () => {
   
@@ -249,7 +251,7 @@ const FilteredRecipePage = () => {
         <div className="mt-4 w-[70%] max-w-[1114px]">
           {resultsArray.length === 0 ? (
             <div className="flex flex-col items-center -mt-[0px]">
-              <img 
+              <Image
                 src="/noRecipe.png" 
                 alt="Error" 
                 className="w-3/6 h-3/6 -mt-[80px]" 

@@ -1,13 +1,13 @@
 "use client";
 import Footer from "@/components/Footer";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Modal from "@/components/Modal";
 import Navbar from "@/components/Navbar";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import Image from "next/image";
 import Link from "next/link";
-import { FaTimes } from 'react-icons/fa';
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaTimes } from 'react-icons/fa';
 
 const Accountpage = () => {
   const [userRole, setUserRole] = useState("user");
@@ -185,7 +185,7 @@ const Accountpage = () => {
 
         <div>
           <div className="w-1/3 float-right justify-items-end text-center">
-            <img
+            <Image
               src="Fish&chips.jpg"
               alt="Homemade Fish & Chips Image"
               className="w-full max-w-screen-xl mr-96 rounded-2xl shadow-2xl shadow-black"

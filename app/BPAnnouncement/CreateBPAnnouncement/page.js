@@ -2,8 +2,10 @@
 import Footer from "@/components/Footer";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
 
 const CreateBPAnnouncement = () => {
   const router = useRouter();
@@ -161,7 +163,7 @@ const CreateBPAnnouncement = () => {
             )}
             {/* Display the image */}
             {announcementImageURL && (
-              <img
+              <Image
                 src={announcementImageURL}
                 alt="Selected Announcement Image"
                 className="object-cover -ml-4"

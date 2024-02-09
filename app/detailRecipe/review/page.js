@@ -1,5 +1,6 @@
 "use client";
 import Footer from "@/components/Footer";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
 import SmallStarRating from "@/components/SmallerStars";
 import Star from "@/components/Star";

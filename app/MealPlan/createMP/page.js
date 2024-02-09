@@ -2,9 +2,11 @@
 import Footer from "@/components/Footer";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
 
 const BPCreateMealPlan = () => {
   const userRole = "nutritionist";
@@ -300,7 +302,7 @@ const BPCreateMealPlan = () => {
             )}
             {selectedImage && (
               <>
-                <img
+                <Image
                   id="recipeImage"
                   src={URL.createObjectURL(selectedImage)}
                   alt="Recipe Image"

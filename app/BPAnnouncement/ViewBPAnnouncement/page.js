@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { FaComment, FaHeart, FaRegHeart, FaTimes, FaTrash } from "react-icons/fa";
 
+
 const ViewBPAnnouncement = () => {
   const router = useRouter();
   const [userRole, setUserRole] = useState("nutritionist");
@@ -401,7 +402,7 @@ const ViewBPAnnouncement = () => {
             <div className="relative">
               <div className="bg-white rounded-lg p-4">
                 {imageData && (
-                  <img
+                  <Image
                     src={imageData}
                     alt="Announcement"
                     className="max-w-full"
