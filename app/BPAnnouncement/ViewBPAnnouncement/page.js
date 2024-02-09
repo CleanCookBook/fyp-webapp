@@ -1,12 +1,12 @@
 "use client";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import Link from "next/link";
+import Navbar from "@/components/Navbar";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { FaHeart, FaRegHeart, FaTrash, FaComment } from "react-icons/fa";
+import { FaComment, FaHeart, FaRegHeart, FaTrash } from "react-icons/fa";
 
 const ViewBPAnnouncement = () => {
   const router = useRouter();
@@ -21,7 +21,21 @@ const ViewBPAnnouncement = () => {
   const [likeCount, setLikeCount] = useState(0);
   const nameRef = useRef(null);
   const[userId,setUserId]=useState(null);
+  const [showReplyPopup, setShowReplyPopup] = useState(false);
+  const [replyContent, setReplyContent] = useState("");
+  const [commentId, setCommentId] = useState(null);
+  const[ReplyingToCommentId,setReplyingToCommentId] =  useState(null);
+  const [selectedUsername, setSelectedUsername] = useState(null);
+  const [replyText, setReplyText] = useState("");
+  const [reply, setReply] = useState("");
+  const [showReplyBox, setShowReplyBox] = useState(false);
+  const [replies, setReplies] = useState({});
   
+
+  // Function to toggle reply pop-up
+  const toggleReplyPopup = () => {
+    setShowReplyPopup(!showReplyPopup);
+  };
   useEffect(() => {
     // Ensure the code runs only in the browser environment
     if (typeof window !== "undefined") {
@@ -157,6 +171,16 @@ const ViewBPAnnouncement = () => {
       console.error("Error handling like:", error.message);
     }
   };
+
+  const handleReplyClick = async (comment) => {
+    setReplyingToCommentId(comment.commentId);
+    // Use 'reviewID' instead of 'reviewId'
+    setSelectedUsername(comment.Username);
+    setReplyText(`${comment.comment}`);
+    setReply("");
+    setShowReplyBox(true);
+    setCommentId(comment.commentId); 
+  };
   
   const handleSubmitComment = async () => {
     try {
@@ -223,6 +247,88 @@ const ViewBPAnnouncement = () => {
     }
   };
 
+  const handleSubmitReply = async (commentId, userID, file_name, reply, replyText) => {
+    try {
+      // Fetch the user ID from /api/userID
+      const userResponse = await fetch("http://localhost:3001/api/userID", {
+        method: "GET",
+        credentials: "include", // Include credentials for cookie authentication
+      });
+
+      if (!userResponse.ok) {
+        console.error("Error fetching user ID:", userResponse.statusText);
+        return;
+      }
+
+      const userData = await userResponse.json();
+      const userId = userData.user.UserID;
+      
+  
+      // Send a POST request to the backend API to submit the reply
+      const response = await fetch(`http://localhost:3001/api/commentReply/replies/${commentId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          userId: userId, // Use the userId obtained from the backend
+          commentId: commentId, // Ensure reviewId is included in the request body
+          file_name: file_name, // Assuming Rname is not needed for reply
+          reply: reply, // Pass the reply text
+          comment: replyText, // Include the comment field
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error submitting reply");
+      }
+
+      const responseData = await response.json();
+      console.log("Reply submitted successfully:", responseData.message);
+
+      // Clear reply text and hide reply input box after successful submission
+      setReplyText("");
+      setShowReplyBox(false);
+
+      // Optionally, you may update the replies state to reflect the new reply
+      // For example, refetch the replies after submitting a new reply
+    } catch (error) {
+      console.error("Error submitting reply:", error.message);
+    }
+  };
+
+  const fetchReplies = async (commentId) => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/commentReply/${commentId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch replies');
+      }
+      const data = await response.json();
+      // Update the replies state with the fetched replies
+      setReplies(data.repliesWithUsernames);
+    } catch (error) {
+      console.error('Error fetching replies:', error);
+    }
+  };
+
+  const handleCommentButtonClick = async (comment) => {
+    try {
+      // Fetch replies for the selected review
+      await fetchReplies(comment.commentId);
+      // Set the state to show the reply input box and populate the necessary data
+      setReplyingToCommentId(comment.commentId);
+      // Use 'reviewID' instead of 'reviewId'
+      setSelectedUsername(comment.Username);
+      setReplyText(comment.comment);
+      setReply("");
+      setShowReplyBox(true); // Show the reply input box
+    } catch (error) {
+      console.error('Error handling comment button click:', error);
+    }
+  };
+
+
   if (!isAuthenticated) {
     // If not authenticated, the user will be redirected during authentication check
     return null;
@@ -280,11 +386,15 @@ const ViewBPAnnouncement = () => {
                     )}
                   </button>
                   <div className="ml-2">
-                    <span className="text-blue-950 font-medium">{likeCount}</span>
+                    <span className="text-blue-950 font-medium">
+                      {likeCount}
+                    </span>
                   </div>
                   <div className="ml-2 flex items-center">
                     <FaComment className="text-blue-950 text-3xl ml-10" />
-                    <span className="text-blue-950 ml-3 font-medium">{comments.length}</span>
+                    <span className="text-blue-950 ml-3 font-medium">
+                      {comments.length}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -300,42 +410,179 @@ const ViewBPAnnouncement = () => {
                   Comments :
                 </h2>
                 {/* Display comments */}
-                <section 
+                <section
                   className="bg-white h-96 flex-grow p-4 rounded-t-lg shadow-md mt-4 overflow-y-auto scrollbar-container"
-                  style={{ 
-                    scrollbarWidth: "thin"
+                  style={{
+                    scrollbarWidth: "thin",
                   }}
                 >
                   <div>
                     {comments.map((comment) => (
-                      <div key={comment.commentID} className="flex items-start mb-4">
+                      <div
+                        key={comment.commentID}
+                        className="flex items-start mb-4"
+                      >
                         {/* Display profile picture, username, and comment details */}
                         {comment.comment && (
                           <>
-                            <Image 
-                              src="/logo.jpg" 
-                              alt="Profile Picture" 
+                            <Image
+                              src="/logo.jpg"
+                              alt="Profile Picture"
                               width={150}
                               height={150}
-                              className="w-16 h-16 rounded-full mr-4" 
+                              className="w-16 h-16 rounded-full mr-4"
                               unoptimized={true}
                             />
                             <div className="flex flex-col flex-grow">
                               {/* Username */}
-                              <div className="text-blue-950 font-bold">@{comment.Username}</div>
+                              <div className="text-blue-950 font-bold">
+                                @{comment.Username}
+                              </div>
 
                               {/* Comment */}
                               <div className="relative">
-                                <p className="text-blue-950 font-semibold">{comment.comment}</p>
+                                <div className="flex items-center">
+                                <p className="text-blue-950 font-semibold">
+                                  {comment.comment}
+                                </p>
+                                  <button
+                                    onClick={() =>
+                                      handleCommentButtonClick(comment)
+                                    }
+                                    className="flex items-center"
+                                  >
+                                    <FaComment />
+                                    {replies.length > 0 && ( // Check if there are replies
+                                      <span className="text-blue-950 ml-2 font-medium">
+                                        {replies.length}
+                                      </span> // Show the number of replies
+                                    )}
+                                  </button>
+                                </div>
+
+                                {/* Trash button */}
+                                
                                 {comment.UserID === userId && (
                                   <button
-                                    onClick={() => handleDeleteComment(comment.commentID)}
+                                    onClick={() =>
+                                      handleDeleteComment(comment.commentID)
+                                    }
                                     className="absolute top-0 right-4 text-red-500"
                                   >
                                     <FaTrash />
                                   </button>
-                                )}                           
+                                )}
                               </div>
+
+                              {showReplyBox && ReplyingToCommentId === comment.commentId && (
+                  <div className="fixed inset-0 flex flex-row items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+                    <div className="mt-1">
+                      <div className="bg-white p-8 rounded-t-lg w-[56rem] h-[28rem] relative overflow-y-auto scrollbar-container">
+                        {/* Render selected user's review */}
+                        <div className="mb-4 flex items-start">
+                          <Image
+                            src="/logo.jpg"
+                            alt="Profile Picture"
+                            width={150}
+                            height={150}
+                            className="w-16 h-16 rounded-full mr-4"
+                            unoptimized={true}
+                          />
+                          <div>
+                            <div className="text-blue-950 font-bold">
+                              @{selectedUsername}
+                            </div>
+                            <p className="text-blue-950 font-semibold">
+                              {replyText}
+                            </p>
+                            <div className="flex items-center mt-2">
+                              <div className="border-b border-solid border-black w-6 ml-5 "></div>{" "}
+                              {/* Long dash */}
+                              <span className="mx-2">View Replies</span>
+                              {replies.length > 0 && (
+                                <span className="text-blue-950">
+                                  ({replies.length})
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Render the replies */}
+                            <div className=" ml-4">
+                              {replies.map((reply, index) => (
+                                <div key={index} className="flex items-start">
+                                  <Image
+                                    src="/logo.jpg"
+                                    alt="Profile Picture"
+                                    width={150}
+                                    height={150}
+                                    className="w-12 h-12 rounded-full mr-2 mt-6"
+                                    unoptimized={true}
+                                  />
+                                  <div>
+                                    <div className="text-blue-950 font-bold mt-6">
+                                      @{reply.Username}
+                                    </div>
+                                    <p className="text-blue-950 font-semibold">
+                                      {reply.Reply}
+                                    </p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setReplyingToReviewId(null);
+                            setReplyText(""); // Clear reply text if cancelled
+                            setShowReplyBox(false);
+                          }}
+                          className="absolute top-0 right-0 m-4 text-2xl"
+                        >
+                          <FaTimes />
+                        </button>
+                      </div>
+
+                      <div className="bg-white p-4 rounded-b-lg border-t">
+                        {/* Render the username of the user being replied to */}
+                        <div className="text-blue-950 font-bold mb-2">
+                          Replying to @{selectedUsername}
+                        </div>
+
+                        {/* Reply input field */}
+                        <textarea
+                          type="text"
+                          className="w-[49rem] h-20 p-2 mt-1 flex-grow"
+                          placeholder="Write a reply ..."
+                          value={reply}
+                          onChange={(e) => setReply(e.target.value)}
+                        />
+
+                        {/* Reply button */}
+                        <div className="flex justify-end -mr-5 -mt-[6.5rem] p-4 h-28">
+                          <button
+                            onClick={() => {
+                              console.log("Review ID:", userReview.reviewId);
+                              console.log("User Review:", userReview);
+                              handleSubmitReply(
+                                userReview.reviewId,
+                                userId,
+                                recipeName,
+                                reply,
+                                replyText
+                              ); // Pass reviewId, userId, recipeName, and replyText
+                            }}
+                            className="px-4 py-2 bg-white text-blue-950 hover:text-blue-550 text-md font-extrabold"
+                          >
+                            Reply
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+
                             </div>
                           </>
                         )}
@@ -372,6 +619,7 @@ const ViewBPAnnouncement = () => {
           </div>
         </div>
       </div>
+      
       <Footer />
     </div>
   );
