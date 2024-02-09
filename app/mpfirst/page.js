@@ -3,18 +3,20 @@
 import Footer from "@/components/Footer";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 
+
 // Define the functional component
 const mpfirst = () => {
   const userRole = "user";
+  const [mealPlans, setMealPlans] = useState([]);
+  const [paymentStatus, setPaymentStatus] = useState('');
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [mealPlans, setMealPlans] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [paymentStatus, setPaymentStatus] = useState('');
 
   
   useEffect(() => {
@@ -122,7 +124,7 @@ const mpfirst = () => {
           {paymentStatus !== "paid" && (
             <div className="absolute inset-0 -top-38 flex items-center justify-center z-10">
               <div className="bg-[#00509D] rounded-[20px] p-8 w-[400px]">
-                <img
+                <Image
                   src="/unlock.png"  // Replace with the correct path to your GIF file
                   alt="Unlock"
                   className="mx-auto"
@@ -151,7 +153,7 @@ const mpfirst = () => {
                 >
                   <div className="relative hover:brightness-75 transition-all">
                     {/* Add meal plan image */}
-                    <img
+                    <Image
                       src={mealPlan.MP_Image}
                       alt={`${mealPlan.MPName} diet food`}
                       width={380}

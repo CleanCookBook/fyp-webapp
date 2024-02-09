@@ -2,9 +2,11 @@
 import Footer from "@/components/Footer";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
 
 const CreateRecipefirst = () => {
   const userRole = "nutritionist";
@@ -351,7 +353,7 @@ const CreateRecipefirst = () => {
               )}
               {selectedImage && (
                 <>
-                  <img
+                  <Image
                     id="recipeImage"
                     src={URL.createObjectURL(selectedImage)}
                     alt="Recipe Image"

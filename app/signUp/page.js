@@ -1,7 +1,9 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+
 
 const Signup = () => {
   const router = useRouter();
@@ -283,7 +285,7 @@ const Signup = () => {
             </div>
           </div>
           <div className="w-1/2">
-            <img
+            <Image
               className=" flex w-[400px] h-[400px] object-cover drop-shadow-lg ml-28"
               src="login-signupPage.jpg"
               alt="Sign Up Image"

@@ -1,9 +1,12 @@
 "use client";
 import Footer from "@/components/Footer";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+
 
 const editNutriFav = () => {
   const router = useRouter();
@@ -230,7 +233,7 @@ return (
         <div className="flex p-4 pl-20 bg-[#F9D548]">
           {/* Division 1 - 1/3 width */}
           <div className="w-1/3">
-            <img
+            <Image
               src={recipeDetails?.image || "/placeholder-image.jpg"} // Use your placeholder image or another fallback
               alt={recipeDetails?.RName || "Recipe Image"}
               width={500}

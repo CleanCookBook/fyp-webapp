@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
-
 import 'react-toastify/dist/ReactToastify.css';
 
 const LCProgress = () => {
@@ -408,7 +407,7 @@ return(
                 <div className="bg-blue-900 text-white font-bold h-auto w-auto p-4 rounded-[20px] flex flex-col items-center">
                   <p className="mt-6 text-lg">{notification}</p>
                   {/* Include the GIF based on the day index */}
-                  <img
+                  <Image
                     src={gifPaths[checkedDays.length - 1]}
                     alt="GIF"
                     className="-mt-2"
