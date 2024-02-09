@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import Modal from "@/components/Modal"; // Adjust the path based on your file structure
 import Navbar from "@/components/Navbar";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Select from "react-select";
 
 const EditInfo = () => {
@@ -213,6 +213,7 @@ const EditInfo = () => {
     <div className="flex flex-col h-full bg-[#F9D548]">
       <Navbar userRole={userRole} />
       <div className="lg:w-4/5 lg:pr-8 p-8 flex flex-col h-full bg-[#F9D548] text-[#0A2A67] justify-start items-start ml-20">
+      <Suspense fallback={<LoadingSpinner />}>
         <form action="/update-account" method="POST" onSubmit={submitForm}>
           <div>
             <h2 className="text-xl underline font-bold left-10 mt-9">
@@ -397,6 +398,7 @@ const EditInfo = () => {
             </div>
           </div>
         </form>
+        </Suspense>
       </div>
       <Footer />
       {isModalOpen && <Modal onClose={closeModal} />}
