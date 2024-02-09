@@ -1,7 +1,7 @@
 "use client";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -75,7 +75,7 @@ const AboutMe = () => {
 
   useEffect(() => {
     fetchAboutMeData();
-  }, []);
+  }, [fetchAboutMeData]);
 
   const heightInMeters = userData.height / 100;
   const minNormalWeight = 18.5 * (heightInMeters ** 2);
@@ -191,7 +191,7 @@ const AboutMe = () => {
 
         <div>
           <div className="w-1/3 float-right justify-items-end text-center">
-            <img
+          <Image
               src="Fish&chips.jpg"
               alt="Homemade Fish & Chips Image"
               className="w-full max-w-screen-xl rounded-2xl shadow-2xl shadow-black"
