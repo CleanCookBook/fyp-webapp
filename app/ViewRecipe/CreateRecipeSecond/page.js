@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 const CreateRecipesecond = () => {
   const router = useRouter();
-  const userRole = "bp";
+  const userRole = "nutritionist";
   const [recipeSteps, setRecipeSteps] = useState("");
   const [funFacts, setFunFacts] = useState("");
   const [tips, setTips] = useState("");
