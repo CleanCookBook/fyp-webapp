@@ -3,7 +3,6 @@ import Footer from "@/components/Footer";
 import ImageModel from "@/components/ImageModel";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -134,28 +133,28 @@ function SysAdminViewPartnerInfo() {
                       {user.LinkedInURL}
                     </td>
                     <td className="border p-2 text-center">
-                      <Image
+                      <img
                         src={`data:image/jpeg;base64,${user.LicenseImage}`}
                         alt="License"
                         className="w-24 h-24 object-cover"
                         onClick={() => handleImageClick(user.LicenseImage)} />
                     </td>
                     <td className="border p-2 text-center">
-                      <Image
+                      <img
                         src={`data:image/jpeg;base64,${user.UserPhoto}`}
                         alt="User"
                         className="w-24 h-24 object-cover"
                         onClick={() => handleImageClick(user.UserPhoto)} />
                     </td>
                     <td className="border p-2 text-center">
-                      <Image
+                      <img
                         src={`data:image/jpeg;base64,${user.ExperienceFile}`}
                         alt="Experience"
                         className="w-24 h-24 object-cover"
                         onClick={() => handleImageClick(user.ExperienceFile)} />
                     </td>
                     <td className="border p-2 text-center">
-                      <Image
+                      <img
                         src={`data:image/jpeg;base64,${user.TestimonyFile}`}
                         alt="Testimony"
                         className="w-24 h-24 object-cover"
