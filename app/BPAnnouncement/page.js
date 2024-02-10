@@ -2,7 +2,6 @@
 import Footer from "@/components/Footer";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
@@ -198,7 +197,7 @@ const AnnouncementsPage = () => {
             {userRole !== "nutritionist" && paymentStatus !== "paid" && (
               <div className="absolute inset-0 -top-38 flex items-center justify-center z-10">
                 <div className="bg-[#00509D] rounded-[20px] p-8 w-[400px]">
-                  <Image
+                  <img
                     src="/unlock.png"  // Replace with the correct path to your GIF file
                     alt="Unlock"
                     className="mx-auto"

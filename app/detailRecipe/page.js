@@ -304,7 +304,7 @@ const RecipeDetails = () => {
         <div className="flex p-4 pl-20 bg-[#F9D548]">
           {/* Division 1 - 1/3 width */}
           <div className="w-1/3">
-            <Image
+            <img
               src={recipeDetails?.image || "/placeholder-image.jpg"} // Use your placeholder image or another fallback
               alt={recipeDetails?.RName || "Recipe Image"}
               width={500}

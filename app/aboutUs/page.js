@@ -2,7 +2,6 @@
 import Footer from "@/components/Footer";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -102,7 +101,7 @@ const About = () => {
                 unique preferences and goals.
               </p>
               <div className="flex justify-center">
-                <Image
+                <img
                   className="w-[363px] h-[236px] rounded-[20px] drop-shadow-lg m-8"
                   src="aboutPage.jpg"
                   alt="About Page Image"

@@ -2,7 +2,6 @@
 import Footer from "@/components/Footer";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
@@ -189,7 +188,7 @@ const NewsFeed = () => {
           {paymentStatus !== "paid" && (
             <div className="absolute inset-0 flex items-end justify-end -mr-38 z-10 -mt-4">
               <div className="bg-[#00509D] rounded-[20px] p-2 w-[400px] h-[510px]">
-                <Image
+                <img
                   src="/unlock.png"  // Replace with the correct path to your GIF file
                   alt="Unlock"
                   className="flex justify-center items-center -mt-2"

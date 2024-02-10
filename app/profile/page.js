@@ -185,7 +185,7 @@ const Accountpage = () => {
 
         <div>
           <div className="w-1/3 float-right justify-items-end text-center">
-            <Image
+            <img
               src="Fish&chips.jpg"
               alt="Homemade Fish & Chips Image"
               className="w-full max-w-screen-xl mr-96 rounded-2xl shadow-2xl shadow-black"
