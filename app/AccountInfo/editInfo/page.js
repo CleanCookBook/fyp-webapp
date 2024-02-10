@@ -1,5 +1,6 @@
 "use client";
 import Footer from "@/components/Footer";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Modal from "@/components/Modal"; // Adjust the path based on your file structure
 import Navbar from "@/components/Navbar";
 import { useRouter, useSearchParams } from "next/navigation";
