@@ -67,7 +67,7 @@ const BPHomepage = () => {
             {/* Create/View Announcement */}
             <Link href="/BPAnnouncement">
               <button className="bg-white hover:bg-gray-200 rounded-lg py-8 px-8 w-72 text-[#0A2A67] font-black text-2xl">
-                Create/View Announcement
+                Create/View Social Post
               </button>
             </Link>
 

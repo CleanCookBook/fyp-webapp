@@ -119,7 +119,7 @@ const videos = () => {
     <div className="flex flex-col min-h-screen bg-[#F9D548]">
       <Navbar userRole={userRole} />
       <div className="flex flex-col justify-center items-center mt-20 mb-20">
-        <h2 className="text-5xl text-[#0A2A67] font-black text-left mb-4"> Recipes </h2>
+        <h2 className="text-5xl text-[#0A2A67] font-black text-left mb-4"> Videos </h2>
         <div className="relative mt-2">
           {paymentStatus !== "paid" && (
             <div className="absolute inset-0 -top-40 flex items-center justify-center z-10">

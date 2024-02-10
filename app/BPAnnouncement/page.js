@@ -2,7 +2,6 @@
 import Footer from "@/components/Footer";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
@@ -190,7 +189,7 @@ const AnnouncementsPage = () => {
               </Link>
             )}
             <h1 className="text-5xl font-extrabold text-[#0A2A67] mb-4 mt-10 ml-8">
-              {userRole === "nutritionist" ? "Your Announcements" : "All Announcements"}
+              {userRole === "nutritionist" ? "Your Social Posts" : "All Social Posts"}
             </h1>
           </div>
 
@@ -198,7 +197,7 @@ const AnnouncementsPage = () => {
             {userRole !== "nutritionist" && paymentStatus !== "paid" && (
               <div className="absolute inset-0 -top-38 flex items-center justify-center z-10">
                 <div className="bg-[#00509D] rounded-[20px] p-8 w-[400px]">
-                  <Image
+                  <img
                     src="/unlock.png"  // Replace with the correct path to your GIF file
                     alt="Unlock"
                     className="mx-auto"
@@ -258,7 +257,7 @@ const AnnouncementsPage = () => {
                 <p>
                   Create A New
                   <a href="/BPAnnouncement/CreateBPAnnouncement" className="ml-1.5 underline font-bold">
-                    Announcement
+                    Social Post
                   </a>
                 </p>
               </div>

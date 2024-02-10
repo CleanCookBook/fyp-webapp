@@ -2,7 +2,6 @@
 import Footer from "@/components/Footer";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -131,7 +130,7 @@ const CreateBPAnnouncement = () => {
             &lt;&nbsp;&nbsp;Back
           </button>
         <h1 className="text-5xl font-extrabold text-[#0A2A67] mb-4 mt-10 ml-7">
-          Create Your Announcement
+          Create Your Social Post
         </h1>
         </div>
         <p className="text-black-200 text-2xl font-medium">
@@ -163,7 +162,7 @@ const CreateBPAnnouncement = () => {
             )}
             {/* Display the image */}
             {announcementImageURL && (
-              <Image
+              <img
                 src={announcementImageURL}
                 alt="Selected Announcement Image"
                 className="object-cover -ml-4"

@@ -3,6 +3,7 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 
+
 const EditBPInfo = () => {
   const [linkedinUrl, setLinkedinUrl] = useState(""); // State to hold the LinkedIn URL
   const [licenseImage, setLicenseImage] = useState(null); // State for license image
