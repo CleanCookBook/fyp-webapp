@@ -405,6 +405,8 @@ const ViewBPAnnouncement = () => {
                   <Image
                     src={imageData}
                     alt="Announcement"
+                    width={800}
+                    height={600}
                     className="max-w-full"
                     style={{ height: "auto" }}
                   />
@@ -478,38 +480,36 @@ const ViewBPAnnouncement = () => {
 
                               {/* Comment */}
                               <div className="relative">
-                                <div className="flex items-center">
+                                <div>
                                   <p className="text-blue-950 font-semibold">
                                     {comment.comment}
                                   </p>
+                                </div>
+                                <div className="flex items-center">
+                                  {/* Comment button */}
                                   <button
-                                    onClick={() =>
-                                      handleCommentButtonClick(comment)
-                                    }
-                                    className="flex items-center"
+                                    onClick={() => handleCommentButtonClick(comment)}
+                                    className="flex items-center ml-2"
                                   >
                                     <FaComment />
-                                    {replies.length > 0 && ( // Check if there are replies
+                                    {replies.length > 0 && (
                                       <span className="text-blue-950 ml-2 font-medium">
                                         {replies.length}
-                                      </span> // Show the number of replies
+                                      </span>
                                     )}
                                   </button>
+                                  {/* Trash button */}
+                                  {userId === comment.UserID && (
+                                    <button
+                                      onClick={() => handleDeleteComment(comment.commentID)}
+                                      className="text-red-500 ml-4"
+                                    >
+                                      <FaTrash />
+                                    </button>
+                                  )}                                  
                                 </div>
-
-                                {/* Trash button */}
-
-                                { userId===comment.UserID && (
-                                  <button
-                                    onClick={() =>
-                                      handleDeleteComment(comment.commentID)
-                                    }
-                                    className="absolute top-0 right-4 text-red-500"
-                                  >
-                                    <FaTrash />
-                                  </button>
-                                )}
                               </div>
+
                               {showReplyBox &&
                                 ReplyingToCommentId === comment.commentID && (
                                   <div className="fixed inset-0 flex flex-row items-center justify-center bg-gray-800 bg-opacity-50 z-50">
