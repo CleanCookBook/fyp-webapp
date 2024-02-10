@@ -274,13 +274,15 @@ const CreateRecipefirst = () => {
     <div className="flex flex-col min-h-screen bg-[#F9D548] text-[#0A2A67]">
       <Navbar userRole={userRole} className="fixed top-0 left-0 right-0" />
       <div className="flex items-center mb-4">
-        <Link 
-          href="/home/BPHomepage" 
+        <Link
+          href="/home/BPHomepage"
           className="flex justify-center items-center w-28 h-10 bg-blue-950 hover:bg-[#154083] text-white text-xl font-bold rounded-[10px] shadow self-start mt-[45px] ml-6"
         >
           &lt;&nbsp;&nbsp;Back
         </Link>
-        <h2 className="text-5xl font-extrabold text-[#0A2A67] mb-4 mt-10 ml-8">Create Your Recipe </h2>
+        <h2 className="text-5xl font-extrabold text-[#0A2A67] mb-4 mt-10 ml-8">
+          Create Your Recipe{" "}
+        </h2>
       </div>
       <div className="w-full mx-auto flex items-center px-8 lg:px-20">
         <div className="w-1/2 border-r border-gray-400 pr-8">
@@ -354,9 +356,10 @@ const CreateRecipefirst = () => {
               {selectedImage && (
                 <>
                   <Image
-                    id="recipeImage"
                     src={URL.createObjectURL(selectedImage)}
                     alt="Recipe Image"
+                    width={imageSize.width}
+                    height={imageSize.height}
                     className="w-full h-full object-cover -ml-2 rounded-[10px]"
                   />
                   {/* Hide the "Choose File" button and icon */}
@@ -400,7 +403,7 @@ const CreateRecipefirst = () => {
                 -
               </button>
               <input
-                type="number"  // Change the input type to "number"
+                type="number" // Change the input type to "number"
                 className="text-center text-black text-lg font-medium border-none outline-none w-20 h-10 pl-2.5 py-2.5 bg-white mb-4 mx-2 -ml-1"
                 value={cookingTime.value}
                 onChange={(e) =>
@@ -462,9 +465,11 @@ const CreateRecipefirst = () => {
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
           <div className="bg-white p-8 rounded-lg shadow-md">
-            <h2 className="text-center mb-4">Please fill out all the required fields before proceeding!</h2>
-            <button 
-              onClick={() => setIsModalOpen(false)} 
+            <h2 className="text-center mb-4">
+              Please fill out all the required fields before proceeding!
+            </h2>
+            <button
+              onClick={() => setIsModalOpen(false)}
               className="bg-blue-950 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-44 mt-4 focus:outline-none focus:shadow-outline"
             >
               Close

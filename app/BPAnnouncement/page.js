@@ -189,7 +189,7 @@ const AnnouncementsPage = () => {
               </Link>
             )}
             <h1 className="text-5xl font-extrabold text-[#0A2A67] mb-4 mt-10 ml-8">
-              {userRole === "nutritionist" ? "Your Announcements" : "All Announcements"}
+              {userRole === "nutritionist" ? "Your Social Posts" : "All Social Posts"}
             </h1>
           </div>
 
@@ -257,7 +257,7 @@ const AnnouncementsPage = () => {
                 <p>
                   Create A New
                   <a href="/BPAnnouncement/CreateBPAnnouncement" className="ml-1.5 underline font-bold">
-                    Announcement
+                    Social Post
                   </a>
                 </p>
               </div>

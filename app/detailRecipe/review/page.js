@@ -13,7 +13,7 @@ import { FaComment, FaTimes, FaTrash } from 'react-icons/fa';
 
 
 const Review = () => {
-  const userRole ="user";
+  const [userRole, setUserRole] = useState("user");
   const router = useRouter();
   const [wordCount, setWordCount] = useState(50); // Initialize word count to 50
   const [recipeName, setRecipeName] = useState("");
@@ -83,6 +83,32 @@ const Review = () => {
     };
 
     fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserType = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3001/api/user/userType",
+          {
+            method: "POST",
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserRole(data.userType || "user"); // Set the userRole based on the response
+        } else {
+          console.error("Error fetching user type:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching user type:", error.message);
+      }
+    };
+
+    // Fetch user type when the component mounts
+    fetchUserType();
   }, []);
 
   // Calculate overall rating based on user ratings

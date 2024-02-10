@@ -2,7 +2,6 @@
 import Footer from "@/components/Footer";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Navbar from "@/components/Navbar";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -174,7 +173,7 @@ const AboutMe = () => {
       <Navbar userRole={userRole} />
       <div className="lg:w-4/5 lg:pr-8 p-8 flex flex-col h-full bg-[#F9D548] text-[#0A2A67] justify-start items-start ml-20">
         <div className="w-full max-w-md flex flex-row mt-7">
-          <Image
+          <img
             src="/logo.jpg"
             alt="Profile Picture"
             width={150}
@@ -191,7 +190,7 @@ const AboutMe = () => {
 
         <div>
           <div className="w-1/3 float-right justify-items-end text-center">
-          <Image
+          <img
               src="Fish&chips.jpg"
               alt="Homemade Fish & Chips Image"
               className="w-full max-w-screen-xl rounded-2xl shadow-2xl shadow-black"
