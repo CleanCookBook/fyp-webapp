@@ -1,7 +1,6 @@
 "use client";
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
-import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 
@@ -93,7 +92,7 @@ return (
       <div className="bg-white w-[990px] h-[585px] mx-auto font-black text-2xl shadow-md flex-row -mt-4">
         <p className="text-xl font-bold flex py-5 px-5 top-0 left-75"></p>
         <div className="flex space-x-2 justify-end items-center cursor-pointer mt-8">
-          <Image
+          <img
             src="/chef.gif" // Replace with the correct path to your GIF file
             alt="Your alt text"
             className="flex justify-center items-center ml-50 -mt-4"
