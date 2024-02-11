@@ -111,17 +111,27 @@ const BPCreateMealPlan = () => {
   const handleFileChange = (e) => {
     const files = e.target.files;
     const image = files[0];
-    const imageUrl = URL.createObjectURL(image);
-
-    const img = new Image();
-    img.src = imageUrl;
+    
+    const img = new window.Image(); // Use the native Image constructor
+  
+    // Set up onload event to execute when the image has finished loading
     img.onload = () => {
+      // Once the image has loaded, set the image size state
       setImageSize({ width: img.width, height: img.height });
     };
-
+  
+    // Set width and height properties explicitly to avoid missing "width" property error
+    img.width = 500; // Set a default width
+    img.height = 500; // Set a default height
+  
+    // Set the source of the image element to the loaded file object URL
+    img.src = URL.createObjectURL(image);
+  
     setSelectedImage(image);
     setAdjustingSize(true);
   };
+  
+  
   const handleFileInputChange = (e) => {
     handleFileChange(e);
   };
@@ -277,12 +287,12 @@ const BPCreateMealPlan = () => {
                   <label htmlFor="recipeImage" className="cursor-pointer">
                     <span className="mr-2 text-gray-500">Choose Image</span>
                     <input
-                      type="file"
-                      id="recipeImage"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={handleFileInputChange}
-                    />
+            type="file"
+            id="recipeImage"
+            accept="image/*" // Accept only image files
+            className="hidden"
+            onChange={handleFileInputChange}
+          />
                   </label>
                 )}
                 {/* Icon */}
@@ -303,15 +313,18 @@ const BPCreateMealPlan = () => {
             {selectedImage && (
               <>
                 <Image
-                  id="recipeImage"
                   src={URL.createObjectURL(selectedImage)}
                   alt="Recipe Image"
-                  className="w-full h-full object-cover -ml-2 rounded-[10px]"
+                  width={imageSize.width}
+                  height={imageSize.height}
+                  className="w-full h-full object-cover rounded-[10px]"
                 />
+
                 {/* Hide the "Choose File" button and icon */}
               </>
             )}
           </div>
+
           <div>
             {/* Change Picture button */}
             <button
