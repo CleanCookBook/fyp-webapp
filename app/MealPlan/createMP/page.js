@@ -287,12 +287,12 @@ const BPCreateMealPlan = () => {
                   <label htmlFor="recipeImage" className="cursor-pointer">
                     <span className="mr-2 text-gray-500">Choose Image</span>
                     <input
-            type="file"
-            id="recipeImage"
-            accept="image/*" // Accept only image files
-            className="hidden"
-            onChange={handleFileInputChange}
-          />
+                      type="file"
+                      id="recipeImage"
+                      accept="image/*" // Accept only image files
+                      className="hidden"
+                      onChange={handleFileInputChange}
+                    />
                   </label>
                 )}
                 {/* Icon */}
