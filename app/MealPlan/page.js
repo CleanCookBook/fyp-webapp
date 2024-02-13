@@ -20,7 +20,7 @@ const BPMealPlan = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/check-auth", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -46,7 +46,7 @@ const BPMealPlan = () => {
     const fetchMealPlans = async () => {
       try {
         // Make a request to your backend API to fetch meal plans based on the logged-in user
-        const response = await fetch("http://localhost:3001/api/mealPlan/name", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/mealPlan/name", {
           method: "GET",
           credentials: "include", // Include credentials if using cookies for authentication
         });

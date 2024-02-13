@@ -1,8 +1,8 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const BusinessPartnerSignup = () => {
   const userRole = 'system admin'; 
@@ -53,7 +53,7 @@ const BusinessPartnerSignup = () => {
 
 
     try {
-      const response = await fetch("http://localhost:3001/api/user/upload", {
+      const response = await fetch("https://cleancookbook.vercel.app/api/user/upload", {
         method: "POST",
         body: formData,
       })

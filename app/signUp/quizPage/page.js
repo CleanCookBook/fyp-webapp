@@ -131,7 +131,7 @@ const isNil4 = selectedDietMethods.includes("Nil");
 
     try {
       // Perform the HTTP POST request
-      const response = await fetch("http://localhost:3001/api/user/quiz", {
+      const response = await fetch("https://ccb-backendd.onrender.com/api/user/quiz", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -21,7 +21,7 @@ const CreateBPAnnouncement = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/check-auth", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -79,7 +79,7 @@ const CreateBPAnnouncement = () => {
 
     // Example: send formData to the server using fetch or axios
     try {
-      const response = await fetch("http://localhost:3001/api/announce/announcement", {
+      const response = await fetch("https://ccb-backendd.onrender.com/api/announce/announcement", {
         method: "POST",
         body: formData,
         credentials: "include",

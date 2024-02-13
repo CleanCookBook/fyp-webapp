@@ -22,7 +22,7 @@ const mpDescription = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/check-auth", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -48,7 +48,7 @@ const mpDescription = () => {
     const fetchUserType = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/user/userType",
+          "https://ccb-backendd.onrender.com/api/user/userType",
           {
             method: "POST",
             credentials: "include",
@@ -75,7 +75,7 @@ const mpDescription = () => {
       try {
         if (mealPlanName) {
           const response = await fetch(
-            `http://localhost:3001/api/mealPlan/${mealPlanName}`
+            `https://ccb-backendd.onrender.com/api/mealPlan/${mealPlanName}`
           );
           if (response.ok) {
             const data = await response.json();
@@ -103,7 +103,7 @@ const mpDescription = () => {
   const fetchMealPlanStatus = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/mealPlan/TrackStatus/${encodeURIComponent(
+        `https://ccb-backendd.onrender.com/api/mealPlan/TrackStatus/${encodeURIComponent(
           mealPlanName
         )}`,
         {
@@ -140,7 +140,7 @@ const mpDescription = () => {
   const handleStartMealPlan = async () => {
     try {
       // Update the "MealPlanTrack" table
-      const response = await fetch("http://localhost:3001/api/registration", {
+      const response = await fetch("https://ccb-backendd.onrender.com/api/registration", {
         method: "POST",
         credentials: "include",
         headers: {

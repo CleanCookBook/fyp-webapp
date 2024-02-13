@@ -22,7 +22,7 @@ const mpfirst = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/check-auth", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -47,7 +47,7 @@ const mpfirst = () => {
   // Function to fetch meal plan options from the backend
   const fetchMealPlans = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/mealPlan/Fp");
+      const response = await fetch("https://ccb-backendd.onrender.com/api/mealPlan/Fp");
       const data = await response.json();
 
       // Check if data.mealPlans is an array
@@ -86,7 +86,7 @@ const mpfirst = () => {
       const fetchPaymentStatus = async () => {
         try {
           // Fetch payment status from the server
-          const response = await fetch("http://localhost:3001/api/payment/status", {
+          const response = await fetch("https://ccb-backendd.onrender.com/api/payment/status", {
             method: "GET",
             credentials: "include", // Include credentials to send cookies with the request
           });

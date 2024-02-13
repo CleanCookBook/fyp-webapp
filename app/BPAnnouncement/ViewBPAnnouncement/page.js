@@ -51,7 +51,7 @@ const ViewBPAnnouncement = () => {
     const fetchData = async () => {
       try {
         const authResponse = await fetch(
-          "http://localhost:3001/api/check-auth",
+          "https://ccb-backendd.onrender.com/api/check-auth",
           {
             method: "GET",
             credentials: "include",
@@ -63,7 +63,7 @@ const ViewBPAnnouncement = () => {
           setLoading(false);
 
           // Fetch user ID
-          const userResponse = await fetch("http://localhost:3001/api/userID", {
+          const userResponse = await fetch("https://ccb-backendd.onrender.com/api/userID", {
             method: "GET",
             credentials: "include",
           });
@@ -78,7 +78,7 @@ const ViewBPAnnouncement = () => {
 
           // Fetch user type
           const userTypeResponse = await fetch(
-            "http://localhost:3001/api/user/userType",
+            "https://ccb-backendd.onrender.com/api/user/userType",
             {
               method: "POST",
               credentials: "include",
@@ -97,7 +97,7 @@ const ViewBPAnnouncement = () => {
 
           // Fetch announcement file
           const announcementFileResponse = await fetch(
-            `http://localhost:3001/api/announce/getAnnouncementFile/${name}`,
+            `https://ccb-backendd.onrender.com/api/announce/getAnnouncementFile/${name}`,
             {
               credentials: "include",
             }
@@ -115,7 +115,7 @@ const ViewBPAnnouncement = () => {
 
           // Fetch comments
           const commentsResponse = await fetch(
-            `http://localhost:3001/api/comments/${name}`
+            `https://ccb-backendd.onrender.com/api/comments/${name}`
           );
 
           if (commentsResponse.ok) {
@@ -130,7 +130,7 @@ const ViewBPAnnouncement = () => {
 
           // Fetch like count
           const likeCountResponse = await fetch(
-            `http://localhost:3001/api/comments/likeCount/${name}`
+            `https://ccb-backendd.onrender.com/api/comments/likeCount/${name}`
           );
 
           if (likeCountResponse.ok) {
@@ -145,7 +145,7 @@ const ViewBPAnnouncement = () => {
 
           // Fetch like status
           const likeStatusResponse = await fetch(
-            `http://localhost:3001/api/comments/likeStatus/${name}`,
+            `https://ccb-backendd.onrender.com/api/comments/likeStatus/${name}`,
             {
               credentials: "include",
             }
@@ -175,7 +175,7 @@ const ViewBPAnnouncement = () => {
 
   const handleLikeClick = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/comments/like", {
+      const response = await fetch("https://ccb-backendd.onrender.com/api/comments/like", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -265,7 +265,7 @@ const ViewBPAnnouncement = () => {
     try {
       // Make a DELETE request to the backend API
       const deleteResponse = await fetch(
-        `http://localhost:3001/api/comments/${commentId}`,
+        `https://ccb-backendd.onrender.com/api/comments/${commentId}`,
         {
           method: "DELETE",
           credentials: "include", // Include credentials for cookie authentication
@@ -292,7 +292,7 @@ const ViewBPAnnouncement = () => {
   const handleSubmitReply = async (commentId, userId,name, reply,replyText) => {
     try {
       // Fetch the user ID from /api/userID
-      const userResponse = await fetch("http://localhost:3001/api/userID", {
+      const userResponse = await fetch("https://ccb-backendd.onrender.com/api/userID", {
         method: "GET",
         credentials: "include", // Include credentials for cookie authentication
       });
@@ -339,7 +339,7 @@ const ViewBPAnnouncement = () => {
   const fetchReplies = async (commentId) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/replyComment/${commentId}`
+        `https://ccb-backendd.onrender.com/api/replyComment/${commentId}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch replies");

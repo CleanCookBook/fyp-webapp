@@ -30,7 +30,7 @@ const EditBPInfo = () => {
     const fetchUserDetails = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/api/edit/partner/change/${UserID}`
+          `https://cleancookbook.vercel.app/api/edit/partner/change/${UserID}`
         );
         const data = await response.json();
 
@@ -84,7 +84,7 @@ const EditBPInfo = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3001/api/edit/partner/upload/${UserID}`,
+        `https://cleancookbook.vercel.app/api/edit/partner/upload/${UserID}`,
         {
           method: "PUT",
           body: formData,

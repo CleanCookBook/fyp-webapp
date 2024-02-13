@@ -20,7 +20,7 @@ function SysAdminViewPartnerInfo() {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/check-auth", {
+        const response = await fetch("https://cleancookbook.vercel.app/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -45,7 +45,7 @@ function SysAdminViewPartnerInfo() {
   useEffect(() => {
     const fetchPartnerInfo = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/user/partnerInfo");
+        const response = await fetch("https://cleancookbook.vercel.app/api/user/partnerInfo");
         const data = await response.json();
         setPartnersInfo(data);
       } catch (error) {

@@ -23,7 +23,7 @@ const customized = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/check-auth", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -50,7 +50,7 @@ const customized = () => {
   const fetchIngredientsAndInstruction = async (recipeName) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/editRecipe/changed/${recipeName}`
+        `https://ccb-backendd.onrender.com/api/editRecipe/changed/${recipeName}`
       );
       const data = await response.json();
 
@@ -77,7 +77,7 @@ const customized = () => {
   const fetchUserType = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3001/api/user/userType",
+        "https://ccb-backendd.onrender.com/api/user/userType",
         {
           method: "POST",
           credentials: "include",
@@ -97,7 +97,7 @@ const customized = () => {
   const fetchRecipeDetails = async (recipeName) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/recipe/${recipeName}`
+        `https://ccb-backendd.onrender.com/api/recipe/${recipeName}`
       );
       const data = await response.json();
 

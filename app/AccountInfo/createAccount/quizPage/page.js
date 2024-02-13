@@ -1,7 +1,7 @@
 "use client";
-import Link from "next/link";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -133,7 +133,7 @@ const handleSubmit = async () => {
 
 try {
   // Perform the HTTP POST request
-  const response = await fetch("http://localhost:3001/api/user/quiz", {
+  const response = await fetch("https://cleancookbook.vercel.app/api/user/quiz", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

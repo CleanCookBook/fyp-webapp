@@ -140,7 +140,7 @@ const EditInfo = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3001/api/edit/update-AboutMe/${userID}`,
+        `https://cleancookbook.vercel.app/api/edit/update-AboutMe/${userID}`,
         {
           method: "POST",
           headers: {
@@ -181,7 +181,7 @@ const EditInfo = () => {
     const fetchUserData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/api/edit/userInfo/${userID}`,
+          `https://cleancookbook.vercel.app/api/edit/userInfo/${userID}`,
           {
             method: "GET",
             headers: {

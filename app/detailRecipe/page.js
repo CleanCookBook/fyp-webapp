@@ -29,7 +29,7 @@ const RecipeDetails = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/check-auth", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -71,7 +71,7 @@ const RecipeDetails = () => {
       if (isFavorite) {
         // If it's already red, remove from favorites
         const removeFavoriteResponse = await fetch(
-          "http://localhost:3001/api/bookmark/removeFavorite",
+          "https://ccb-backendd.onrender.com/api/bookmark/removeFavorite",
           {
             method: "POST",
             credentials: "include",
@@ -98,7 +98,7 @@ const RecipeDetails = () => {
       } else {
         // If it's not red, insert into favorites (similar to your existing logic)
         const insertBookmarkResponse = await fetch(
-          "http://localhost:3001/api/bookmark/favorite",
+          "https://ccb-backendd.onrender.com/api/bookmark/favorite",
           {
             method: "POST",
             credentials: "include",
@@ -145,7 +145,7 @@ const RecipeDetails = () => {
     const fetchUserType = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/user/userType",
+          "https://ccb-backendd.onrender.com/api/user/userType",
           {
             method: "POST",
             credentials: "include",
@@ -169,7 +169,7 @@ const RecipeDetails = () => {
       try {
         setIsLoading(true);
         const response = await fetch(
-          `http://localhost:3001/api/recipe/${recipeName}`
+          `https://ccb-backendd.onrender.com/api/recipe/${recipeName}`
         );
         const data = await response.json();
 
@@ -192,7 +192,7 @@ const RecipeDetails = () => {
             cookingTime: data.cTime,
           });
           const checkFavoriteResponse = await fetch(
-            "http://localhost:3001/api/bookmark/isFavorite",
+            "https://ccb-backendd.onrender.com/api/bookmark/isFavorite",
             {
               method: "POST",
               credentials: "include",

@@ -19,7 +19,7 @@ const FavoritePage = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/check-auth", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -45,7 +45,7 @@ const FavoritePage = () => {
     try {
       setIsLoading(true);
       
-      const response = await fetch("http://localhost:3001/api/bookmark/username", {
+      const response = await fetch("https://ccb-backendd.onrender.com/api/bookmark/username", {
         method: "GET",
         credentials: "include",
       });
@@ -69,7 +69,7 @@ const FavoritePage = () => {
     try {
       setIsLoading(true);
 
-      const response = await fetch("http://localhost:3001/api/bookmark/showFavorites", {
+      const response = await fetch("https://ccb-backendd.onrender.com/api/bookmark/showFavorites", {
         method: "GET",
         credentials: "include",  // Include credentials (cookies) in the request
       });

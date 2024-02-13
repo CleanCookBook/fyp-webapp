@@ -12,7 +12,7 @@ const NewsDetail = () => {
     // Fetch the specific news item based on the ID
     const fetchNewsItem = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/news/${id}`);
+        const response = await fetch(`https://ccb-backendd.onrender.com/api/news/${id}`);
         const data = await response.json();
         setNewsItem(data);
       } catch (error) {
