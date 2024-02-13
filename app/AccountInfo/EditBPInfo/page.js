@@ -84,7 +84,7 @@ const EditBPInfo = () => {
 
     try {
       const response = await fetch(
-        `https://ccb-backendd.onrender.com//api/edit/partner/upload/${UserID}`,
+        `https://ccb-backendd.onrender.com/api/edit/partner/upload/${UserID}`,
         {
           method: "PUT",
           body: formData,

@@ -181,7 +181,7 @@ const EditInfo = () => {
     const fetchUserData = async () => {
       try {
         const response = await fetch(
-          `https://ccb-backendd.onrender.com//api/edit/userInfo/${userID}`,
+          `https://ccb-backendd.onrender.com/api/edit/userInfo/${userID}`,
           {
             method: "GET",
             headers: {

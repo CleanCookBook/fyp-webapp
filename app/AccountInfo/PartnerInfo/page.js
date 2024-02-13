@@ -45,7 +45,7 @@ function SysAdminViewPartnerInfo() {
   useEffect(() => {
     const fetchPartnerInfo = async () => {
       try {
-        const response = await fetch("https://ccb-backendd.onrender.com//api/user/partnerInfo");
+        const response = await fetch("https://ccb-backendd.onrender.com/api/user/partnerInfo");
         const data = await response.json();
         setPartnersInfo(data);
       } catch (error) {

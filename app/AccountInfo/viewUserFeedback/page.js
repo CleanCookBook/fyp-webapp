@@ -19,7 +19,7 @@ const ViewUserFeedback = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("https://cleancookbook.vercel.app/api/check-auth", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -44,7 +44,7 @@ const ViewUserFeedback = () => {
   useEffect(() => {
     const fetchFeedback = async () => {
       try {
-        const response = await fetch("https://cleancookbook.vercel.app/api/feedback/user-feedback");
+        const response = await fetch("https://ccb-backendd.onrender.com/api/feedback/user-feedback");
         const data = await response.json();
         setUserFeedback(data); // Update state to store user feedback
       } catch (error) {

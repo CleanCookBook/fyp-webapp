@@ -20,7 +20,7 @@ const SysAdminReviewApp = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("https://ccb-backendd.onrender.com//api/check-auth", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -47,7 +47,7 @@ const SysAdminReviewApp = () => {
     const fetchPartnerInfo = async () => {
       try {
         const response = await fetch(
-          "https://ccb-backendd.onrender.com//api/user/ReviewInfo"
+          "https://ccb-backendd.onrender.com/api/user/ReviewInfo"
         );
         const data = await response.json();
         setPartnersInfo(data);
@@ -62,7 +62,7 @@ const SysAdminReviewApp = () => {
   const handleEdit = async (userId) => {
     try {
       const response = await fetch(
-        `https://ccb-backendd.onrender.com//api/edit/approve/${userId}`,
+        `https://ccb-backendd.onrender.com/api/edit/approve/${userId}`,
         {
           method: "PATCH", // Use PATCH method for updating
           method: "PATCH", // Use PATCH method for updating

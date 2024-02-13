@@ -14,7 +14,7 @@ const About = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("https://cleancookbook.vercel.app/api/check-auth", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
