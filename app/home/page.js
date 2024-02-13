@@ -20,7 +20,7 @@ const Homepage = () => {
     // Fetch user details including paid/unpaid status
     const fetchUserDetails = async () => {
       try {
-        const response = await fetch("https://ccb-backendd.onrender.com/api/payment/search", {
+        const response = await fetch("http://localhost:3001/api/payment/search", {
           method: "GET",
           credentials: "include",
         });
@@ -44,14 +44,15 @@ const Homepage = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
+        const response = await fetch("https://cleancookbook.vercel.app/api/check-auth", {
           method: "GET",
-          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
-
+  
         if (response.ok) {
           setIsAuthenticated(true);
-          
         } else {
           router.push('/loginPage');
         }
@@ -62,12 +63,12 @@ const Homepage = () => {
         setIsLoading(false);
       }
     };
-
+  
     checkAuthentication();
   }, [router]);
   const updateSearchCount = async () => {
     try {
-      const response = await fetch("https://ccb-backendd.onrender.com/api/payment/update-search-count", {
+      const response = await fetch("https://cleancookbook.vercel.app/api/payment/update-search-count", {
         method: "POST",
         credentials: "include",
       });
@@ -131,7 +132,7 @@ const Homepage = () => {
 
     // Fetch data from the API endpoint
     const encodedQuery = encodeURIComponent(searchQuery);
-    const response = await fetch(`https://ccb-backendd.onrender.com/api/recipe/search?query=${encodedQuery}`);
+    const response = await fetch(`https://fyp-webapp-six.vercel.app/api/recipe/search?query=${encodedQuery}`);
     const data = await response.json();
   
     console.log('API Response:', data); // Add this line
