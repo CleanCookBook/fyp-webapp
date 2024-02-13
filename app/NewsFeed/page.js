@@ -78,7 +78,7 @@ const NewsFeed = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/check-auth", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -104,7 +104,7 @@ const NewsFeed = () => {
   useEffect(() => {
     const fetchNewsData = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/news");
+        const response = await fetch("https://ccb-backendd.onrender.com/api/news");
         const data = await response.json();
         console.log("API Response:", data);
 
