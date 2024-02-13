@@ -83,7 +83,7 @@ const editNutriFav = () => {
   const handleNext = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/recipe/updating/${recipeName}`,
+        `https://ccb-backendd.onrender.com/recipe/updating/${recipeName}`,
         {
           method: "POST",
           headers: {
@@ -128,7 +128,7 @@ const editNutriFav = () => {
     const fetchUserType = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/user/userType",
+          "https://ccb-backendd.onrender.com/api/user/userType",
           {
             method: "POST",
             credentials: "include",
@@ -149,7 +149,7 @@ const editNutriFav = () => {
     const fetchRecipeDetails = async () => {
         try {
           const response = await fetch(
-            `http://localhost:3001/api/recipe/${recipeName}`
+            `https://ccb-backendd.onrender.com/api/recipe/${recipeName}`
           );
       
           if (response.ok) {
