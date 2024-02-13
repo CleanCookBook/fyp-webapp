@@ -48,9 +48,10 @@ const Homepage = () => {
           method: "GET",
           credentials: "include",
         });
-  
+
         if (response.ok) {
           setIsAuthenticated(true);
+          
         } else {
           router.push('/loginPage');
         }
@@ -61,9 +62,10 @@ const Homepage = () => {
         setIsLoading(false);
       }
     };
-  
+
     checkAuthentication();
   }, [router]);
+
   const updateSearchCount = async () => {
     try {
       const response = await fetch("https://ccb-backendd.onrender.com/api/payment/update-search-count", {
