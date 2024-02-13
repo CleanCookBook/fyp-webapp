@@ -83,7 +83,7 @@ const editNutriFav = () => {
   const handleNext = async () => {
     try {
       const response = await fetch(
-        `https://ccb-backendd.onrender.com/recipe/updating/${recipeName}`,
+        `https://ccb-backendd.onrender.com/api/recipe/updating/${recipeName}`,
         {
           method: "POST",
           headers: {
