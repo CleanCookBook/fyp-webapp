@@ -18,7 +18,7 @@ const Login = () => {
     try {
       setLoading(true);
 
-      const response = await fetch("hhttps://cleancookbook.vercel.app/api/login", {
+      const response = await fetch("https://cleancookbook.vercel.app/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,6 +29,7 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("Login successful:", data);
+        localStorage.setItem("token", data.token);
         setIsAuthenticated(true);
         console.log("UserType:", data.userType);
         console.log("Status:", data.status);
