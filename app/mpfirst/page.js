@@ -31,7 +31,7 @@ const mpfirst = () => {
           setIsAuthenticated(true);
           
         } else {
-          router.push('/loginPage');
+          router.push('https://cleancookbook.vercel.app/loginPage');
         }
       } catch (error) {
         console.error('Error during authentication check:', error.message);
