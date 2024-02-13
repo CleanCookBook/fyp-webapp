@@ -21,7 +21,7 @@ const SysAdminViewPartner = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("https://ccb-backendd.onrender.com//api/check-auth", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -50,7 +50,7 @@ const SysAdminViewPartner = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("https://ccb-backendd.onrender.com//api/user/partner");
+        const response = await fetch("https://ccb-backendd.onrender.com/api/user/partner");
         const data = await response.json();
         setUsers(data);
       } catch (error) {
@@ -70,7 +70,7 @@ const SysAdminViewPartner = () => {
   const handleDeleteConfirm = async () => {
     try {
       const response = await fetch(
-        `https://ccb-backendd.onrender.com//api/edit/partner/${selectedUsers.UserID}`,
+        `https://ccb-backendd.onrender.com/api/edit/partner/${selectedUsers.UserID}`,
         {
           method: "DELETE",
         }
