@@ -29,7 +29,7 @@ const Confirmation = () => {
   const createUserAccount = async () => {
     if (isChecked) {
       try {
-        const response = await fetch('https://ccb-backendd.onrender.com//api/user/create-account', {
+        const response = await fetch('https://ccb-backendd.onrender.com/api/user/create-account', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const Confirmation = () => {
     // Implement the API call for creating a nutritionist account
     // Adjust the API endpoint and request format accordingly
     try {
-      const response = await fetch('https://ccb-backendd.onrender.com//api/user/create-account-n', {
+      const response = await fetch('https://ccb-backendd.onrender.com/api/user/create-account-n', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
