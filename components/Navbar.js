@@ -17,7 +17,7 @@ const Navbar = ({ userRole }) => {
   const handleLogout = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:3001/api/logout", {
+      const response = await fetch("https://cleancookbook.vercel.app/api/logout", {
         method: "GET",
         credentials: "include",
       });
