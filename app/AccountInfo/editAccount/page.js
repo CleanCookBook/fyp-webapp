@@ -69,7 +69,7 @@ const EditSysAccount = () => {
 
     try {
       const response = await fetch(
-        "https://cleancookbook.vercel.app/api/edit/update-profile",
+        "https://ccb-backendd.onrender.com//api/edit/update-profile",
         {
           method: "POST",
           headers: {
@@ -114,7 +114,7 @@ const EditSysAccount = () => {
         }
 
         const response = await fetch(
-          `https://cleancookbook.vercel.app/api/edit/${userID}`
+          `https://ccb-backendd.onrender.com//api/edit/${userID}`
         );
         const data = await response.json();
 

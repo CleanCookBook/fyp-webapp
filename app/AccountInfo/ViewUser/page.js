@@ -52,7 +52,7 @@ const SysAdminViewUser = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      const response = await fetch(`https://cleancookbook.vercel.app/api/edit/${selectedUser.UserID}`, {
+      const response = await fetch(`https://ccb-backendd.onrender.com/api/edit/${selectedUser.UserID}`, {
         method: 'DELETE',
       });
   
