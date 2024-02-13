@@ -20,7 +20,7 @@ const Homepage = () => {
     // Fetch user details including paid/unpaid status
     const fetchUserDetails = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/payment/search", {
+        const response = await fetch("https://cleancookbook.vercel.app/api/payment/search", {
           method: "GET",
           credentials: "include",
         });
@@ -132,7 +132,7 @@ const Homepage = () => {
 
     // Fetch data from the API endpoint
     const encodedQuery = encodeURIComponent(searchQuery);
-    const response = await fetch(`https://fyp-webapp-six.vercel.app/api/recipe/search?query=${encodedQuery}`);
+    const response = await fetch(`https://cleancookbook.vercel.app/api/recipe/search?query=${encodedQuery}`);
     const data = await response.json();
   
     console.log('API Response:', data); // Add this line
