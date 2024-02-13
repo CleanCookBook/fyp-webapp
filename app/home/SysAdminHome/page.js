@@ -25,7 +25,7 @@ const SysAdminHome = () => {
           setIsAuthenticated(true);
           
         } else {
-          router.push('https://ccb-backendd.onrender.com/loginPage');
+          router.push('https://cleancookbook.vercel.app/loginPage');
         }
       } catch (error) {
         console.error('Error during authentication check:', error.message);
