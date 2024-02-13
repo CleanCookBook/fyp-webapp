@@ -60,7 +60,7 @@ const AboutMe = () => {
         });
       } else if (response.status === 401) {
         console.error("Unauthorized access");
-        router.push("/loginPage");
+        router.push("https://cleancookbook.vercel.app/loginPage");
       } else {
         console.error("Failed to fetch user data");
       }

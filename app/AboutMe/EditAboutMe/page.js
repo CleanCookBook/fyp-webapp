@@ -33,7 +33,7 @@ const EditAboutMe = () => {
             setIsAuthenticated(true);
             
           } else {
-            router.push('/loginPage');
+            router.push('https://cleancookbook.vercel.app/loginPage');
           }
         } catch (error) {
           console.error('Error during authentication check:', error.message);
@@ -147,7 +147,7 @@ const EditAboutMe = () => {
         };
       
         try {
-          const response = await fetch("https://cleancookbook.vercel.app/api/aboutme/update-aboutme", {
+          const response = await fetch("https://ccb-backendd.onrender.com/api/aboutme/update-aboutme", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -184,7 +184,7 @@ useEffect(() => {
 useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("https://cleancookbook.vercel.app/api/aboutme", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/aboutme", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
