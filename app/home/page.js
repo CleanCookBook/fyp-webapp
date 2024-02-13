@@ -53,7 +53,7 @@ const Homepage = () => {
           setIsAuthenticated(true);
           
         } else {
-          router.push('/loginPage');
+          router.push('https://ccb-backendd.onrender.com/loginPage');
         }
       } catch (error) {
         console.error('Error during authentication check:', error.message);
