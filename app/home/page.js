@@ -46,9 +46,7 @@ const Homepage = () => {
       try {
         const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          credentials: "include",
         });
   
         if (response.ok) {
