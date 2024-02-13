@@ -29,7 +29,6 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("Login successful:", data);
-        localStorage.setItem("token", data.token);
         setIsAuthenticated(true);
         console.log("UserType:", data.userType);
         console.log("Status:", data.status);
