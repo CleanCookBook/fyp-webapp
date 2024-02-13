@@ -48,7 +48,7 @@ const Accountpage = () => {
     const fetchUserType = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/user/userType",
+          "https://ccb-backendd.onrender.com/user/userType",
           {
             method: "POST",
             credentials: "include",
@@ -74,7 +74,7 @@ const Accountpage = () => {
     try {
       setIsLoading(true);
 
-      const response = await fetch("http://localhost:3001/api/profile", {
+      const response = await fetch("https://ccb-backendd.onrender.com/api/profile", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -119,7 +119,7 @@ const Accountpage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3001/api/profile/verify-password", {
+      const response = await fetch("https://ccb-backendd.onrender.com/api/profile/verify-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
