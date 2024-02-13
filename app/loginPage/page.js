@@ -1,7 +1,7 @@
 "use client";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Image from "next/image";
 import Link from "next/link";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -18,7 +18,7 @@ const Login = () => {
     try {
       setLoading(true);
 
-      const response = await fetch("https://ccb-backendd.onrender.com/api/login", {
+      const response = await fetch("hhttps://cleancookbook.vercel.app/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
