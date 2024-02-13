@@ -53,7 +53,7 @@ const BusinessPartnerSignup = () => {
 
 
     try {
-      const response = await fetch("https://ccb-backendd.onrender.com//api/user/upload", {
+      const response = await fetch("https://ccb-backendd.onrender.com/api/user/upload", {
         method: "POST",
         body: formData,
       })
