@@ -20,7 +20,7 @@ const AnnouncementsPage = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/check-auth", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -46,7 +46,7 @@ const AnnouncementsPage = () => {
     const fetchUserType = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/user/userType",
+          "https://ccb-backendd.onrender.com/api/user/userType",
           {
             method: "POST",
             credentials: "include",
@@ -70,9 +70,9 @@ const AnnouncementsPage = () => {
         try {
           let apiUrl = "";
           if (userRole === "nutritionist") {
-            apiUrl = "http://localhost:3001/api/announce/user-announcements";
+            apiUrl = "https://ccb-backendd.onrender.com/api/announce/user-announcements";
           } else {
-            apiUrl = "http://localhost:3001/api/announce/all-announcements";
+            apiUrl = "https://ccb-backendd.onrender.com/api/announce/all-announcements";
           }
   
           const response = await fetch(apiUrl, {
@@ -116,7 +116,7 @@ const AnnouncementsPage = () => {
     const fetchPaymentStatus = async () => {
       try {
         // Fetch payment status from the server
-        const response = await fetch("http://localhost:3001/api/payment/status", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/payment/status", {
           method: "GET",
           credentials: "include", // Include credentials to send cookies with the request
         });

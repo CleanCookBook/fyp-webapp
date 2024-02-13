@@ -22,7 +22,7 @@ const SysAdminViewUser = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/check-auth", {
+        const response = await fetch("https://cleancookbook.vercel.app/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -52,7 +52,7 @@ const SysAdminViewUser = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/edit/${selectedUser.UserID}`, {
+      const response = await fetch(`https://cleancookbook.vercel.app/api/edit/${selectedUser.UserID}`, {
         method: 'DELETE',
       });
   
@@ -82,7 +82,7 @@ const SysAdminViewUser = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/user");
+        const response = await fetch("https://cleancookbook.vercel.app/api/user");
         const data = await response.json();
         setUsers(data);
       } catch (error) {

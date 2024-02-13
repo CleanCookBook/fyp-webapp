@@ -19,7 +19,7 @@ const Payment = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/check-auth", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -44,7 +44,7 @@ const Payment = () => {
   useEffect(() => {
     const fetchPaymentStatus = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/payment/status", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/payment/status", {
           method: "GET",
           credentials: "include",
         });
@@ -111,7 +111,7 @@ const Payment = () => {
           setPaymentStatus("premium");
 
           // Send a POST request to backend to update payment status
-          const response = await fetch('http://localhost:3001/api/payment/updatePaidStatus', {
+          const response = await fetch('https://ccb-backendd.onrender.com/api/payment/updatePaidStatus', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

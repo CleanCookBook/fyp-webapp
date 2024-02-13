@@ -54,7 +54,7 @@ const TermsCon = () => {
     // Implement the API call for creating a nutritionist account
     // Adjust the API endpoint and request format accordingly
     try {
-      const response = await fetch('http://localhost:3001/api/user/create-account-n', {
+      const response = await fetch('https://ccb-backendd.onrender.com/api/user/create-account-n', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

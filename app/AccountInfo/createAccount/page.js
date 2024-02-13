@@ -1,10 +1,10 @@
 "use client";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const createAccount = () => {
   const userRole = 'system admin';  
@@ -77,7 +77,7 @@ const createAccount = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3001/api/user/signup", {
+      const response = await fetch("https://ccb-backendd.onrender.com/api/user/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

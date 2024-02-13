@@ -18,7 +18,7 @@ const videos = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/check-auth", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -45,7 +45,7 @@ const videos = () => {
     const fetchVideos = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/healthy-videos"
+          "https://ccb-backendd.onrender.com/api/healthy-videos"
         );
         const data = await response.json();
 
@@ -80,7 +80,7 @@ const videos = () => {
     const fetchPaymentStatus = async () => {
       try {
         // Fetch payment status from the server
-        const response = await fetch("http://localhost:3001/api/payment/status", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/payment/status", {
           method: "GET",
           credentials: "include", // Include credentials to send cookies with the request
         });

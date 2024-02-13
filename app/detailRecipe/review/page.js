@@ -39,7 +39,7 @@ const Review = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/check-auth", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
           method: "GET",
           credentials: "include",
         });
@@ -64,7 +64,7 @@ const Review = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userResponse = await fetch("http://localhost:3001/api/userID", {
+        const userResponse = await fetch("https://ccb-backendd.onrender.com/api/userID", {
           method: "GET",
           credentials: "include",
         });
@@ -89,7 +89,7 @@ const Review = () => {
     const fetchUserType = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/user/userType",
+          "https://ccb-backendd.onrender.com/api/user/userType",
           {
             method: "POST",
             credentials: "include",
@@ -304,7 +304,7 @@ const Review = () => {
   // Function to fetch replies for a specific review
   const fetchReplies = async (reviewId) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/reply/${reviewId}`);
+      const response = await fetch(`https://ccb-backendd.onrender.com/api/reply/${reviewId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch replies');
       }

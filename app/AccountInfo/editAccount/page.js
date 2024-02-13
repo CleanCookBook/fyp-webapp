@@ -69,7 +69,7 @@ const EditSysAccount = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:3001/api/edit/update-profile",
+        "https://cleancookbook.vercel.app/api/edit/update-profile",
         {
           method: "POST",
           headers: {
@@ -114,7 +114,7 @@ const EditSysAccount = () => {
         }
 
         const response = await fetch(
-          `http://localhost:3001/api/edit/${userID}`
+          `https://cleancookbook.vercel.app/api/edit/${userID}`
         );
         const data = await response.json();
 

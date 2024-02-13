@@ -21,7 +21,7 @@ const ViewRecipePage = () => {
   useEffect(() => {
       const checkAuthentication = async () => {
         try {
-          const response = await fetch("http://localhost:3001/api/check-auth", {
+          const response = await fetch("https://ccb-backendd.onrender.com/api/check-auth", {
             method: "GET",
             credentials: "include",
           });
@@ -47,7 +47,7 @@ const ViewRecipePage = () => {
     const fetchUserRecipes = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/recipe/user-recipes",
+          "https://ccb-backendd.onrender.com/api/recipe/user-recipes",
           {
             credentials: "include",
           }
@@ -87,7 +87,7 @@ const ViewRecipePage = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/editRecipe/${selectedRecipe.Rname}`, {
+      const response = await fetch(`https://ccb-backendd.onrender.com/api/editRecipe/${selectedRecipe.Rname}`, {
         method: "DELETE",
       });
   

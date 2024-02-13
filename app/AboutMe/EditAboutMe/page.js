@@ -24,7 +24,7 @@ const EditAboutMe = () => {
     useEffect(() => {
       const checkAuthentication = async () => {
         try {
-          const response = await fetch("http://localhost:3001/api/check-auth", {
+          const response = await fetch("https://cleancookbook.vercel.app/api/check-auth", {
             method: "GET",
             credentials: "include",
           });
@@ -147,7 +147,7 @@ const EditAboutMe = () => {
         };
       
         try {
-          const response = await fetch("http://localhost:3001/api/aboutme/update-aboutme", {
+          const response = await fetch("https://cleancookbook.vercel.app/api/aboutme/update-aboutme", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -184,7 +184,7 @@ useEffect(() => {
 useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/aboutme", {
+        const response = await fetch("https://cleancookbook.vercel.app/api/aboutme", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
