@@ -17,7 +17,7 @@ const Navbar = ({ userRole }) => {
   const handleLogout = async () => {
     setLoading(true);
     try {
-      const response = await fetch("https://cleancookbook.vercel.app/api/logout", {
+      const response = await fetch("https://ccb-backendd.onrender.com/api/logout", {
         method: "GET",
         credentials: "include",
       });
