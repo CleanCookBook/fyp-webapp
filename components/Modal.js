@@ -21,7 +21,7 @@ const Modal = ({ onClose }) => {
         calories: calories,
       });
   
-      const url = `http://localhost:3001/api/filter?${params}`;
+      const url = `https://ccb-backendd.onrender.com/api/filter?${params}`;
   
       const response = await fetch(url);
       if (!response.ok) {
