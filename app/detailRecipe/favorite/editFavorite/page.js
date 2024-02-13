@@ -49,7 +49,7 @@ const editFavorite = () => {
   const fetchRecipeDetails = async (recipeName) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/bookmark/${recipeName}`,
+        `https://ccb-backendd.onrender.com/api/bookmark/${recipeName}`,
         {
           credentials: "include", // Include credentials (cookies) in the request
         }
@@ -88,7 +88,7 @@ const editFavorite = () => {
       });
   
       const response = await fetch(
-        `http://localhost:3001/api/bookmark/updating/${recipeName}`,
+        `https://ccb-backendd.onrender.com/api/bookmark/updating/${recipeName}`,
         {
           method: "POST",
           headers: {
@@ -131,7 +131,7 @@ const editFavorite = () => {
     const fetchUserType = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/user/userType",
+          "https://ccb-backendd.onrender.com/api/user/userType",
           {
             method: "POST",
             credentials: "include",
@@ -152,7 +152,7 @@ const editFavorite = () => {
     const fetchRecipeDetails = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/api/recipe/${recipeName}`
+          `https://ccb-backendd.onrender.com/api/recipe/${recipeName}`
         );
         const data = await response.json();
 
@@ -175,7 +175,7 @@ const editFavorite = () => {
             cookingTime: data.cTime,
           });
           const checkFavoriteResponse = await fetch(
-            "http://localhost:3001/api/bookmark/isFavorite",
+            "https://ccb-backendd.onrender.com/api/bookmark/isFavorite",
             {
               method: "POST",
               credentials: "include",
