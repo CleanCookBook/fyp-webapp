@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 
 const ResetPasswordForm = () => {
-  const userRole = 'user';
+  const [userRole, setUserRole] = useState("user");
   const router = useRouter();
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -51,6 +51,32 @@ const ResetPasswordForm = () => {
     username: "",
     name : "",
   })
+
+  useEffect(() => {
+    const fetchUserType = async () => {
+      try {
+        const response = await fetch(
+          "https://ccb-backendd.onrender.com/user/userType",
+          {
+            method: "POST",
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserRole(data.userType || "user"); // Set the userRole based on the response
+        } else {
+          console.error("Error fetching user type:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching user type:", error.message);
+      }
+    };
+
+    // Fetch user type when the component mounts
+    fetchUserType();
+  }, []);
 
   const submitForm = async (e) => {
     e.preventDefault();
