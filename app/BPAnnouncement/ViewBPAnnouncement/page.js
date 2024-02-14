@@ -199,15 +199,6 @@ const ViewBPAnnouncement = () => {
     }
   };
 
-  const handleReplyClick = async (comment) => {
-    setReplyingToCommentId(comment.commentId);
-    // Use 'reviewID' instead of 'reviewId'
-    setSelectedUsername(comment.Username);
-    setReplyText(`${comment.comment}`);
-    setReply("");
-    setShowReplyBox(true);
-    setCommentId(comment.commentId);
-  };
 
   const handleSubmitComment = async () => {
     try {

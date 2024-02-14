@@ -30,7 +30,7 @@ const EditBPInfo = () => {
     const fetchUserDetails = async () => {
       try {
         const response = await fetch(
-          `https://ccb-backendd.onrender.com//api/edit/partner/change/${UserID}`
+          `https://ccb-backendd.onrender.com/api/edit/partner/change/${UserID}`
         );
         const data = await response.json();
 

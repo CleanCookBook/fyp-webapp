@@ -123,7 +123,7 @@ router.post('/update-search-count', isAuthenticated, async (req, res) => {
   }
 });
 
-module.exports = router;
+  module.exports = router;
 
 
 
