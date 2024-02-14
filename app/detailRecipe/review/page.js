@@ -184,7 +184,7 @@ const Review = () => {
   const handleSubmitReview = async () => {
     try {
       // Fetch the user ID from /api/userID
-      const userResponse = await fetch("http://localhost:3001/api/userID", {
+      const userResponse = await fetch("https://ccb-backendd.onrender.com/api/userID", {
         method: "GET",
         credentials: "include", // Include credentials for cookie authentication
       });
@@ -198,7 +198,7 @@ const Review = () => {
       const userId = userData.user.UserID;
 
       // Use the fetch API to submit the review
-      const reviewResponse = await fetch("http://localhost:3001/api/reviews", {
+      const reviewResponse = await fetch("https://ccb-backendd.onrender.com/api/reviews", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -230,7 +230,7 @@ const Review = () => {
   const handleDeleteReview = async (reviewId) => {
     try {
       // Make a DELETE request to the backend API
-      const deleteResponse = await fetch(`http://localhost:3001/api/reviews/${reviewId}`, {
+      const deleteResponse = await fetch(`https://ccb-backendd.onrender.com/api/reviews/${reviewId}`, {
         method: "DELETE",
         credentials: "include", // Include credentials for cookie authentication
       });
@@ -253,7 +253,7 @@ const Review = () => {
   const handleSubmitReply = async (reviewId, userID, recipeName, reply, replyText) => {
     try {
       // Fetch the user ID from /api/userID
-      const userResponse = await fetch("http://localhost:3001/api/userID", {
+      const userResponse = await fetch("https://ccb-backendd.onrender.com/api/userID", {
         method: "GET",
         credentials: "include", // Include credentials for cookie authentication
       });
@@ -268,7 +268,7 @@ const Review = () => {
       
   
       // Send a POST request to the backend API to submit the reply
-      const response = await fetch(`http://localhost:3001/api/reply/replies/${reviewId}`, {
+      const response = await fetch(`https://ccb-backendd.onrender.com/api/reply/replies/${reviewId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
