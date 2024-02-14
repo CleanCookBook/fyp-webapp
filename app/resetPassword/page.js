@@ -86,7 +86,7 @@ const ResetPasswordForm = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3001/api/profile/update-password", {
+      const response = await fetch("https://ccb-backendd.onrender.com/api/profile/update-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -124,7 +124,7 @@ const ResetPasswordForm = () => {
       // Fetch user data when the component mounts
       const fetchUserData = async () => {
         try {
-          const response = await fetch("http://localhost:3001/api/profile", {
+          const response = await fetch("https://ccb-backendd.onrender.com/api/profile", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
