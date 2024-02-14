@@ -210,7 +210,7 @@ const ViewBPAnnouncement = () => {
       }
 
       const response = await fetch(
-        "http://localhost:3001/api/comments/addComment",
+        "https://ccb-backendd.onrender.com/api/comments/addComment",
         {
           method: "POST",
           credentials: "include",

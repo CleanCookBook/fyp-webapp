@@ -153,7 +153,7 @@ const Review = () => {
 
       // Fetch the rating for the recipe using your backend endpoint
       fetch(
-        `http://localhost:3001/api/recipe/${encodeURIComponent(
+        `https://ccb-backendd.onrender.com/api/recipe/${encodeURIComponent(
           recipeNameParam
         )}`
       )
@@ -165,7 +165,7 @@ const Review = () => {
 
       // Fetch the reviews for the recipe using your backend endpoint
       fetch(
-        `http://localhost:3001/api/reviews/${encodeURIComponent(
+        `https://ccb-backendd.onrender.com/api/reviews/${encodeURIComponent(
           recipeNameParam
         )}`
       )

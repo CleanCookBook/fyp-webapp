@@ -66,7 +66,7 @@ const BPCreateMealPlan = () => {
     const fetchRecipes = async () => {
       try {
         // Fetch recipes from the API endpoint using the fetch function
-        const response = await fetch("http://localhost:3001/api/mealPlan/recipe", {
+        const response = await fetch("https://ccb-backendd.onrender.com/api/mealPlan/recipe", {
           method: "GET",
           credentials: "include",
         });
@@ -209,7 +209,7 @@ const BPCreateMealPlan = () => {
 
       // Make a POST request to the backend API endpoint
       const response = await fetch(
-        "http://localhost:3001/api/mealPlan/upload",
+        "https://ccb-backendd.onrender.com/api/mealPlan/upload",
         {
           method: "POST",
           credentials: "include",
