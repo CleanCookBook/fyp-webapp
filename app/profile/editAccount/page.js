@@ -141,7 +141,6 @@ const submitForm = async (e) => {
 
               if (response.ok) {
                   const data = await response.json();
-                  setUserRole(data.userType || "user");
                   const userProfile = data.userProfile;
 
                   setFormData({
@@ -151,6 +150,8 @@ const submitForm = async (e) => {
                       gender: userProfile.gender,
                       email: userProfile.email,
                   });
+
+                   setUserRole(userProfile.userType || "user");
 
                  
 
