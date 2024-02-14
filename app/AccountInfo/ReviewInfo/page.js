@@ -106,7 +106,7 @@ const SysAdminReviewApp = () => {
   const handleDelete = async (userId) => {
     try {
       const response = await fetch(
-        `https://ccb-backendd.onrender.com//api/edit/approve/${userId}`,
+        `https://ccb-backendd.onrender.com/api/edit/approve/${userId}`,
         {
           method: "PATCH",
           headers: {
