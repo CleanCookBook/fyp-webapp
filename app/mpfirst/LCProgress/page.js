@@ -52,7 +52,7 @@ const LCProgress = () => {
     const fetchUserType = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/user/userType",
+          "https://ccb-backendd.onrender.com/api/user/userType",
           {
             method: "POST",
             credentials: "include",
@@ -77,7 +77,7 @@ const LCProgress = () => {
   useEffect(() => {
     const fetchMealPlanRecipes = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/mealPlan/${encodeURIComponent(mealPlanName)}/recipes`);
+        const response = await fetch(`https://ccb-backendd.onrender.com/api/mealPlan/${encodeURIComponent(mealPlanName)}/recipes`);
         const data = await response.json();
 
         if (response.ok) {
@@ -130,7 +130,7 @@ const LCProgress = () => {
   useEffect(() => {
     const fetchInitialCheckedDays = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/mealPlan/getMealPlanTrack/${encodeURIComponent(mealPlanName)}`, {
+        const response = await fetch(`https://ccb-backendd.onrender.com/api/mealPlan/getMealPlanTrack/${encodeURIComponent(mealPlanName)}`, {
           method: 'GET',
           credentials: 'include',
         });
@@ -209,7 +209,7 @@ const LCProgress = () => {
         }
   
         // Update the meal plan tracking in the database
-        fetch('http://localhost:3001/api/mealPlan/updateMealPlanTrack', {
+        fetch('https://ccb-backendd.onrender.com/api/mealPlan/updateMealPlanTrack', {
           method: 'POST',
           credentials: 'include',
           headers: {
@@ -234,7 +234,7 @@ const LCProgress = () => {
       });
   
       // Fetch the updated data after updating the meal plan tracking
-      const response = await fetch('http://localhost:3001/api/mealPlan/updateMealPlanTrack', {
+      const response = await fetch('https://ccb-backendd.onrender.com/api/mealPlan/updateMealPlanTrack', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -303,7 +303,7 @@ return(
             <button
               onClick={async () => {
                 try {
-                  const response = await fetch(`http://localhost:3001/api/registration/delete/${encodeURIComponent(mealPlanName)}`, {
+                  const response = await fetch(`https://ccb-backendd.onrender.com/api/registration/delete/${encodeURIComponent(mealPlanName)}`, {
                     method: 'POST',
                     credentials: 'include',
                   });
