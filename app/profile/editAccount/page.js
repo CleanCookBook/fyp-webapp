@@ -151,10 +151,6 @@ const submitForm = async (e) => {
                       email: userProfile.email,
                   });
 
-                   setUserRole(userProfile.userType || "user");
-
-                 
-
                   setInitialEmail(userProfile.email);
               } else if (response.status === 401) {
                   console.error("Unauthorized access");
@@ -168,7 +164,30 @@ const submitForm = async (e) => {
           }
       };
 
-      fetchUserData();
+       const fetchUserType = async () => {
+      try {
+        const response = await fetch(
+          "https://ccb-backendd.onrender.com/user/userType",
+          {
+            method: "POST",
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserRole(data.userType || "user"); // Set the userRole based on the response
+        } else {
+          console.error("Error fetching user type:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching user type:", error.message);
+      }
+    };
+
+    // Fetch user type when the component mounts
+    fetchUserType();
+     fetchUserData();
   }, []); // Empty dependency array ensures the effect runs only once when the component mounts
 
   if (!isAuthenticated) {
