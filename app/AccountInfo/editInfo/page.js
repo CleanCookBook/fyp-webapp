@@ -157,7 +157,7 @@ const EditInfo = () => {
       const data = await response.json();
       if (data.success) {
         console.log("About Me updated successfully");
-        router.push("/home/BPHomepage");
+        router.push("/home/SysAdminHome");
       } else {
         console.log("Failed to update About Me");
       }
