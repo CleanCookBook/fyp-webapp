@@ -48,7 +48,7 @@ const Accountpage = () => {
     const fetchUserType = async () => {
       try {
         const response = await fetch(
-          "https://ccb-backendd.onrender.com/user/userType",
+          "https://ccb-backendd.onrender.com/api/user/userType",
           {
             method: "POST",
             credentials: "include",
