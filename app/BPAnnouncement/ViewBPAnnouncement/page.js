@@ -230,7 +230,7 @@ const ViewBPAnnouncement = () => {
 
         // Fetch the updated comments from the server
         const updatedCommentsResponse = await fetch(
-          `http://localhost:3001/api/comments/${name}`
+          `https://ccb-backendd.onrender.com/api/comments/${name}`
         );
         if (updatedCommentsResponse.ok) {
           const updatedCommentsData = await updatedCommentsResponse.json();
@@ -298,7 +298,7 @@ const ViewBPAnnouncement = () => {
 
       // Send a POST request to the backend API to submit the reply
       const response = await fetch(
-        `http://localhost:3001/api/replyComment/replies/${commentId}`,
+        `https://ccb-backendd.onrender.com/api/replyComment/replies/${commentId}`,
         {
           method: "POST",
           headers: {
