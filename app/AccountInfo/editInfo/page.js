@@ -140,7 +140,7 @@ const EditInfo = () => {
 
     try {
       const response = await fetch(
-        `https://ccb-backendd.onrender.com//api/edit/update-AboutMe/${userID}`,
+        `https://ccb-backendd.onrender.com/api/edit/update-AboutMe/${userID}`,
         {
           method: "POST",
           headers: {
