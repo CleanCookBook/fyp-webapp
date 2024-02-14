@@ -62,10 +62,7 @@ const SysAdminViewUserInfo = () => {
     router.push(`/AccountInfo/editInfo?UserID=${userId}`);
   };
 
-  const handleDelete = (userId) => {
-    // Your delete logic here
-    console.log(`Delete user with ID: ${userId}`);
-  };
+
 
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;

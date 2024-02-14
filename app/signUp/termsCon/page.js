@@ -26,7 +26,7 @@ const TermsCon = () => {
   const createUserAccount = async () => {
     if (isChecked) {
       try {
-        const response = await fetch('http://localhost:3001/api/user/create-account', {
+        const response = await fetch('https://ccb-backendd.onrender.com/api/user/create-account', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
