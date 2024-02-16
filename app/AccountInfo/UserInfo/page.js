@@ -104,7 +104,6 @@ const SysAdminViewUserInfo = () => {
                   <th className="border p-2">UserID</th>
                   <th className="border p-2">Height</th>
                   <th className="border p-2">Weight</th>
-                  <th className="border p-2">Age</th>
                   <th className="border p-2">Allergies</th>
                   <th className="border p-2">Dietary Preferences</th>
                   <th className="border p-2">Health Goals</th>
@@ -120,7 +119,6 @@ const SysAdminViewUserInfo = () => {
                     <td className="border p-2 text-center">{user.UserID}</td>
                     <td className="border p-2 text-center">{user.height}</td>
                     <td className="border p-2 text-center">{user.Weight}</td>
-                    <td className="border p-2 text-center">{user.age}</td>
                     <td className="border p-2 text-center">{user.allergy}</td>
                     <td className="border p-2 text-center">
                       {user.DietaryPreferance}
