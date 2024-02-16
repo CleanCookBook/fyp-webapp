@@ -200,8 +200,10 @@ const Payment = () => {
               </h3>
               <p className="text-white">
                 - View unlimited recipes. <br />
-                - Access to various meal plans. <br />- Chat with professional
-                nutritionists.
+                - Access to various meal plans. <br />
+                - Community Engagement. <br />
+                - Watching Videos. <br />
+                - Being Updated With NewsFeed <br />
               </p>
             </div>
           </div>
